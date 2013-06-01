@@ -102,16 +102,16 @@ static DIOBJECTDATAFORMAT _c_rgodf[ ] = {
 #define numObjects (sizeof(_c_rgodf) / sizeof(_c_rgodf[0]))
 static DIDATAFORMAT c_dfPad =
 {
-	sizeof(DIDATAFORMAT),		//	structure size   峔憿懱僒僀僘
-	sizeof(DIOBJECTDATAFORMAT),	//	size of object data format 僆僽僕僃僋僩僨乕僞宍幃偺僒僀僘
-	DIDF_ABSAXIS,				//	absolute axis system 愨懳幉嵗昗宯
-	sizeof(DIJOYSTATE),			//	size of device data 僨僶僀僗僨乕僞偺僒僀僘
-	numObjects, 				//	count of objects 僆僽僕僃僋僩悢
-	_c_rgodf,					//	position 埵抲
+	sizeof(DIDATAFORMAT),		//	structure size   構造体サイズ
+	sizeof(DIOBJECTDATAFORMAT),	//	size of object data format オブジェクトデータ形式のサイズ
+	DIDF_ABSAXIS,				//	absolute axis system 絶対軸座標系
+	sizeof(DIJOYSTATE),			//	size of device data デバイスデータのサイズ
+	numObjects, 				//	count of objects オブジェクト数
+	_c_rgodf,					//	position 位置
 };
 static const tjs_int   PadAxisMax = +32767;
 static const tjs_int   PadAxisMin = -32768;
-static const tjs_int   PadAxisThreshold   = 95; // Assumes 95% value can turn input on. 95%偺擖椡偱OK
+static const tjs_int   PadAxisThreshold   = 95; // Assumes 95% value can turn input on. 95%の入力でOK
 static const tjs_int   PadAxisUpperThreshold  = PadAxisMax * PadAxisThreshold / 100;
 static const tjs_int   PadAxisLowerThreshold  = PadAxisMin * PadAxisThreshold / 100;
 static bool CALLBACK EnumJoySticksCallback(LPCDIDEVICEINSTANCE lpddi, LPVOID pvRef);

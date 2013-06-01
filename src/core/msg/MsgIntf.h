@@ -30,14 +30,14 @@
 // Japanese localized messages
 TVP_MSG_DECL_CONST(TVPAboutString,
 	
-TJS_W("媑棦媑棦[偒傝偒傝] 2 幚峴僐傾 version %1 ( TJS version %2 )\n")
+TJS_W("吉里吉里[きりきり] 2 実行コア version %1 ( TJS version %2 )\n")
 TJS_W("Compiled on ") WIDEN(__DATE__) TJS_W(" ") WIDEN(__TIME__) TJS_W("\n")
 TJS_W("SVN Revision: ") TVP_SVN_REVISION TJS_W("\n")
 TJS_W("Copyright (C) 1997-2012 W.Dee and contributors All rights reserved.\n")
 TJS_W("Contributors in alphabetical order:\n")
 TJS_W("  Go Watanabe, Kenjo, Kiyobee, Kouhei Yanagita, mey, MIK, Takenori Imoto, yun\n")
-TJS_W("媑棦媑棦幚峴僐傾偺巊梡/攝晍/夵曄偼丄\n")
-TJS_W("SDK 晅懏偺 license.txt 偵彂偐傟偰偄傞儔僀僙儞僗偵廬偭偰峴偆偙偲偑偱偒傑偡.\n")
+TJS_W("吉里吉里実行コアの使用/配布/改変は、\n")
+TJS_W("SDK 付属の license.txt に書かれているライセンスに従って行うことができます.\n")
 TJS_W("------------------------------------------------------------------------------\n")
 TJS_W("Thanks for many libraries, contributers and supporters not listible here.\n")
 TJS_W("This software is based in part on the work of Independent JPEG Group.\n")
@@ -76,271 +76,271 @@ TJS_W("   LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING\n
 TJS_W("   NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS\n")
 TJS_W("   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.\n")
 TJS_W("------------------------------------------------------------------------------\n")
-TJS_W("娐嫬忣曬\n")
+TJS_W("環境情報\n")
   // important log (environment information, Debug.notice etc.) comes here
 );
 
 TVP_MSG_DECL_CONST(TVPVersionInformation,
 	
-TJS_W("媑棦媑棦[偒傝偒傝] 2 幚峴僐傾/%1 ")
+TJS_W("吉里吉里[きりきり] 2 実行コア/%1 ")
 TJS_W("(SVN revision:") TVP_SVN_REVISION TJS_W("; Compiled on ") WIDEN(__DATE__) TJS_W(" ") WIDEN(__TIME__) TJS_W(") TJS2/%2 ")
 TJS_W("Copyright (C) 1997-2012 W.Dee and contributors All rights reserved."));
 
 TVP_MSG_DECL_CONST(TVPVersionInformation2,
-	TJS_W("僶乕僕儑儞忣曬偺徻嵶偼 Ctrl + F12 偱墈棗偱偒傑偡"));
+	TJS_W("バージョン情報の詳細は Ctrl + F12 で閲覧できます"));
 
 TVP_MSG_DECL_CONST(TVPDownloadPageURL,
 	TJS_W("http://kikyou.info/tvp/"));
 
 TVP_MSG_DECL(TVPInternalError,
-	TJS_W("撪晹僄儔乕偑敪惗偟傑偟偨: at %1 line %2"));
+	TJS_W("内部エラーが発生しました: at %1 line %2"));
 
 TVP_MSG_DECL(TVPInvalidParam,
-	TJS_W("晄惓側僷儔儊乕僞偱偡"));
+	TJS_W("不正なパラメータです"));
 
 TVP_MSG_DECL(TVPWarnDebugOptionEnabled,
-	TJS_W("-debug 僆僾僔儑儞偑巜掕偝傟偰偄傞偨傔丄尰嵼 媑棦媑棦偼僨僶僢僌儌乕僪偱摦嶌偟偰偄傑偡丅僨僶僢僌儌乕僪偱偼廫暘側幚峴懍搙偑弌側偄応崌偑偁傞偺偱拲堄偟偰偔偩偝偄"));
+	TJS_W("-debug オプションが指定されているため、現在 吉里吉里はデバッグモードで動作しています。デバッグモードでは十分な実行速度が出ない場合があるので注意してください"));
 
 TVP_MSG_DECL(TVPCommandLineParamIgnoredAndDefaultUsed,
-	TJS_W("僐儅儞僪儔僀儞僷儔儊乕僞 %1 偵巜掕偝傟偨抣 %2 偼柍岠偺偨傔僨僼僅儖僩偺愝掕傪梡偄傑偡"));
+	TJS_W("コマンドラインパラメータ %1 に指定された値 %2 は無効のためデフォルトの設定を用います"));
 
 TVP_MSG_DECL(TVPInvalidCommandLineParam,
-	TJS_W("僐儅儞僪儔僀儞僷儔儊乕僞 %1 偵巜掕偝傟偨抣 %2 偼柍岠偱偡"));
+	TJS_W("コマンドラインパラメータ %1 に指定された値 %2 は無効です"));
 
 TVP_MSG_DECL(TVPNotImplemented,
-	TJS_W("枹幚憰偺婡擻傪屇傃弌偦偆偲偟傑偟偨"));
+	TJS_W("未実装の機能を呼び出そうとしました"));
 
 TVP_MSG_DECL(TVPCannotOpenStorage,
-	TJS_W("僗僩儗乕僕 %1 傪奐偔偙偲偑偱偒傑偣傫"));
+	TJS_W("ストレージ %1 を開くことができません"));
 
 TVP_MSG_DECL(TVPCannotFindStorage,
-	TJS_W("僗僩儗乕僕 %1 偑尒偮偐傝傑偣傫"));
+	TJS_W("ストレージ %1 が見つかりません"));
 
 TVP_MSG_DECL(TVPCannotOpenStorageForWrite,
-	TJS_W("僗僩儗乕僕 %1 傪彂偒崬傒梡偵奐偔偙偲偑偱偒傑偣傫丅僼傽僀儖偑彂偒崬傒嬛巭偵側偭偰偄側偄偐丄偁傞偄偼僼傽僀儖偵彂偒崬傒尃尷偑偁傞偐偳偆偐丄偁傞偄偼偦傕偦傕偦傟偑彂偒崬傒壜擻側儊僨傿傾傗僼傽僀儖側偺偐傪妋擣偟偰偔偩偝偄"));
+	TJS_W("ストレージ %1 を書き込み用に開くことができません。ファイルが書き込み禁止になっていないか、あるいはファイルに書き込み権限があるかどうか、あるいはそもそもそれが書き込み可能なメディアやファイルなのかを確認してください"));
 
 TVP_MSG_DECL(TVPStorageInArchiveNotFound,
-	TJS_W("僗僩儗乕僕 %1 偑傾乕僇僀僽 %2 偺拞偵尒偮偐傝傑偣傫"));
+	TJS_W("ストレージ %1 がアーカイブ %2 の中に見つかりません"));
 
 TVP_MSG_DECL(TVPInvalidPathName,
-	TJS_W("僷僗柤 %1 偼柍岠側宍幃偱偡丅宍幃偑惓偟偄偐偳偆偐傪妋擣偟偰偔偩偝偄"));
+	TJS_W("パス名 %1 は無効な形式です。形式が正しいかどうかを確認してください"));
 
 TVP_MSG_DECL(TVPUnsupportedMediaName,
-	TJS_W("\"%1\" 偼懳墳偟偰偄側偄儊僨傿傾僞僀僾偱偡"));
+	TJS_W("\"%1\" は対応していないメディアタイプです"));
 
 TVP_MSG_DECL(TVPCannotUnbindXP3EXE,
-	TJS_W("%1 偼幚峴壜擻僼傽僀儖偵尒偊傑偡偑丄偙傟偵寢崌偝傟偨傾乕僇僀僽傪敪尒偱偒傑偣傫偱偟偨"));
+	TJS_W("%1 は実行可能ファイルに見えますが、これに結合されたアーカイブを発見できませんでした"));
 
 TVP_MSG_DECL(TVPCannotFindXP3Mark,
-	TJS_W("%1 偼 XP3 傾乕僇僀僽偱偼側偄偐丄懳墳偱偒側偄宍幃偱偡丅傾乕僇僀僽僼傽僀儖傪巜掕偡傋偒応柺偱捠忢偺僼傽僀儖傪巜掕偟偨応崌丄偁傞偄偼懳墳偱偒側偄傾乕僇僀僽僼傽僀儖傪巜掕偟偨応崌側偳偵偙偺僄儔乕偑敪惗偟傑偡偺偱丄妋擣偟偰偔偩偝偄"));
+	TJS_W("%1 は XP3 アーカイブではないか、対応できない形式です。アーカイブファイルを指定すべき場面で通常のファイルを指定した場合、あるいは対応できないアーカイブファイルを指定した場合などにこのエラーが発生しますので、確認してください"));
 
 TVP_MSG_DECL(TVPMissingPathDelimiterAtLast,
-	TJS_W("僷僗柤偺嵟屻偵偼 '>' 傑偨偼 '/' 傪巜掕偟偰偔偩偝偄 (媑棦媑棦俀 2.19 beta 14 傛傝傾乕僇僀僽偺嬫愗傝婰崋偑 '#' 偐傜 '>' 偵曄傢傝傑偟偨)"));
+	TJS_W("パス名の最後には '>' または '/' を指定してください (吉里吉里２ 2.19 beta 14 よりアーカイブの区切り記号が '#' から '>' に変わりました)"));
 
 TVP_MSG_DECL(TVPFilenameContainsSharpWarn,
-	TJS_W("(拲堄) '#' 偑僼傽僀儖柤 \"%1\" 偵娷傑傟偰偄傑偡丅傾乕僇僀僽偺嬫愗傝暥帤偼媑棦媑棦俀 2.19 beta 14 傛傝'#' 偐傜 '>' 偵曄傢傝傑偟偨丅")
-	TJS_W("傕偟傾乕僇僀僽偺嬫愗傝暥帤偺偮傕傝偱 '#' 傪巊梡偟偨応崌偼丄偍庤悢偱偡偑 '>' 偵曄偊偰偔偩偝偄"));
+	TJS_W("(注意) '#' がファイル名 \"%1\" に含まれています。アーカイブの区切り文字は吉里吉里２ 2.19 beta 14 より'#' から '>' に変わりました。")
+	TJS_W("もしアーカイブの区切り文字のつもりで '#' を使用した場合は、お手数ですが '>' に変えてください"));
 
 TVP_MSG_DECL(TVPCannotGetLocalName,
-	TJS_W("僗僩儗乕僕柤 %1 傪儘乕僇儖僼傽僀儖柤偵曄姺偱偒傑偣傫丅傾乕僇僀僽僼傽僀儖撪偺僼傽僀儖傗丄儘乕僇儖僼傽僀儖偱側偄僼傽僀儖偼儘乕僇儖僼傽僀儖柤偵曄姺偱偒傑偣傫丅"));
+	TJS_W("ストレージ名 %1 をローカルファイル名に変換できません。アーカイブファイル内のファイルや、ローカルファイルでないファイルはローカルファイル名に変換できません。"));
 
 TVP_MSG_DECL(TVPReadError,
-	TJS_W("撉傒崬傒僄儔乕偱偡丅僼傽僀儖偑攋懝偟偰偄傞壜擻惈傗丄僨僶僀僗偐傜偺撉傒崬傒偵幐攕偟偨壜擻惈偑偁傝傑偡"));
+	TJS_W("読み込みエラーです。ファイルが破損している可能性や、デバイスからの読み込みに失敗した可能性があります"));
 
 TVP_MSG_DECL(TVPWriteError,
-	TJS_W("彂偒崬傒僄儔乕偱偡"));
+	TJS_W("書き込みエラーです"));
 
 TVP_MSG_DECL(TVPSeekError,
-	TJS_W("僔乕僋偵幐攕偟傑偟偨丅僼傽僀儖偑攋懝偟偰偄傞壜擻惈傗丄僨僶僀僗偐傜偺撉傒崬傒偵幐攕偟偨壜擻惈偑偁傝傑偡"));
+	TJS_W("シークに失敗しました。ファイルが破損している可能性や、デバイスからの読み込みに失敗した可能性があります"));
 
 TVP_MSG_DECL(TVPTruncateError,
-	TJS_W("僼傽僀儖偺挿偝傪愗傝媗傔傞偺偵幐攕偟傑偟偨"));
+	TJS_W("ファイルの長さを切り詰めるのに失敗しました"));
 
 TVP_MSG_DECL(TVPInsufficientMemory,
-	TJS_W("儊儌儕妋曐偵幐攕偟傑偟偨丅"));
+	TJS_W("メモリ確保に失敗しました。"));
 
 TVP_MSG_DECL(TVPUncompressionFailed,
-	TJS_W("僼傽僀儖偺揥奐偵幐攕偟傑偟偨丅枹懳墳偺埑弅宍幃偑巜掕偝傟偨偐丄偁傞偄偼僼傽僀儖偑攋懝偟偰偄傞壜擻惈偑偁傝傑偡"));
+	TJS_W("ファイルの展開に失敗しました。未対応の圧縮形式が指定されたか、あるいはファイルが破損している可能性があります"));
 
 TVP_MSG_DECL(TVPCompressionFailed,
-	TJS_W("僼傽僀儖偺埑弅偵幐攕偟傑偟偨"));
+	TJS_W("ファイルの圧縮に失敗しました"));
 
 TVP_MSG_DECL(TVPCannotWriteToArchive,
-	TJS_W("傾乕僇僀僽偵僨乕僞傪彂偒崬傓偙偲偼偱偒傑偣傫"));
+	TJS_W("アーカイブにデータを書き込むことはできません"));
 
 TVP_MSG_DECL(TVPUnsupportedCipherMode,
-	TJS_W("%1 偼枹懳墳偺埫崋壔宍幃偐丄僨乕僞偑攋懝偟偰偄傑偡"));
+	TJS_W("%1 は未対応の暗号化形式か、データが破損しています"));
 
 TVP_MSG_DECL(TVPUnsupportedModeString,
-	TJS_W("擣幆偱偒側偄儌乕僪暥帤楍偺巜掕偱偡(%1)"));
+	TJS_W("認識できないモード文字列の指定です(%1)"));
 
 TVP_MSG_DECL(TVPUnknownGraphicFormat,
-	TJS_W("%1 偼枹抦偺夋憸宍幃偱偡"));
+	TJS_W("%1 は未知の画像形式です"));
 
 TVP_MSG_DECL(TVPCannotSuggestGraphicExtension,
-	TJS_W("%1 偵偮偄偰揔愗側奼挘巕傪帩偭偨僼傽僀儖傪尒偮偗傜傟傑偣傫偱偟偨"));
+	TJS_W("%1 について適切な拡張子を持ったファイルを見つけられませんでした"));
 
 TVP_MSG_DECL(TVPMaskSizeMismatch,
-	TJS_W("儅僗僋夋憸偺僒僀僘偑儊僀儞夋憸偺僒僀僘偲堘偄傑偡"));
+	TJS_W("マスク画像のサイズがメイン画像のサイズと違います"));
 
 TVP_MSG_DECL(TVPProvinceSizeMismatch,
-	TJS_W("椞堟夋憸 %1 偼儊僀儞夋憸偲僒僀僘偑堘偄傑偡"));
+	TJS_W("領域画像 %1 はメイン画像とサイズが違います"));
 
 TVP_MSG_DECL(TVPImageLoadError,
-	TJS_W("夋憸撉傒崬傒拞偵僄儔乕偑敪惗偟傑偟偨/%1"));
+	TJS_W("画像読み込み中にエラーが発生しました/%1"));
 
 TVP_MSG_DECL(TVPJPEGLoadError,
-	TJS_W("JPEG 撉傒崬傒拞偵僄儔乕偑敪惗偟傑偟偨/%1"));
+	TJS_W("JPEG 読み込み中にエラーが発生しました/%1"));
 
 TVP_MSG_DECL(TVPPNGLoadError,
-	TJS_W("PNG 撉傒崬傒拞偵僄儔乕偑敪惗偟傑偟偨/%1"));
+	TJS_W("PNG 読み込み中にエラーが発生しました/%1"));
 
 TVP_MSG_DECL(TVPERILoadError,
-	TJS_W("ERI 撉傒崬傒拞偵僄儔乕偑敪惗偟傑偟偨/%1"));
+	TJS_W("ERI 読み込み中にエラーが発生しました/%1"));
 
 TVP_MSG_DECL(TVPTLGLoadError,
-	TJS_W("TLG 撉傒崬傒拞偵僄儔乕偑敪惗偟傑偟偨/%1"));
+	TJS_W("TLG 読み込み中にエラーが発生しました/%1"));
 
 TVP_MSG_DECL(TVPInvalidImageSaveType,
-	TJS_W("柍岠側曐懚夋憸宍幃偱偡(%1)"));
+	TJS_W("無効な保存画像形式です(%1)"));
 
 TVP_MSG_DECL(TVPInvalidOperationFor8BPP,
-	TJS_W("8bpp 夋憸偵懳偟偰偼峴偊側偄憖嶌傪峴偍偆偲偟傑偟偨"));
+	TJS_W("8bpp 画像に対しては行えない操作を行おうとしました"));
 
 TVP_MSG_DECL(TVPSpecifyWindow,
-	TJS_W("Window 僋儔僗偺僆僽僕僃僋僩傪巜掕偟偰偔偩偝偄"));
+	TJS_W("Window クラスのオブジェクトを指定してください"));
 
 TVP_MSG_DECL(TVPSpecifyLayer,
-	TJS_W("Layer 僋儔僗偺僆僽僕僃僋僩傪巜掕偟偰偔偩偝偄"));
+	TJS_W("Layer クラスのオブジェクトを指定してください"));
 
 TVP_MSG_DECL(TVPCannotCreateEmptyLayerImage,
-	TJS_W("夋憸僒僀僘偺墶暆偁傞偄偼廲暆傪 0 埲壓偺悢偵愝掕偡傞偙偲偼偱偒傑偣傫"));
+	TJS_W("画像サイズの横幅あるいは縦幅を 0 以下の数に設定することはできません"));
 
 TVP_MSG_DECL(TVPCannotSetPrimaryInvisible,
-	TJS_W("僾儔僀儅儕儗僀儎偼晄壜帇偵偱偒傑偣傫"));
+	TJS_W("プライマリレイヤは不可視にできません"));
 
 TVP_MSG_DECL(TVPCannotMovePrimary,
-	TJS_W("僾儔僀儅儕儗僀儎偼堏摦偱偒傑偣傫"));
+	TJS_W("プライマリレイヤは移動できません"));
 
 TVP_MSG_DECL(TVPCannotSetParentSelf,
-	TJS_W("帺暘帺恎傪恊偲偡傞偙偲偼偱偒傑偣傫"));
+	TJS_W("自分自身を親とすることはできません"));
 
 TVP_MSG_DECL(TVPCannotMoveNextToSelfOrNotSiblings,
-	TJS_W("帺暘帺恎偺慜屻傗恊偺堎側傞儗僀儎偺慜屻偵堏摦偡傞偙偲偼偱偒傑偣傫"));
+	TJS_W("自分自身の前後や親の異なるレイヤの前後に移動することはできません"));
 
 TVP_MSG_DECL(TVPCannotMovePrimaryOrSiblingless,
-	TJS_W("僾儔僀儅儕儗僀儎傗孼掜偺柍偄儗僀儎偼慜屻偵堏摦偡傞偙偲偼偱偒傑偣傫"));
+	TJS_W("プライマリレイヤや兄弟の無いレイヤは前後に移動することはできません"));
 
 TVP_MSG_DECL(TVPCannotMoveToUnderOtherPrimaryLayer,
-	TJS_W("暿偺僾儔僀儅儕儗僀儎壓偵儗僀儎傪堏摦偡傞偙偲偼偱偒傑偣傫"));
+	TJS_W("別のプライマリレイヤ下にレイヤを移動することはできません"));
 
 TVP_MSG_DECL(TVPInvalidImagePosition,
-	TJS_W("儗僀儎椞堟偵夋憸偺柍偄椞堟偑敪惗偟傑偟偨"));
+	TJS_W("レイヤ領域に画像の無い領域が発生しました"));
 
 TVP_MSG_DECL(TVPCannotSetModeToDisabledOrModal,
-	TJS_W("偡偱偵儌乕僟儖側儗僀儎偺恊儗僀儎丄偁傞偄偼晄壜帇/柍岠側儗僀儎傪儌乕僟儖偵偡傞偙偲偼偱偒傑偣傫"));
+	TJS_W("すでにモーダルなレイヤの親レイヤ、あるいは不可視/無効なレイヤをモーダルにすることはできません"));
 
 TVP_MSG_DECL(TVPNotDrawableLayerType,
-	TJS_W("偙偺 type 偺儗僀儎偱偼昤夋傗夋憸撉傒崬傒傗夋憸僒僀僘/埵抲偺曄峏/庢摼偼偱偒傑偣傫"));
+	TJS_W("この type のレイヤでは描画や画像読み込みや画像サイズ/位置の変更/取得はできません"));
 
 TVP_MSG_DECL(TVPSourceLayerHasNoImage,
-	TJS_W("揮憲尦儗僀儎偼夋憸傪帩偭偰偄傑偣傫"));
+	TJS_W("転送元レイヤは画像を持っていません"));
 
 TVP_MSG_DECL(TVPUnsupportedLayerType,
-	TJS_W("%1 偼偙偺 type 偺儗僀儎偱偼巊梡偱偒傑偣傫"));
+	TJS_W("%1 はこの type のレイヤでは使用できません"));
 
 TVP_MSG_DECL(TVPNotDrawableFaceType,
-	TJS_W("%1 偱偼偙偺 face 偵昤夋偱偒傑偣傫"));
+	TJS_W("%1 ではこの face に描画できません"));
 
 TVP_MSG_DECL(TVPCannotConvertLayerTypeUsingGivenDirection,
-	TJS_W("巜掕偝傟偨儗僀儎僞僀僾曄姺偼偱偒傑偣傫"));
+	TJS_W("指定されたレイヤタイプ変換はできません"));
 
 TVP_MSG_DECL(TVPNegativeOpacityNotSupportedOnThisFace,
-	TJS_W("晧偺晄摟柧搙偼偙偺 face 偱偼巜掕偱偒傑偣傫"));
+	TJS_W("負の不透明度はこの face では指定できません"));
 
 TVP_MSG_DECL(TVPSrcRectOutOfBitmap,
-	TJS_W("揮憲尦偑價僢僩儅僢僾奜偺椞堟傪娷傫偱偄傑偡丅惓偟偄斖埻偵廂傑傞傛偆偵揮憲尦傪巜掕偟偰偔偩偝偄"));
+	TJS_W("転送元がビットマップ外の領域を含んでいます。正しい範囲に収まるように転送元を指定してください"));
 
 TVP_MSG_DECL(TVPBoxBlurAreaMustContainCenterPixel,
-	TJS_W("嬮宍僽儔乕偺斖埻偼昁偢(0,0)傪偦偺拞偵娷傓昁梫偑偁傝傑偡丅left偲right偑椉曽偲傕惓偺悢抣丄偁傞偄偼椉曽偲傕晧偺悢抣偲偄偆巜掕偼偱偒傑偣傫(top偲bottom偵懳偟偰傕摨條)"));
+	TJS_W("矩形ブラーの範囲は必ず(0,0)をその中に含む必要があります。leftとrightが両方とも正の数値、あるいは両方とも負の数値という指定はできません(topとbottomに対しても同様)"));
 
 TVP_MSG_DECL(TVPBoxBlurAreaMustBeSmallerThan16Million,
-	TJS_W("嬮宍僽儔乕偺斖埻偑戝偒偡偓傑偡丅嬮宍僽儔乕偺斖埻偼1677枩埲壓偱偁傞昁梫偑偁傝傑偡"));
+	TJS_W("矩形ブラーの範囲が大きすぎます。矩形ブラーの範囲は1677万以下である必要があります"));
 
 TVP_MSG_DECL(TVPCannotChangeFocusInProcessingFocus,
-	TJS_W("僼僅乕僇僗曄峏張棟拞偼僼僅乕僇僗傪怴偨偵曄峏偡傞偙偲偼偱偒傑偣傫"));
+	TJS_W("フォーカス変更処理中はフォーカスを新たに変更することはできません"));
 
 TVP_MSG_DECL(TVPWindowHasNoLayer,
-	TJS_W("僂傿儞僪僂偵儗僀儎偑偁傝傑偣傫"));
+	TJS_W("ウィンドウにレイヤがありません"));
 
 TVP_MSG_DECL(TVPWindowHasAlreadyPrimaryLayer,
-	TJS_W("僂傿儞僪僂偵偼偡偱偵僾儔僀儅儕儗僀儎偑偁傝傑偡"));
+	TJS_W("ウィンドウにはすでにプライマリレイヤがあります"));
 
 TVP_MSG_DECL(TVPSpecifiedEventNeedsParameter,
-	TJS_W("僀儀儞僩 %1 偵偼僷儔儊乕僞偑昁梫偱偡"));
+	TJS_W("イベント %1 にはパラメータが必要です"));
 
 TVP_MSG_DECL(TVPSpecifiedEventNeedsParameter2,
-	TJS_W("僀儀儞僩 %1 偵偼僷儔儊乕僞 %2 偑昁梫偱偡"));
+	TJS_W("イベント %1 にはパラメータ %2 が必要です"));
 
 TVP_MSG_DECL(TVPSpecifiedEventNameIsUnknown,
-	TJS_W("僀儀儞僩柤 %1 偼枹抦偺僀儀儞僩柤偱偡"));
+	TJS_W("イベント名 %1 は未知のイベント名です"));
 
 TVP_MSG_DECL(TVPOutOfRectangle,
-	TJS_W("嬮宍奜傪巜掕偝傟傑偟偨"));
+	TJS_W("矩形外を指定されました"));
 
 TVP_MSG_DECL(TVPInvalidMethodInUpdating,
-	TJS_W("夋柺峏怴拞偼偙偺婡擻傪幚峴偱偒傑偣傫"));
+	TJS_W("画面更新中はこの機能を実行できません"));
 
 TVP_MSG_DECL(TVPCannotCreateInstance,
-	TJS_W("偙偺僋儔僗偼僀儞僗僞儞僗傪嶌惉偱偒傑偣傫"));
+	TJS_W("このクラスはインスタンスを作成できません"));
 
 TVP_MSG_DECL(TVPUnknownWaveFormat,
-	TJS_W("%1 偼懳墳偱偒側偄 Wave 宍幃偱偡"));
+	TJS_W("%1 は対応できない Wave 形式です"));
 
 TVP_MSG_DECL(TVPCurrentTransitionMustBeStopping,
-	TJS_W("尰嵼偺僩儔儞僕僔儑儞傪掆巭偝偣偰偐傜怴偟偄僩儔儞僕僔儑儞傪奐巒偟偰偔偩偝偄丅摨偠儗僀儎偵懳偟偰暋悢偺僩儔儞僕僔儑儞傪摨帪偵幚峴偟傛偆偲偡傞偲偙偺僄儔乕偑敪惗偟傑偡"));
+	TJS_W("現在のトランジションを停止させてから新しいトランジションを開始してください。同じレイヤに対して複数のトランジションを同時に実行しようとするとこのエラーが発生します"));
 
 TVP_MSG_DECL(TVPTransHandlerError,
-	TJS_W("僩儔儞僕僔儑儞僴儞僪儔偱僄儔乕偑敪惗偟傑偟偨 : %1"));
+	TJS_W("トランジションハンドラでエラーが発生しました : %1"));
 
 TVP_MSG_DECL(TVPTransAlreadyRegistered,
-	TJS_W("僩儔儞僕僔儑儞 %1 偼婛偵搊榐偝傟偰偄傑偡"));
+	TJS_W("トランジション %1 は既に登録されています"));
 
 TVP_MSG_DECL(TVPCannotFindTransHander,
-	TJS_W("僩儔儞僕僔儑儞僴儞僪儔 %1 偑尒偮偐傝傑偣傫"));
+	TJS_W("トランジションハンドラ %1 が見つかりません"));
 
 TVP_MSG_DECL(TVPSpecifyTransitionSource,
-	TJS_W("僩儔儞僕僔儑儞尦傪巜掕偟偰偔偩偝偄"));
+	TJS_W("トランジション元を指定してください"));
 
 TVP_MSG_DECL(TVPLayerCannotHaveImage,
-	TJS_W("偙偺儗僀儎偼夋憸傪帩偮偙偲偼偱偒傑偣傫"));
+	TJS_W("このレイヤは画像を持つことはできません"));
 
 TVP_MSG_DECL(TVPTransitionSourceAndDestinationMustHaveImage,
-	TJS_W("僩儔儞僕僔儑儞尦偲僩儔儞僕僔儑儞愭偼偲傕偵夋憸傪帩偭偰偄傞昁梫偑偁傝傑偡"));
+	TJS_W("トランジション元とトランジション先はともに画像を持っている必要があります"));
 
 TVP_MSG_DECL(TVPCannotLoadRuleGraphic,
-	TJS_W("儖乕儖夋憸 %1 傪撉傒崬傓偙偲偑偱偒傑偣傫"));
+	TJS_W("ルール画像 %1 を読み込むことができません"));
 
 TVP_MSG_DECL(TVPSpecifyOption,
-	TJS_W("僆僾僔儑儞 %1 傪巜掕偟偰偔偩偝偄"));
+	TJS_W("オプション %1 を指定してください"));
 
 TVP_MSG_DECL(TVPTransitionLayerSizeMismatch,
-	TJS_W("僩儔儞僕僔儑儞尦(%1)偲僩儔儞僕僔儑儞愭(%2)偺儗僀儎偺僒僀僘偑堦抳偟傑偣傫"));
+	TJS_W("トランジション元(%1)とトランジション先(%2)のレイヤのサイズが一致しません"));
 
 TVP_MSG_DECL(TVPTransitionMutualSource,
-	TJS_W("僩儔儞僕僔儑儞尦偺僩儔儞僕僔儑儞尦偑帺暘帺恎偱偡"));
+	TJS_W("トランジション元のトランジション元が自分自身です"));
 
 TVP_MSG_DECL(TVPHoldDestinationAlphaParameterIsNowDeprecated,
-	TJS_W("寈崘 : 儊僜僢僪 %1 偺 %2 斣栚偵搉偝傟偨 hda 僷儔儊乕僞偼丄媑棦媑棦俀 2.23 beta 2 傛傝柍帇偝傟傞傛偆偵側傝傑偟偨丅戙傢傝偵 Layer.holdAlpha 僾儘僷僥傿傪梡偄偰偔偩偝偄丅"));
+	TJS_W("警告 : メソッド %1 の %2 番目に渡された hda パラメータは、吉里吉里２ 2.23 beta 2 より無視されるようになりました。代わりに Layer.holdAlpha プロパティを用いてください。"));
 
 TVP_MSG_DECL(TVPCannotConnectMultipleWaveSoundBufferAtOnce,
-	TJS_W("暋悢偺 WaveSoundBuffer 傪堦偮偺僼傿儖僞偱摨帪偵巊梡偡傞偙偲偼偱偒傑偣傫"));
+	TJS_W("複数の WaveSoundBuffer を一つのフィルタで同時に使用することはできません"));
 
 TVP_MSG_DECL(TVPInvalidWindowSizeMustBeIn64to32768,
-	TJS_W("window 偼 64乣32768 偺斖埻偺 2 偺椵忔偱柍偗傟偽側傝傑偣傫"));
+	TJS_W("window は 64～32768 の範囲の 2 の累乗で無ければなりません"));
 
 TVP_MSG_DECL(TVPInvalidOverlapCountMustBeIn2to32,
-	TJS_W("overlap 偼 2乣32 偺斖埻偺 2 偺椵忔偱柍偗傟偽側傝傑偣傫"));
+	TJS_W("overlap は 2～32 の範囲の 2 の累乗で無ければなりません"));
 
 
 //---------------------------------------------------------------------------

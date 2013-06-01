@@ -2,7 +2,7 @@
 /*! @file
 @brief DirectShow media sample wrapper for Windows media format
 
-DirectShowのMedia SampleをラップしたWindows Media Format SDK用のBuffer
+DirectShow､ﾎMedia Sample､鬣ﾃ･ﾗ､ｷ､ｿWindows Media Format SDKﾓﾃ､ﾎBuffer
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
@@ -24,10 +24,10 @@ DirectShowのMedia SampleをラップしたWindows Media Format SDK用のBuffer
 #include <dshow.h>
 
 //----------------------------------------------------------------------------
-//! @brief WMV用バッファ
+//! @brief WMVﾓﾃ･ﾐ･ﾃ･ﾕ･｡
 //!
-//! DirectShowではSampleにあたるもの。
-//! 現在の実装はIMediaSampleのラッパーになっている。
+//! DirectShow､ﾇ､ﾏSample､ﾋ､｢､ｿ､�､筅ﾎ｡｣
+//! ｬFﾔﾚ､ﾎ携ﾗｰ､ﾏIMediaSample､ﾎ･鬣ﾃ･ﾑｩ`､ﾋ､ﾊ､ﾃ､ﾆ､､､�｡｣
 //----------------------------------------------------------------------------
 class CWMBuffer : public INSSBuffer, public CUnknown
 {

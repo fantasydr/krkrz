@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 /*
-	Risa [傝偝]      alias 媑棦媑棦3 [kirikiri-3]
+	Risa [りさ]      alias 吉里吉里3 [kirikiri-3]
 	 stands for "Risa Is a Stagecraft Architecture"
 	Copyright (C) 2000 W.Dee <dee@kikyou.info> and contributors
 
@@ -8,26 +8,26 @@
 */
 //---------------------------------------------------------------------------
 //! @file
-//! @brief Phase Vocoder 偺幚憰
+//! @brief Phase Vocoder の実装
 //---------------------------------------------------------------------------
 
 /*
-	Phase Vocoder (僼僃乕僘 儃僐乕僟 ; 埵憡儃僐乕僟)偺幚憰
+	Phase Vocoder (フェーズ ボコーダ ; 位相ボコーダ)の実装
 
-	嶲峫帒椏:
+	参考資料:
 
 		http://www.panix.com/~jens/pvoc-dolson.par
-			Phase Vocoder 偺僠儏乕僩儕傾儖丅乽儈儏乕僕僔儍儞偵傕傢偐傞傛偆偵乿
-			彂偐傟偰偍傝丄悢妛壒抯僼儗儞僪儕乕丅
+			Phase Vocoder のチュートリアル。「ミュージシャンにもわかるように」
+			書かれており、数学音痴フレンドリー。
 
 		http://www.dspdimension.com/
-			柍椏(僆乕僾儞僜乕僗偱偼側偄)偺 Time Stretcher/Pitch Shifter偺
-			DIRAC傗丄奺庬傾儖僑儕僘儉偺愢柧丄
-			Pitch Shifter 偺愢柧揑側僜乕僗僐乕僪側偳丅
+			無料(オープンソースではない)の Time Stretcher/Pitch Shifterの
+			DIRACや、各種アルゴリズムの説明、
+			Pitch Shifter の説明的なソースコードなど。
 
 		http://soundlab.cs.princeton.edu/software/rt_pvc/
 			real-time phase vocoder analysis/synthesis library + visualization
-			僜乕僗偁傝丅
+			ソースあり。
 */
 
 #include "tjsCommHead.h"
@@ -66,12 +66,12 @@ tRisaPhaseVocoderDSP::tRisaPhaseVocoderDSP(
 				unsigned int frequency, unsigned int channels) :
 					InputBuffer(framesize * 4 * channels),
 					OutputBuffer(framesize * 4 * channels)
-		// InputBuffer 偼嵟掅偱傕
-		// channels * (framesize + (framesize/oversamp)) 昁梫偱丄
-		// OutputBuffer 偼嵟掅偱傕
-		// channels * (framesize + (framesize/oversamp)*MAX_TIME_SCALE) 昁梫
+		// InputBuffer は最低でも
+		// channels * (framesize + (framesize/oversamp)) 必要で、
+		// OutputBuffer は最低でも
+		// channels * (framesize + (framesize/oversamp)*MAX_TIME_SCALE) 必要
 {
-	// 僼傿乕儖僪偺弶婜壔
+	// フィールドの初期化
 	FFTWorkIp = NULL;
 	FFTWorkW = NULL;
 	InputWindow = NULL;
@@ -89,13 +89,13 @@ tRisaPhaseVocoderDSP::tRisaPhaseVocoderDSP(
 
 	TimeScale = 1.0;
 	FrequencyScale = 1.0;
-	RebuildParams = true; // 昁偢弶夞偵僷儔儊乕僞傪嵞峔抸偡傞傛偆偵恀
+	RebuildParams = true; // 必ず初回にパラメータを再構築するように真
 
 	LastSynthPhaseAdjustCounter = 0;
 
 	try
 	{
-		// 儚乕僋側偳偺妋曐
+		// ワークなどの確保
 		AnalWork  = (float **)TJSAlignedAlloc(sizeof(float *) * Channels, 4);
 		SynthWork = (float **)TJSAlignedAlloc(sizeof(float *) * Channels, 4);
 		for(unsigned int ch = 0; ch < Channels; ch++)
@@ -112,7 +112,7 @@ tRisaPhaseVocoderDSP::tRisaPhaseVocoderDSP(
 		for(unsigned int ch = 0; ch < Channels; ch++)
 		{
 			LastAnalPhase[ch] = (float *)TJSAlignedAlloc(sizeof(float) * (FrameSize/2), 4);
-			memset(LastAnalPhase[ch], 0, FrameSize/2 * sizeof(float)); // 0 偱僋儕傾
+			memset(LastAnalPhase[ch], 0, FrameSize/2 * sizeof(float)); // 0 でクリア
 		}
 
 		LastSynthPhase = (float **)TJSAlignedAlloc(sizeof(float *) * Channels, 4);
@@ -121,7 +121,7 @@ tRisaPhaseVocoderDSP::tRisaPhaseVocoderDSP(
 		for(unsigned int ch = 0; ch < Channels; ch++)
 		{
 			LastSynthPhase[ch] = (float *)TJSAlignedAlloc(sizeof(float) * (FrameSize/2), 4);
-			memset(LastSynthPhase[ch], 0, FrameSize/2 * sizeof(float)); // 0 偱僋儕傾
+			memset(LastSynthPhase[ch], 0, FrameSize/2 * sizeof(float)); // 0 でクリア
 		}
 
 		FFTWorkIp = (int *)TJSAlignedAlloc(sizeof(int) * (static_cast<int>(2+sqrt((double)FrameSize/4))), 4);
@@ -136,7 +136,7 @@ tRisaPhaseVocoderDSP::tRisaPhaseVocoderDSP(
 		throw;
 	}
 
-	// 擖弌椡僶僢僼傽偺撪梕傪僋儕傾
+	// 入出力バッファの内容をクリア
 	float *bufp1;
 	size_t buflen1;
 	float *bufp2;
@@ -172,10 +172,10 @@ void tRisaPhaseVocoderDSP::SetTimeScale(float v)
 		RebuildParams = true;
 		InputHopSize = OutputHopSize = FrameSize / OverSampling;
 		OutputHopSize = static_cast<unsigned int>(InputHopSize * TimeScale) & ~1;
-			// 仾 嬼悢偵傾儔僀儞(廳梫)
-			// 暋慺悢 re,im, re,im, ... 偺攝楍偑媡FFT偵傛傝摨悢偺(暋慺悢偺屄悢亊2偺)
-			// PCM僒儞僾儖偵曄姺偝傟傞偨傔丄PCM僒儞僾儖傕俀屄偢偮偱埖傢側偄偲側傜側偄.
-			// 偙偺幚嵺偺 OutputHopSize 偵廬偭偰 ExactTimeScale 偑寁嶼偝傟傞.
+			// ↑ 偶数にアライン(重要)
+			// 複素数 re,im, re,im, ... の配列が逆FFTにより同数の(複素数の個数×2の)
+			// PCMサンプルに変換されるため、PCMサンプルも２個ずつで扱わないとならない.
+			// この実際の OutputHopSize に従って ExactTimeScale が計算される.
 	}
 }
 //---------------------------------------------------------------------------
@@ -198,9 +198,9 @@ void tRisaPhaseVocoderDSP::SetOverSampling(unsigned int v)
 {
 	if(v == 0)
 	{
-		// TimeScale 偵廬偭偰抣傪愝掕
-		// 偙傟傜偺鑷抣偼幚嵺偺儕僗僯儞僌偵傛傝寛掕偝傟偨悢抣偱偁傝丄
-		// 榑棟揑側崻嫆偼側偄丅
+		// TimeScale に従って値を設定
+		// これらの閾値は実際のリスニングにより決定された数値であり、
+		// 論理的な根拠はない。
 		if(TimeScale <= 0.2) v = 2;
 		else if(TimeScale <= 1.2) v = 4;
 		else v = 8;
@@ -211,8 +211,8 @@ void tRisaPhaseVocoderDSP::SetOverSampling(unsigned int v)
 		OverSampling = v;
 		InputHopSize = OutputHopSize = FrameSize / OverSampling;
 		OutputHopSize = static_cast<unsigned int>(InputHopSize * TimeScale) & ~1;
-		// 偙偙偺OutputHopSize偺寁嶼偵偮偄偰偼 tRisaPhaseVocoderDSP::SetTimeScale
-		// 傕嶲徠偺偙偲
+		// ここのOutputHopSizeの計算については tRisaPhaseVocoderDSP::SetTimeScale
+		// も参照のこと
 		RebuildParams = true;
 	}
 }
@@ -222,7 +222,7 @@ void tRisaPhaseVocoderDSP::SetOverSampling(unsigned int v)
 //---------------------------------------------------------------------------
 void tRisaPhaseVocoderDSP::Clear()
 {
-	// 慡偰偺僶僢僼傽側偳傪夝曻偡傞
+	// 全てのバッファなどを解放する
 	if(AnalWork)
 	{
 		for(unsigned int ch = 0; ch < Channels; ch++)
@@ -271,7 +271,7 @@ bool tRisaPhaseVocoderDSP::GetInputBuffer(
 {
 	size_t numsamples = numsamplegranules * Channels;
 
-	if(InputBuffer.GetFreeSize() < numsamples) return false; // 廫暘側嬻偒梕検偑側偄
+	if(InputBuffer.GetFreeSize() < numsamples) return false; // 十分な空き容量がない
 
 	InputBuffer.GetWritePointer(numsamples, p1, p1size, p2, p2size);
 
@@ -301,7 +301,7 @@ bool tRisaPhaseVocoderDSP::GetOutputBuffer(
 {
 	size_t numsamples = numsamplegranules * Channels;
 
-	if(OutputBuffer.GetDataSize() < numsamples) return false; // 廫暘側弨旛嵪傒僒儞僾儖偑側偄
+	if(OutputBuffer.GetDataSize() < numsamples) return false; // 十分な準備済みサンプルがない
 
 	OutputBuffer.GetReadPointer(numsamples, p1, p1size, p2, p2size);
 
@@ -324,13 +324,13 @@ tRisaPhaseVocoderDSP::tStatus tRisaPhaseVocoderDSP::Process()
 			(TVPCPUType & TVP_CPU_HAS_CMOV);
 
 
-	// 僷儔儊乕僞偺嵞寁嶼偺昁梫偑偁傞応崌偼嵞寁嶼傪偡傞
+	// パラメータの再計算の必要がある場合は再計算をする
 	if(RebuildParams)
 	{
-		// 憢娭悢偺寁嶼(偙偙偱偼Vorbis I 憢)
+		// 窓関数の計算(ここではVorbis I 窓)
 		float recovery_of_loss_of_vorbis_window = 2.0;
 				//         1            1         2
-				//  2  =  佺  1dx  /   佺   vorbis (x) dx
+				//  2  =  ∫  1dx  /   ∫   vorbis (x) dx
 				//         0            0
 				// where vobis = vorbis I window function
 		float output_volume =
@@ -344,27 +344,27 @@ tRisaPhaseVocoderDSP::tStatus tRisaPhaseVocoderDSP::Process()
 			OutputWindow[i] = (float)(window *output_volume);
 		}
 
-		// 偦偺傎偐偺僷儔儊乕僞偺嵞寁嶼
+		// そのほかのパラメータの再計算
 		OverSamplingRadian = (float)((2.0*M_PI)/OverSampling);
 		OverSamplingRadianRecp = (float)(1.0/OverSamplingRadian);
 		FrequencyPerFilterBand = (float)((double)Frequency/FrameSize);
 		FrequencyPerFilterBandRecp = (float)(1.0/FrequencyPerFilterBand);
 		ExactTimeScale = (float)OutputHopSize / InputHopSize;
 
-		// 僼儔僌傪搢偡
+		// フラグを倒す
 		RebuildParams = false;
 	}
 
-	// 擖椡僶僢僼傽撪偺僨乕僞偼廫暘偐丠
+	// 入力バッファ内のデータは十分か？
 	if(InputBuffer.GetDataSize() < FrameSize * Channels)
-		return psInputNotEnough; // 懌傝側偄
+		return psInputNotEnough; // 足りない
 
-	// 弌椡僶僢僼傽偺嬻偒偼廫暘偐丠
+	// 出力バッファの空きは十分か？
 	if(OutputBuffer.GetFreeSize() < FrameSize * Channels)
-		return psOutputFull; // 懌傝側偄
+		return psOutputFull; // 足りない
 
-	// 偙傟偐傜彂偒崬傕偆偲偡傞 OutputBuffer 偺椞堟偺嵟屻偺 OutputHopSize 僒儞僾儖
-	// 僌儔僯儏乕儖偼 0 偱杽傔傞 (僆乕僶乕儔僢僾帪偵偼傒弌偡晹暘側偺偱)
+	// これから書き込もうとする OutputBuffer の領域の最後の OutputHopSize サンプル
+	// グラニュールは 0 で埋める (オーバーラップ時にはみ出す部分なので)
 	{
 		float *p1, *p2;
 		size_t p1len, p2len;
@@ -375,7 +375,7 @@ tRisaPhaseVocoderDSP::tStatus tRisaPhaseVocoderDSP::Process()
 		if(p2) memset(p2, 0, p2len * sizeof(float));
 	}
 
-	// 憢娭悢傪揔梡偟偮偮丄擖椡僶僢僼傽偐傜 AnalWork 偵撉傒崬傓
+	// 窓関数を適用しつつ、入力バッファから AnalWork に読み込む
 	{
 		const float *p1, *p2;
 		size_t p1len, p2len;
@@ -394,21 +394,21 @@ tRisaPhaseVocoderDSP::tStatus tRisaPhaseVocoderDSP::Process()
 				(AnalWork, p2, InputWindow + p1len, Channels, p1len, p2len);
 	}
 
-	// 僠儍儞僱儖偛偲偵張棟
+	// チャンネルごとに処理
 	for(unsigned int ch = 0; ch < Channels; ch++)
 	{
 		//------------------------------------------------
-		// 夝愅
+		// 解析
 		//------------------------------------------------
 
-		// 墘嶼偺崻姴晹暘傪幚峴偡傞
+		// 演算の根幹部分を実行する
 			(use_sse?
 			sse__ZN20tRisaPhaseVocoderDSP11ProcessCoreEi:
 			def__ZN20tRisaPhaseVocoderDSP11ProcessCoreEi)
 				(this, ch);
 	}
 
-	// 憢娭悢傪揔梡偟偮偮丄SynthWork 偐傜弌椡僶僢僼傽偵彂偒崬傓
+	// 窓関数を適用しつつ、SynthWork から出力バッファに書き込む
 	{
 		float *p1, *p2;
 		size_t p1len, p2len;
@@ -427,19 +427,19 @@ tRisaPhaseVocoderDSP::tStatus tRisaPhaseVocoderDSP::Process()
 				(p2, SynthWork, OutputWindow + p1len, Channels, p1len, p2len);
 	}
 
-	// LastSynthPhase 傪嵞挷惍偡傞偐
+	// LastSynthPhase を再調整するか
 	LastSynthPhaseAdjustCounter += LastSynthPhaseAdjustIncrement;
 	if(LastSynthPhaseAdjustCounter >= LastSynthPhaseAdjustInterval)
 	{
-		// LastSynthPhase 傪嵞挷惍偡傞僇僂儞僩偵側偭偨
+		// LastSynthPhase を再調整するカウントになった
 		LastSynthPhaseAdjustCounter = 0;
 
-		// 偙偙偱峴偆挷惍偼 LastSynthPhase 偺 unwrapping 偱偁傞丅
-		// LastSynthPhase 偼埵憡偺嵎偑椵愊偝傟傞偺偱戝偒側悢抣偵側偭偰偄偔偑丄
-		// 揔摉側娫妘偱偙傟傪 unwrapping 偟側偄偲丄偄偢傟(悢抣偑戝偒偡偓偰)惛搙
-		// 棊偪偑敪惗偟丄惓忢偵崌惉偑弌棃側偔側偭偰偟傑偆丅
-		// 偨偩偟丄惛搙偑曐偨傟傟偽傛偄偨傔丄枅夞偙偺 unwrapping 傪峴偆昁梫偼側偄丅
-		// 偙偙偱偼 LastSynthPhaseAdjustInterval/LastSynthPhaseAdjustIncrement 夞偛偲偵挷惍傪峴偆丅
+		// ここで行う調整は LastSynthPhase の unwrapping である。
+		// LastSynthPhase は位相の差が累積されるので大きな数値になっていくが、
+		// 適当な間隔でこれを unwrapping しないと、いずれ(数値が大きすぎて)精度
+		// 落ちが発生し、正常に合成が出来なくなってしまう。
+		// ただし、精度が保たれればよいため、毎回この unwrapping を行う必要はない。
+		// ここでは LastSynthPhaseAdjustInterval/LastSynthPhaseAdjustIncrement 回ごとに調整を行う。
 		for(unsigned int ch = 0; ch < Channels; ch++)
 		{
 			unsigned int framesize_d2 = FrameSize / 2;
@@ -451,11 +451,11 @@ tRisaPhaseVocoderDSP::tStatus tRisaPhaseVocoderDSP::Process()
 		}
 	}
 
-	// 擖弌椡僶僢僼傽偺億僀儞僞傪恑傔傞
+	// 入出力バッファのポインタを進める
 	OutputBuffer.AdvanceWritePos(OutputHopSize * Channels);
 	InputBuffer.AdvanceReadPos(InputHopSize * Channels);
 
-	// 僗僥乕僞僗 = no error
+	// ステータス = no error
 	return psNoError;
 }
 //---------------------------------------------------------------------------

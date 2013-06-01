@@ -18,7 +18,7 @@ static LRESULT WINAPI DlgProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam
 	}
 	case WM_COMMAND:
 		if(LOWORD(wParam) == IDOK) {
-			//OKƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«‚Ìˆ—
+			//OK¥Ü¥¿¥ó¤¬Ñº¤µ¤ì¤¿¤È¤­¤Î„IÀí
 			::EndDialog(hWnd, IDOK);
 			return TRUE;
 		} else if(LOWORD(wParam) == IDCANCEL) {

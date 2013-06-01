@@ -2,7 +2,7 @@
 /*! @file
 @brief DirectShow allocator wrapper for Windows media format
 
-DirectShow偺傾儘働乕僞乕傪儔僢僾偟偨Windows Media Format SDK梡偺傾儘働乕僞乕
+DirectShowのアロケーターをラップしたWindows Media Format SDK用のアロケーター
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
@@ -17,17 +17,17 @@ DirectShow偺傾儘働乕僞乕傪儔僢僾偟偨Windows Media Format SDK梡偺傾儘働乕僞乕
 
 
 //----------------------------------------------------------------------------
-//! @brief	  	僨僗僩儔僋僞
+//! @brief	  	デストラクタ
 //----------------------------------------------------------------------------
 CWMAllocator::~CWMAllocator()
 {
 }
 
 //----------------------------------------------------------------------------
-//! @brief	  	梫媮偝傟偨僀儞僞乕僼僃僀僗傪曉偡
-//! @param		riid : 僀儞僞乕僼僃僀僗偺IID
-//! @param		ppv : 僀儞僞乕僼僃僀僗傪曉偡億僀儞僞乕傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	要求されたインターフェイスを返す
+//! @param		riid : インターフェイスのIID
+//! @param		ppv : インターフェイスを返すポインターへのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CWMAllocator::NonDelegatingQueryInterface( REFIID riid, void ** ppv )
 {
@@ -40,15 +40,15 @@ STDMETHODIMP CWMAllocator::NonDelegatingQueryInterface( REFIID riid, void ** ppv
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僶僢僼傽傪妋曐偡傞 ( 僗僩儕乕儉偐傜梫媮偝傟偨応崌偵偙偺儊僜僢僪偑屇偽傟傞 )
-//! @param		wStreamNum : 僗僩儕乕儉斣崋
-//! @param		cbBuffer : 梫媮偝傟偨僶僢僼傽僒僀僘
-//! @param		ppBuffer : 僶僢僼傽傪曉偡億僀儞僞偺億僀儞僞
-//! @param		dwFlags : 梡搑僼儔僌
-//! @param		cnsSampleTime : 僒儞僾儖僞僀儉
-//! @param		cnsSampleDuration : 僒儞僾儖昞帵帪娫
-//! @param		pvContext : IWMReader::Start僐乕儖帪偵搉偝傟偨億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	バッファを確保する ( ストリームから要求された場合にこのメソッドが呼ばれる )
+//! @param		wStreamNum : ストリーム番号
+//! @param		cbBuffer : 要求されたバッファサイズ
+//! @param		ppBuffer : バッファを返すポインタのポインタ
+//! @param		dwFlags : 用途フラグ
+//! @param		cnsSampleTime : サンプルタイム
+//! @param		cnsSampleDuration : サンプル表示時間
+//! @param		pvContext : IWMReader::Startコール時に渡されたポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CWMAllocator::AllocateForStreamEx( WORD wStreamNum, DWORD cbBuffer, INSSBuffer **ppBuffer,
 	DWORD dwFlags, QWORD cnsSampleTime, QWORD cnsSampleDuration, void *pvContext )
@@ -59,7 +59,7 @@ STDMETHODIMP CWMAllocator::AllocateForStreamEx( WORD wStreamNum, DWORD cbBuffer,
 		return E_INVALIDARG;
 
 	DWORD	flag = 0;
-	if( dwFlags & WM_SFEX_NOTASYNCPOINT )	// 旕 Key frame
+	if( dwFlags & WM_SFEX_NOTASYNCPOINT )	// 非 Key frame
 		flag |= AM_GBF_NOTASYNCPOINT;
 
 	REFERENCE_TIME	StartTime = cnsSampleTime;
@@ -72,21 +72,21 @@ STDMETHODIMP CWMAllocator::AllocateForStreamEx( WORD wStreamNum, DWORD cbBuffer,
 		*ppBuffer = new CWMBuffer(pSample);
 		(*ppBuffer)->AddRef();
 		(*ppBuffer)->SetLength(cbBuffer);
-		pSample->Release();	// CWMBuffer傊搉偟偨帪揰偱嶲徠僇僂儞僩偑憹偊傞
+		pSample->Release();	// CWMBufferへ渡した時点で参照カウントが増える
 	}
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僶僢僼傽傪妋曐偡傞 ( 傾僂僩僾僢僩偐傜梫媮偝傟偨応崌偵偙偺儊僜僢僪偑屇偽傟傞 )
-//! @param		wStreamNum : 僗僩儕乕儉斣崋
-//! @param		cbBuffer : 梫媮偝傟偨僶僢僼傽僒僀僘
-//! @param		ppBuffer : 僶僢僼傽傪曉偡億僀儞僞偺億僀儞僞
-//! @param		dwFlags : 梡搑僼儔僌
-//! @param		cnsSampleTime : 僒儞僾儖僞僀儉
-//! @param		cnsSampleDuration : 僒儞僾儖昞帵帪娫
-//! @param		pvContext : IWMReader::Start僐乕儖帪偵搉偝傟偨億僀儞僞
-//! @return		僄儔乕僐乕僪
-//! @note		尰嵼偙偺儊僜僢僪偼巊偭偰偄側偄丅偨傇傫惓忢偵婡擻偟側偄丅
+//! @brief	  	バッファを確保する ( アウトプットから要求された場合にこのメソッドが呼ばれる )
+//! @param		wStreamNum : ストリーム番号
+//! @param		cbBuffer : 要求されたバッファサイズ
+//! @param		ppBuffer : バッファを返すポインタのポインタ
+//! @param		dwFlags : 用途フラグ
+//! @param		cnsSampleTime : サンプルタイム
+//! @param		cnsSampleDuration : サンプル表示時間
+//! @param		pvContext : IWMReader::Startコール時に渡されたポインタ
+//! @return		エラーコード
+//! @note		現在このメソッドは使っていない。たぶん正常に機能しない。
 //----------------------------------------------------------------------------
 STDMETHODIMP CWMAllocator::AllocateForOutputEx( DWORD dwOutputNum, DWORD cbBuffer, INSSBuffer **ppBuffer,
 	DWORD dwFlags, QWORD cnsSampleTime, QWORD cnsSampleDuration, void *pvContext )
@@ -97,7 +97,7 @@ STDMETHODIMP CWMAllocator::AllocateForOutputEx( DWORD dwOutputNum, DWORD cbBuffe
 		return E_INVALIDARG;
 
 	DWORD	flag = 0;
-	if( dwFlags & WM_SFEX_NOTASYNCPOINT )	// 旕 Key frame
+	if( dwFlags & WM_SFEX_NOTASYNCPOINT )	// 非 Key frame
 		flag |= AM_GBF_NOTASYNCPOINT;
 
 	REFERENCE_TIME	StartTime = cnsSampleTime;
@@ -109,7 +109,7 @@ STDMETHODIMP CWMAllocator::AllocateForOutputEx( DWORD dwOutputNum, DWORD cbBuffe
 	{
 		*ppBuffer = new CWMBuffer(pSample);
 		(*ppBuffer)->AddRef();
-		pSample->Release();	// CWMBuffer傊搉偟偨帪揰偱嶲徠僇僂儞僩偑憹偊傞
+		pSample->Release();	// CWMBufferへ渡した時点で参照カウントが増える
 	}
 	return hr;
 }

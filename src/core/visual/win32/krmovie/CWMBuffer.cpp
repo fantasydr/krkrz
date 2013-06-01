@@ -2,7 +2,7 @@
 /*! @file
 @brief DirectShow media sample wrapper for Windows media format
 
-DirectShow偺Media Sample傪儔僢僾偟偨Windows Media Format SDK梡偺Buffer
+DirectShowのMedia SampleをラップしたWindows Media Format SDK用のBuffer
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
@@ -14,10 +14,10 @@ DirectShow偺Media Sample傪儔僢僾偟偨Windows Media Format SDK梡偺Buffer
 #include "CWMBuffer.h"
 
 //----------------------------------------------------------------------------
-//! @brief	  	梫媮偝傟偨僀儞僞乕僼僃僀僗傪曉偡
-//! @param		riid : 僀儞僞乕僼僃僀僗偺IID
-//! @param		ppv : 僀儞僞乕僼僃僀僗傪曉偡億僀儞僞乕傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	要求されたインターフェイスを返す
+//! @param		riid : インターフェイスのIID
+//! @param		ppv : インターフェイスを返すポインターへのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CWMBuffer::NonDelegatingQueryInterface( REFIID riid, void ** ppv )
 {
@@ -30,19 +30,19 @@ STDMETHODIMP CWMBuffer::NonDelegatingQueryInterface( REFIID riid, void ** ppv )
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僶僢僼傽傪庢摼偡傞
-//! @param		ppdwBuffer : 億僀儞僞偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	バッファを取得する
+//! @param		ppdwBuffer : ポインタのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CWMBuffer::GetBuffer( BYTE **ppdwBuffer )
 {
 	return Sample()->GetPointer( ppdwBuffer );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僶僢僼傽偲僒僀僘傪庢摼偡傞
-//! @param		ppdwBuffer : 億僀儞僞偺億僀儞僞
-//! @param		pdwLength : 僒僀僘
-//! @return		僄儔乕僐乕僪
+//! @brief	  	バッファとサイズを取得する
+//! @param		ppdwBuffer : ポインタのポインタ
+//! @param		pdwLength : サイズ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CWMBuffer::GetBufferAndLength( BYTE **ppdwBuffer, DWORD *pdwLength )
 {
@@ -50,9 +50,9 @@ STDMETHODIMP CWMBuffer::GetBufferAndLength( BYTE **ppdwBuffer, DWORD *pdwLength 
 	return Sample()->GetPointer( ppdwBuffer );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僨乕僞偑奿擺偝傟偰偄傞幚僒僀僘傪庢摼偡傞
-//! @param		pdwLength : 僒僀僘
-//! @return		僄儔乕僐乕僪
+//! @brief	  	データが格納されている実サイズを取得する
+//! @param		pdwLength : サイズ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CWMBuffer::GetLength( DWORD *pdwLength )
 {
@@ -60,9 +60,9 @@ STDMETHODIMP CWMBuffer::GetLength( DWORD *pdwLength )
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僶僢僼傽偺僒僀僘傪庢摼偡傞
-//! @param		pdwLength : 僒僀僘
-//! @return		僄儔乕僐乕僪
+//! @brief	  	バッファのサイズを取得する
+//! @param		pdwLength : サイズ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CWMBuffer::GetMaxLength( DWORD *pdwLength )
 {
@@ -70,9 +70,9 @@ STDMETHODIMP CWMBuffer::GetMaxLength( DWORD *pdwLength )
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僒僀僘傪愝掕偡傞
-//! @param		dwLength : 僒僀僘
-//! @return		僄儔乕僐乕僪
+//! @brief	  	サイズを設定する
+//! @param		dwLength : サイズ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CWMBuffer::SetLength( DWORD dwLength )
 {

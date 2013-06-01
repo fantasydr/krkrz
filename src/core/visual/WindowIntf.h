@@ -64,72 +64,72 @@ enum tTVPMouseCursorState
 class iTVPWindow
 {
 public:
-	//! @brief	尦夋憸偺僒僀僘偑曄峏偝傟偨
-	//! @note	昤夋僨僶僀僗偑丄尦夋憸偺僒僀僘偑曄峏偝傟偨偙偲傪捠抦偡傞偨傔偵屇傇丅
-	//!			僂傿儞僪僂偼 iTVPDrawDevice::GetSrcSize() 傪屇傃弌偟偰尦夋憸偺
-	//!			僒僀僘傪庢摼偟偨屻丄僘乕儉側偳偺寁嶼傪峴偭偰偐傜 
-	//!			iTVPDrawDevice::SetTargetWindow() 傪屇傃弌偡丅
+	//! @brief	元画像のサイズが変更された
+	//! @note	描画デバイスが、元画像のサイズが変更されたことを通知するために呼ぶ。
+	//!			ウィンドウは iTVPDrawDevice::GetSrcSize() を呼び出して元画像の
+	//!			サイズを取得した後、ズームなどの計算を行ってから 
+	//!			iTVPDrawDevice::SetTargetWindow() を呼び出す。
 	virtual void TJS_INTF_METHOD NotifySrcResize() = 0;
 
-	//! @brief		儅僂僗僇乕僜儖偺宍忬傪僨僼僅儖僩偵栠偡
-	//! @note		儅僂僗僇乕僜儖偺宍忬傪僨僼僅儖僩偺暔偵栠偟偨偄応崌偵屇傇
+	//! @brief		マウスカーソルの形状をデフォルトに戻す
+	//! @note		マウスカーソルの形状をデフォルトの物に戻したい場合に呼ぶ
 	virtual void TJS_INTF_METHOD SetDefaultMouseCursor() = 0; // set window mouse cursor to default
 
-	//! @brief		儅僂僗僇乕僜儖偺宍忬傪愝掕偡傞
-	//! @param		cursor		儅僂僗僇乕僜儖宍忬斣崋
+	//! @brief		マウスカーソルの形状を設定する
+	//! @param		cursor		マウスカーソル形状番号
 	virtual void TJS_INTF_METHOD SetMouseCursor(tjs_int cursor) = 0; // set window mouse cursor
 
-	//! @brief		儅僂僗僇乕僜儖偺埵抲傪庢摼偡傞
-	//! @param		x			昤夋嬮宍撪偺嵗昗偵偍偗傞儅僂僗僇乕僜儖偺x埵抲
-	//! @param		y			昤夋嬮宍撪偺嵗昗偵偍偗傞儅僂僗僇乕僜儖偺y埵抲
+	//! @brief		マウスカーソルの位置を取得する
+	//! @param		x			描画矩形内の座標におけるマウスカーソルのx位置
+	//! @param		y			描画矩形内の座標におけるマウスカーソルのy位置
 	virtual void TJS_INTF_METHOD GetCursorPos(tjs_int &x, tjs_int &y) = 0;
 		// get mouse cursor position in primary layer's coordinates
 
-	//! @brief		儅僂僗僇乕僜儖偺埵抲傪愝掕偡傞
-	//! @param		x			昤夋嬮宍撪偺嵗昗偵偍偗傞儅僂僗僇乕僜儖偺x埵抲
-	//! @param		y			昤夋嬮宍撪偺嵗昗偵偍偗傞儅僂僗僇乕僜儖偺y埵抲
+	//! @brief		マウスカーソルの位置を設定する
+	//! @param		x			描画矩形内の座標におけるマウスカーソルのx位置
+	//! @param		y			描画矩形内の座標におけるマウスカーソルのy位置
 	virtual void TJS_INTF_METHOD SetCursorPos(tjs_int x, tjs_int y) = 0;
 
-	//! @brief		僂傿儞僪僂偺儅僂僗僉儍僾僠儍傪夝曻偡傞
-	//! @note		僂傿儞僪僂偺儅僂僗僉儍僾僠儍傪夝曻偡傋偒応崌偵屇傇丅
-	//! @note		偙偺儊僜僢僪偱偼婎杮揑偵偼 ::ReleaseCapture() 側偳偱
-	//!				儅僂僗偺僉儍僾僠儍傪奐曻偡傞偙偲丅
+	//! @brief		ウィンドウのマウスキャプチャを解放する
+	//! @note		ウィンドウのマウスキャプチャを解放すべき場合に呼ぶ。
+	//! @note		このメソッドでは基本的には ::ReleaseCapture() などで
+	//!				マウスのキャプチャを開放すること。
 	virtual void TJS_INTF_METHOD WindowReleaseCapture() = 0;
 
 #ifdef USE_OBSOLETE_FUNCTIONS
-	//! @brief		僣乕儖僠僢僾僸儞僩傪愝掕偡傞
-	//! @param		text		僸儞僩僥僉僗僩(嬻暥帤楍偺応崌偼僸儞僩偺昞帵傪僉儍儞僙儖偡傞)
+	//! @brief		ツールチップヒントを設定する
+	//! @param		text		ヒントテキスト(空文字列の場合はヒントの表示をキャンセルする)
 	virtual void TJS_INTF_METHOD SetHintText(const ttstr & text) = 0;
 #endif
 
-	//! @brief		拲帇億僀儞僩偺愝掕
-	//! @param		layer		僼僅儞僩忣曬偺娷傑傟傞儗僀儎
-	//! @param		x			昤夋嬮宍撪偺嵗昗偵偍偗傞拲帇億僀儞僩偺x埵抲
-	//! @param		y			昤夋嬮宍撪偺嵗昗偵偍偗傞拲帇億僀儞僩偺y埵抲
+	//! @brief		注視ポイントの設定
+	//! @param		layer		フォント情報の含まれるレイヤ
+	//! @param		x			描画矩形内の座標における注視ポイントのx位置
+	//! @param		y			描画矩形内の座標における注視ポイントのy位置
 	virtual void TJS_INTF_METHOD SetAttentionPoint(tTJSNI_BaseLayer *layer,
 		tjs_int l, tjs_int t) = 0;
 
-	//! @brief		拲帇億僀儞僩偺夝彍
+	//! @brief		注視ポイントの解除
 	virtual void TJS_INTF_METHOD DisableAttentionPoint() = 0;
 
-	//! @brief		IME儌乕僪偺愝掕
-	//! @param		mode		IME儌乕僪
+	//! @brief		IMEモードの設定
+	//! @param		mode		IMEモード
 	virtual void TJS_INTF_METHOD SetImeMode(tTVPImeMode mode) = 0;
 
-	//! @brief		IME儌乕僪偺儕僙僢僩
+	//! @brief		IMEモードのリセット
 	virtual void TJS_INTF_METHOD ResetImeMode() = 0;
 
-	//! @brief		iTVPWindow::Update() 偺屇傃弌偟傪梫媮偡傞
-	//! @note		僂傿儞僪僂偵懳偟偰 iTVPWindow::Update() 傪師偺揔摉側僞僀儈儞僌偱
-	//!				屇傃弌偡偙偲傪梫媮偡傞丅
-	//!				iTVPWindow::Update() 偑屇傃弌偝傟傞傑偱偼壗夞 RequestUpdate() 傪
-	//!				屇傫偱傕岠壥偼摨偠偱偁傞丅傑偨丄堦搙 iTVPWindow::Update() 偑
-	//!				屇傃弌偝傟傞偲丄嵞傃 RequestUpdate() 傪屇偽側偄尷傝偼
-	//!				iTVPWindow::Update() 偼屇偽傟側偄丅
+	//! @brief		iTVPWindow::Update() の呼び出しを要求する
+	//! @note		ウィンドウに対して iTVPWindow::Update() を次の適当なタイミングで
+	//!				呼び出すことを要求する。
+	//!				iTVPWindow::Update() が呼び出されるまでは何回 RequestUpdate() を
+	//!				呼んでも効果は同じである。また、一度 iTVPWindow::Update() が
+	//!				呼び出されると、再び RequestUpdate() を呼ばない限りは
+	//!				iTVPWindow::Update() は呼ばれない。
 	virtual void TJS_INTF_METHOD RequestUpdate() = 0;
 
 
-	//! @brief		Window偺iTJSDispatch2僀儞僞乕僼僃乕僗傪庢摼偡傞
+	//! @brief		WindowのiTJSDispatch2インターフェースを取得する
 	virtual iTJSDispatch2 * GetWindowDispatch() = 0;
 
 };

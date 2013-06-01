@@ -18,7 +18,7 @@
 #define __CISTREM_H__
 
 #include <objidl.h>
-//#include <streams.h>	// 杮棃偼偁偭偨曽偑偄偄偗偳丄儚乕僯儞僌偑弌傞偺偱僐儊儞僩傾僂僩丅僜乕僗偺僀儞僋儖乕僪弴偱夞旔丠
+//#include <streams.h>	// 本来はあった方がいいけど、ワーニングが出るのでコメントアウト。ソースのインクルード順で回避？
 #include "asyncio.h"
 #include "asyncrdr.h"
 

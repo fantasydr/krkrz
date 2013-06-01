@@ -1,6 +1,6 @@
 /****************************************************************************/
 /*! @file
-@brief DirectShow傪棙梡偟偨儉乕價乕偺儗僀儎乕昤夋嵞惗
+@brief DirectShowを利用したムービーのレイヤー描画再生
 
 -----------------------------------------------------------------------------
 	Copyright (C) 2004 T.Imoto <http://www.kaede-software.com>
@@ -20,7 +20,7 @@
 
 class tTVPBaseBitmap;
 //----------------------------------------------------------------------------
-//! @brief 儗僀儎乕昤夋價僨僆僋儔僗
+//! @brief レイヤー描画ビデオクラス
 //----------------------------------------------------------------------------
 class tTVPDSLayerVideo : public tTVPDSMovie
 {
@@ -30,8 +30,8 @@ private:
 
 	BYTE			*m_BmpBits[2];
 	//----------------------------------------------------------------------------
-	//! @brief	  	IRendererBufferAccess傪庢摼偡傞
-	//! @return		IRendererBufferAccess僀儞僞乕僼僃僀僗
+	//! @brief	  	IRendererBufferAccessを取得する
+	//! @return		IRendererBufferAccessインターフェイス
 	//----------------------------------------------------------------------------
 	IRendererBufferAccess *BufferAccess()
 	{
@@ -39,8 +39,8 @@ private:
 		return m_BuffAccess;
 	}
 	//----------------------------------------------------------------------------
-	//! @brief	  	IRendererBufferVideo傪庢摼偡傞
-	//! @return		IRendererBufferVideo僀儞僞乕僼僃僀僗
+	//! @brief	  	IRendererBufferVideoを取得する
+	//! @return		IRendererBufferVideoインターフェイス
 	//----------------------------------------------------------------------------
 	IRendererBufferVideo *BufferVideo()
 	{

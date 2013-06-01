@@ -2,7 +2,7 @@
 /*! @file
 @brief Windows Media Reader
 
-Windows Media僼傽僀儖傪撉傒崬傓
+Windows Mediaファイルを読み込む
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
@@ -27,7 +27,7 @@ Windows Media僼傽僀儖傪撉傒崬傓
 class CWMReader;
 
 //----------------------------------------------------------------------------
-//! @brief WM弌椡僗僩儕乕儉
+//! @brief WM出力ストリーム
 //----------------------------------------------------------------------------
 class CWMOutput : public IOutputStream, public CUnknown
 {
@@ -65,11 +65,11 @@ public:
 };
 
 //----------------------------------------------------------------------------
-//! @brief WM儕乕僟乕
+//! @brief WMリーダー
 //!
-//! 偙偺僋儔僗偼COM偱偼側偄丅CDemuxSource偵傛偭偰曐帩偝傟丄CDemuxSource偑奐曻傪峴偆
-//! 棙梡帪偼丄new偟丄偦偺億僀儞僞傪CDemuxSource惗惉帪偵搉偡丅
-//! 徻偟偔偼 tTVPDSMovie::BuildWMVGraph 傪嶲徠偺偙偲丅
+//! このクラスはCOMではない。CDemuxSourceによって保持され、CDemuxSourceが開放を行う
+//! 利用時は、newし、そのポインタをCDemuxSource生成時に渡す。
+//! 詳しくは tTVPDSMovie::BuildWMVGraph を参照のこと。
 //----------------------------------------------------------------------------
 class CWMReader : public IDemuxReader
 {

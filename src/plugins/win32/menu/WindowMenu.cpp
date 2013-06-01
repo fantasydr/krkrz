@@ -12,7 +12,7 @@ std::map<int, WindowMenuItem*> WindowMenuItem::ID_TO_ITEM;
 extern const tjs_char* TVPMenuIDOverflow;
 
 int WindowMenuItem::GetNewMenuId( WindowMenuItem* item ) {
-	// 梫慺偑偁傞応崌偼偦傟傪曉偡
+	// 要素がある場合はそれを返す
 	if( FREE_ID_LIST.size() > 0 ) {
 		int result = FREE_ID_LIST.back();
 		FREE_ID_LIST.pop_back();
@@ -239,7 +239,7 @@ void WindowMenuItem::SetEnabled( bool b ) {
 void WindowMenuItem::SetGroupIndex( int group ) {
 	group_no_ = group;
 	if( parent_ && GetChecked() && GetRadioItem() ) {
-		// 帺恎偑check偮偄偰偄偰丄懠偵傕check偮偄偰偄傞傕偺偑偁傞応崌偼帺恎偺check傪奜偡
+		// 自身がcheckついていて、他にもcheckついているものがある場合は自身のcheckを外す
 		int index = parent_->GetCheckRadioIndex(group);
 		if( index >= 0 ) {
 			menu_item_info_.fState &= ~MFS_CHECKED;
@@ -256,7 +256,7 @@ void WindowMenuItem::SetRadioItem( bool b ) {
 		menu_item_info_.fType &= ~MFT_RADIOCHECK;
 	}
 	if( b && parent_ && GetChecked() ) {
-		// 帺恎偑check偮偄偰偄偰丄懠偵傕check偮偄偰偄傞傕偺偑偁傞応崌偼帺恎偺check傪奜偡
+		// 自身がcheckついていて、他にもcheckついているものがある場合は自身のcheckを外す
 		int index = parent_->GetCheckRadioIndex(group_no_);
 		if( index >= 0 ) {
 			menu_item_info_.fState &= ~MFS_CHECKED;

@@ -6,7 +6,7 @@
 	See details of license at "license.txt"
 */
 //---------------------------------------------------------------------------
-//!@file 昤夋僨僶僀僗娗棟
+//!@file 描画デバイス管理
 //---------------------------------------------------------------------------
 
 #include "tjsCommHead.h"
@@ -22,7 +22,7 @@
 //---------------------------------------------------------------------------
 tTVPDrawDevice::tTVPDrawDevice()
 {
-	// 僐儞僗僩儔僋僞
+	// コンストラクタ
 	Window = NULL;
 	PrimaryLayerManagerIndex = 0;
 	DestRect.clear();
@@ -33,12 +33,12 @@ tTVPDrawDevice::tTVPDrawDevice()
 //---------------------------------------------------------------------------
 tTVPDrawDevice::~tTVPDrawDevice()
 {
-	// 偡傋偰偺 managers 傪奐曻偡傞
-	//TODO: 僾儔僀儅儕儗僀儎柍岠壔丄偁傞偄偼僂傿儞僪僂攋婞帪偺廔椆張棟偑惓偟偄偐丠
-	// managers 偼 奐曻偝傟傞嵺丄帺恎偺搊榐夝彍傪峴偆偨傔偵
-	// RemoveLayerManager() 傪屇傇偐傕偟傟側偄偺偱拲堄丅
-	// 偦偺偨傔丄偙偙偱偼偄偭偨傫攝楍傪僐僺乕偟偰偐傜偦傟偧傟偺
-	// Release() 傪屇傇丅
+	// すべての managers を開放する
+	//TODO: プライマリレイヤ無効化、あるいはウィンドウ破棄時の終了処理が正しいか？
+	// managers は 開放される際、自身の登録解除を行うために
+	// RemoveLayerManager() を呼ぶかもしれないので注意。
+	// そのため、ここではいったん配列をコピーしてからそれぞれの
+	// Release() を呼ぶ。
 	std::vector<iTVPLayerManager *> backup = Managers;
 	for(std::vector<iTVPLayerManager *>::iterator i = backup.begin(); i != backup.end(); i++)
 		(*i)->Release();
@@ -52,11 +52,11 @@ bool tTVPDrawDevice::TransformToPrimaryLayerManager(tjs_int &x, tjs_int &y)
 	iTVPLayerManager * manager = GetLayerManagerAt(PrimaryLayerManagerIndex);
 	if(!manager) return false;
 
-	// 僾儔僀儅儕儗僀儎儅僱乕僕儍偺僾儔僀儅儕儗僀儎偺僒僀僘傪摼傞
+	// プライマリレイヤマネージャのプライマリレイヤのサイズを得る
 	tjs_int pl_w, pl_h;
 	if(!manager->GetPrimaryLayerSize(pl_w, pl_h)) return false;
 
-	// x , y 偼 DestRect 偺 0, 0 傪尨揰偲偟偨嵗昗偲偟偰搉偝傟偰偒偰偄傞
+	// x , y は DestRect の 0, 0 を原点とした座標として渡されてきている
 	tjs_int w = DestRect.get_width();
 	tjs_int h = DestRect.get_height();
 	x = w ? (x * pl_w / w) : 0;
@@ -73,11 +73,11 @@ bool tTVPDrawDevice::TransformFromPrimaryLayerManager(tjs_int &x, tjs_int &y)
 	iTVPLayerManager * manager = GetLayerManagerAt(PrimaryLayerManagerIndex);
 	if(!manager) return false;
 
-	// 僾儔僀儅儕儗僀儎儅僱乕僕儍偺僾儔僀儅儕儗僀儎偺僒僀僘傪摼傞
+	// プライマリレイヤマネージャのプライマリレイヤのサイズを得る
 	tjs_int pl_w, pl_h;
 	if(!manager->GetPrimaryLayerSize(pl_w, pl_h)) return false;
 
-	// x , y 偼 DestRect 偺 0, 0 傪尨揰偲偟偨嵗昗偲偟偰搉偝傟偰偒偰偄傞
+	// x , y は DestRect の 0, 0 を原点とした座標として渡されてきている
 	x = pl_w ? (x * DestRect.get_width()  / pl_w) : 0;
 	y = pl_h ? (y * DestRect.get_height() / pl_h) : 0;
 
@@ -105,7 +105,7 @@ void TJS_INTF_METHOD tTVPDrawDevice::SetWindowInterface(iTVPWindow * window)
 //---------------------------------------------------------------------------
 void TJS_INTF_METHOD tTVPDrawDevice::AddLayerManager(iTVPLayerManager * manager)
 {
-	// Managers 偵 manager 傪 push 偡傞丅AddRef偡傞偺傪朰傟側偄偙偲丅
+	// Managers に manager を push する。AddRefするのを忘れないこと。
 	Managers.push_back(manager);
 	manager->AddRef();
 }
@@ -115,7 +115,7 @@ void TJS_INTF_METHOD tTVPDrawDevice::AddLayerManager(iTVPLayerManager * manager)
 //---------------------------------------------------------------------------
 void TJS_INTF_METHOD tTVPDrawDevice::RemoveLayerManager(iTVPLayerManager * manager)
 {
-	// Managers 偐傜 manager 傪嶍彍偡傞丅Release偡傞丅
+	// Managers から manager を削除する。Releaseする。
 	std::vector<iTVPLayerManager *>::iterator i = std::find(Managers.begin(), Managers.end(), manager);
 	if(i == Managers.end())
 		TVPThrowInternalError;
@@ -341,7 +341,7 @@ void TJS_INTF_METHOD tTVPDrawDevice::GetCursorPos(iTVPLayerManager * manager, tj
 	Window->GetCursorPos(x, y);
 	if(primary_manager != manager || !TransformToPrimaryLayerManager(x, y))
 	{
-		// 僾儔僀儅儕儗僀儎儅僱乕僕儍埲奜偵偼嵗昗 0,0 偱搉偟偰偍偔
+		// プライマリレイヤマネージャ以外には座標 0,0 で渡しておく
 		 x = 0;
 		 y = 0;
 	}
@@ -481,7 +481,7 @@ void TJS_INTF_METHOD tTVPDrawDevice::RequestInvalidation(const tTVPRect & rect)
 	tjs_int l = rect.left, t = rect.top, r = rect.right, b = rect.bottom;
 	if(!TransformToPrimaryLayerManager(l, t)) return;
 	if(!TransformToPrimaryLayerManager(r, b)) return;
-	r ++; // 岆嵎偺媧廂(杮摉偼傕偆偪傚偭偲尩枾偵傗傜側偄偲側傜側偄偑偦傟偑栤戣偵側傞偙偲偼側偄)
+	r ++; // 誤差の吸収(本当はもうちょっと厳密にやらないとならないがそれが問題になることはない)
 	b ++;
 
 	iTVPLayerManager * manager = GetLayerManagerAt(PrimaryLayerManagerIndex);
@@ -494,7 +494,7 @@ void TJS_INTF_METHOD tTVPDrawDevice::RequestInvalidation(const tTVPRect & rect)
 //---------------------------------------------------------------------------
 void TJS_INTF_METHOD tTVPDrawDevice::Update()
 {
-	// 偡傋偰偺 layer manager 偺 UpdateToDrawDevice 傪屇傇
+	// すべての layer manager の UpdateToDrawDevice を呼ぶ
 	for(std::vector<iTVPLayerManager *>::iterator i = Managers.begin(); i != Managers.end(); i++)
 	{
 		(*i)->UpdateToDrawDevice();
@@ -506,7 +506,7 @@ void TJS_INTF_METHOD tTVPDrawDevice::Update()
 //---------------------------------------------------------------------------
 void TJS_INTF_METHOD tTVPDrawDevice::Show()
 {
-	// 側偵傕偟側偄
+	// なにもしない
 }
 //---------------------------------------------------------------------------
 
@@ -514,7 +514,7 @@ void TJS_INTF_METHOD tTVPDrawDevice::Show()
 //---------------------------------------------------------------------------
 void TJS_INTF_METHOD tTVPDrawDevice::DumpLayerStructure()
 {
-	// 偡傋偰偺 layer manager 偺 DumpLayerStructure 傪屇傇
+	// すべての layer manager の DumpLayerStructure を呼ぶ
 	for(std::vector<iTVPLayerManager *>::iterator i = Managers.begin(); i != Managers.end(); i++)
 	{
 		(*i)->DumpLayerStructure();
@@ -526,6 +526,6 @@ void TJS_INTF_METHOD tTVPDrawDevice::DumpLayerStructure()
 //---------------------------------------------------------------------------
 void TJS_INTF_METHOD tTVPDrawDevice::SetShowUpdateRect(bool b)
 {
-	// 側偵傕偟側偄
+	// なにもしない
 }
 //---------------------------------------------------------------------------

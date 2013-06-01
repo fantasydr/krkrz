@@ -18,32 +18,32 @@ library TVPSndSysLib
   {
     [
     id(0x00000001), 
-    helpstring("儊僨傿傾偺庬椶暥帤楍偺庢摼")
+    helpstring("メディアの種類文字列の取得")
     ]
     HRESULT _stdcall GetMediaType([in] LPWSTR shortname, [in] LPWSTR descbuf, [in] unsigned long descbuflen );
     [
     id(0x00000002), 
-    helpstring("嬋挿偝偺庢摼")
+    helpstring("曲長さの取得")
     ]
     HRESULT _stdcall GetLength([out, retval] unsigned long * length );
     [
     id(0x00000003), 
-    helpstring("儊僨傿傾僞僀僩儖偺庢摼")
+    helpstring("メディアタイトルの取得")
     ]
     HRESULT _stdcall GetTitle([in] LPWSTR buf, [in] unsigned long buflen );
     [
     id(0x00000004), 
-    helpstring("儊僨傿傾挊嶌尃忣曬偺庢摼")
+    helpstring("メディア著作権情報の取得")
     ]
     HRESULT _stdcall GetCopyright([in] LPWSTR buf, [in] unsigned long buflen );
     [
     id(0x00000005), 
-    helpstring("儊僨傿傾僐儊儞僩偺庢摼")
+    helpstring("メディアコメントの取得")
     ]
     HRESULT _stdcall GetComment([in] LPWSTR buf, [in] unsigned long buflen );
     [
     id(0x00000006), 
-    helpstring("儊僨傿傾傾乕僥傿僗僩偺庢摼")
+    helpstring("メディアアーティストの取得")
     ]
     HRESULT _stdcall GetArtist([in] LPWSTR buf, [in] unsigned long buflen );
   };
@@ -56,27 +56,27 @@ library TVPSndSysLib
   typedef struct tagTSSWaveFormat
   {
     [
-    helpstring("僒儞僾儕儞僌廃攇悢")
+    helpstring("サンプリング周波数")
     ]
     unsigned long dwSamplesPerSec;
     [
-    helpstring("僠儍僱儖悢")
+    helpstring("チャネル数")
     ]
     unsigned long dwChannels;
     [
-    helpstring("價僢僩悢")
+    helpstring("ビット数")
     ]
     unsigned long dwBitsPerSample;
     [
-    helpstring("僔乕僋壜擻偐")
+    helpstring("シーク可能か")
     ]
     unsigned long dwSeekable;
     [
-    helpstring("慡僒儞僾儖悢")
+    helpstring("全サンプル数")
     ]
     unsigned __int64 ui64TotalSamples;
     [
-    helpstring("慡帪娫")
+    helpstring("全時間")
     ]
     unsigned long dwTotalTime;
     long dwReserved1;
@@ -92,17 +92,17 @@ library TVPSndSysLib
   {
     [
     id(0x00000001), 
-    helpstring("僗僩儗乕僕偺撉傒崬傒梡IStream偺庢摼")
+    helpstring("ストレージの読み込み用IStreamの取得")
     ]
     HRESULT _stdcall GetStreamForRead([in] LPWSTR url, [out, retval]  IUnknown ** stream );
     [
     id(0x00000002), 
-    helpstring("僗僩儗乕僕偺彂偒崬傒梡IStream偺庢摼")
+    helpstring("ストレージの書き込み用IStreamの取得")
     ]
     HRESULT _stdcall GetStreamForWrite([in] LPWSTR url, [out, retval]  IUnknown ** stream );
     [
     id(0x00000003), 
-    helpstring("僗僩儗乕僕偺峏怴梡IStream偺庢摼")
+    helpstring("ストレージの更新用IStreamの取得")
     ]
     HRESULT _stdcall GetStreamForUpdate([in] LPWSTR url, [out, retval]  IUnknown ** stream );
   };
@@ -116,32 +116,32 @@ library TVPSndSysLib
   {
     [
     id(0x00000001), 
-    helpstring("儌僕儏乕儖偺挊嶌尃忣曬偺庢摼")
+    helpstring("モジュールの著作権情報の取得")
     ]
     HRESULT _stdcall GetModuleCopyright([in] LPWSTR buffer, [in] unsigned long buflen );
     [
     id(0x00000002), 
-    helpstring("儌僕儏乕儖偺捛壛忣曬偺庢摼")
+    helpstring("モジュールの追加情報の取得")
     ]
     HRESULT _stdcall GetModuleDescription([in] LPWSTR buffer, [in] unsigned long buflen );
     [
     id(0x00000003), 
-    helpstring("懳墳僼傽僀儖奼挘巕偺庢摼")
+    helpstring("対応ファイル拡張子の取得")
     ]
     HRESULT _stdcall GetSupportExts([in] unsigned long index, [in] LPWSTR mediashortname, [in] LPWSTR buf, [in] unsigned long buflen );
     [
     id(0x00000004), 
-    helpstring("巜掕儊僨傿傾偺忣曬傪庢摼")
+    helpstring("指定メディアの情報を取得")
     ]
     HRESULT _stdcall GetMediaInfo([in] LPWSTR url, [out, retval] ITSSMediaBaseInfo ** info );
     [
     id(0x00000005), 
-    helpstring("巜掕儊僨傿傾傪偙偺僾儔僌僀儞偱埖偊傞偐専嵏")
+    helpstring("指定メディアをこのプラグインで扱えるか検査")
     ]
     HRESULT _stdcall GetMediaSupport([in] LPWSTR url );
     [
     id(0x00000006), 
-    helpstring("儊僨傿傾嵞惗梡僆僽僕僃僋僩偺庢摼")
+    helpstring("メディア再生用オブジェクトの取得")
     ]
     HRESULT _stdcall GetMediaInstance([in] LPWSTR url, [out, retval]  IUnknown ** instance );
   };
@@ -155,17 +155,17 @@ library TVPSndSysLib
   {
     [
     id(0x00000001), 
-    helpstring("嵞惗僼僅乕儅僢僩偺庢摼")
+    helpstring("再生フォーマットの取得")
     ]
     HRESULT _stdcall GetFormat([in] TSSWaveFormat * format );
     [
     id(0x00000002), 
-    helpstring("尰嵼埵抲偐傜僨僐乕僪")
+    helpstring("現在位置からデコード")
     ]
     HRESULT _stdcall Render([in] void * buf, [in] unsigned long bufsamplelen, [out] unsigned long * rendered, [out, retval] unsigned long * status );
     [
     id(0x00000003), 
-    helpstring("巜掕埵抲傊偺僨僐乕僪埵抲偺堏摦")
+    helpstring("指定位置へのデコード位置の移動")
     ]
     HRESULT _stdcall SetPosition([in] unsigned __int64 samplepos );
   };

@@ -2,7 +2,7 @@
 /*! @file
 @brief DirectShow
 
-僶僢僼傽僿儗儞僟儕儞僌偡傞
+バッファヘレンダリングする
 -----------------------------------------------------------------------------
 	Copyright (C) 2004 T.Imoto
 -----------------------------------------------------------------------------
@@ -25,8 +25,8 @@
 //##	TBufferRenderer
 //----------------------------------------------------------------------------
 //! @brief	  	This goes in the factory template table to create new filter instances
-//! @param		pUnk : 廤惉偟偨 IUnknown 僀儞僞乕僼僃僀僗傊偺億僀儞僞丅
-//! @param		phr : 儊僜僢僪偺惉岟丒幐攕傪帵偡 HRESULT 抣傪庴偗庢傞曄悢傊偺億僀儞僞丅
+//! @param		pUnk : 集成した IUnknown インターフェイスへのポインタ。
+//! @param		phr : メソッドの成功．失敗を示す HRESULT 値を受け取る変数へのポインタ。
 //----------------------------------------------------------------------------
 CUnknown * WINAPI TBufferRenderer::CreateInstance( LPUNKNOWN pUnk, HRESULT *phr )
 {
@@ -35,19 +35,19 @@ CUnknown * WINAPI TBufferRenderer::CreateInstance( LPUNKNOWN pUnk, HRESULT *phr 
 		*phr = E_OUTOFMEMORY;
 	return punk;
 }
-#pragma warning(disable: 4355)	// 僐儞僗僩儔僋僞偺儀乕僗儊儞僶弶婜壔帪偵this傪巊偆偲儚乕僯儞僌偑弌傞偺偱偦傟傪梷巭
+#pragma warning(disable: 4355)	// コンストラクタのベースメンバ初期化時にthisを使うとワーニングが出るのでそれを抑止
 //----------------------------------------------------------------------------
 //! @brief	  	TBufferRenderer constructor
-//! @param		pName : 僨僶僢僌偺偨傔偵巊梡偝傟傞婰弎傊偺億僀儞僞丅
-//! @param		pUnk : 廤惉偝傟偨強桳幰僆僽僕僃僋僩傊偺億僀儞僞丅
-//! @param		phr : HRESULT 抣傊偺億僀儞僞丅
+//! @param		pName : デバッグのために使用される記述へのポインタ。
+//! @param		pUnk : 集成された所有者オブジェクトへのポインタ。
+//! @param		phr : HRESULT 値へのポインタ。
 //----------------------------------------------------------------------------
 TBufferRenderer::TBufferRenderer( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
  : CBaseVideoRenderer( CLSID_BufferRenderer, pName, pUnk, phr )
 , m_InputPin( this, &m_InterfaceLock, phr, L"Input" )
 , m_Allocator( this, NAME("Allocator"), GetOwner(), phr )
 {
-	//CBaseRender::m_pInputPin偵億僀儞僞傪愝掕偡傞丅
+	//CBaseRender::m_pInputPinにポインタを設定する。
 	m_pInputPin = &m_InputPin;
 
 	// Store and AddRef the texture for our use.
@@ -68,21 +68,21 @@ TBufferRenderer::TBufferRenderer( TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr )
 //----------------------------------------------------------------------------
 TBufferRenderer::~TBufferRenderer()
 {
-	//CBaseRender::m_pInputPin偵億僀儞僞傪儕僙僢僩偡傞丅
-	//偙傟傪偟側偄偲CBaseRender偺僨僗僩儔僋僞偱delete偝傟偰偟傑偆偺偱拲堄両
+	//CBaseRender::m_pInputPinにポインタをリセットする。
+	//これをしないとCBaseRenderのデストラクタでdeleteされてしまうので注意！
     m_pInputPin = NULL;
 
-	// 帺暘偱妋曐偟偰偄傞応崌僶僢僼傽偺夝曻
+	// 自分で確保している場合バッファの解放
 	FreeFrontBuffer();
 	FreeBackBuffer();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	梫媮偝傟偨僀儞僞乕僼僃僀僗傪曉偡
+//! @brief	  	要求されたインターフェイスを返す
 //! 
 //! Overriden to say what interfaces we support and where
-//! @param		riid : 僀儞僞乕僼僃僀僗偺IID
-//! @param		ppv : 僀儞僞乕僼僃僀僗傪曉偡億僀儞僞乕傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @param		riid : インターフェイスのIID
+//! @param		ppv : インターフェイスを返すポインターへのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP TBufferRenderer::NonDelegatingQueryInterface( REFIID riid, void **ppv )
 {
@@ -99,13 +99,13 @@ STDMETHODIMP TBufferRenderer::NonDelegatingQueryInterface( REFIID riid, void **p
 	return CBaseVideoRenderer::NonDelegatingQueryInterface( riid, ppv );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	摿掕偺儊僨傿傾 僞僀僾傪僼傿儖僞偑庴偗擖傟傞偐偳偆偐傪妋擣偡傞
+//! @brief	  	特定のメディア タイプをフィルタが受け入れるかどうかを確認する
 //! 
 //! This method forces the graph to give us an R8G8B8 video type, making our copy 
 //! to texture memory trivial.
-//! @param		pmt : 採埬偝傟偨儊僨傿傾 僞僀僾傪娷傓 CMediaType 僆僽僕僃僋僩傊偺億僀儞僞
-//! @return		採埬偝傟偨儊僨傿傾 僞僀僾偑庴偗擖傟傜傟傞側傜 S_OK 傪曉偡丅
-//!				偦偆偱側偗傟偽 S_FALSE 偐僄儔乕 僐乕僪傪曉偡丅
+//! @param		pmt : 提案されたメディア タイプを含む CMediaType オブジェクトへのポインタ
+//! @return		提案されたメディア タイプが受け入れられるなら S_OK を返す。
+//!				そうでなければ S_FALSE かエラー コードを返す。
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::CheckMediaType( const CMediaType *pmt )
 {
@@ -132,19 +132,19 @@ HRESULT TBufferRenderer::CheckMediaType( const CMediaType *pmt )
 }
 //----------------------------------------------------------------------------
 //! @brief	  	Graph connection has been made. 
-//! @param		pmt : 儊僨傿傾 僞僀僾傪巜掕偡傞 CMediaType 僆僽僕僃僋僩傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @param		pmt : メディア タイプを指定する CMediaType オブジェクトへのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::SetMediaType( const CMediaType *pmt )
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 
 	// Retrive the size of this media type
 	VIDEOINFO *pviBmp;						// Bitmap info header
 	pviBmp = (VIDEOINFO *)pmt->Format();
 	m_VideoWidth  = pviBmp->bmiHeader.biWidth;
 	m_VideoHeight = abs(pviBmp->bmiHeader.biHeight);
-	m_VideoPitch = m_VideoWidth * 4;	// RGB32偵寛傔懪偪
+	m_VideoPitch = m_VideoWidth * 4;	// RGB32に決め打ち
 
 	if( !IsAllocatedFrontBuffer() )
 		AllocFrontBuffer( GetBufferSize() );
@@ -156,8 +156,8 @@ HRESULT TBufferRenderer::SetMediaType( const CMediaType *pmt )
 }
 //----------------------------------------------------------------------------
 //! @brief	  	A sample has been delivered. Copy it to the texture.
-//! @param		pSample : 僒儞僾儖偺 IMediaSample 僀儞僞乕僼僃僀僗傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @param		pSample : サンプルの IMediaSample インターフェイスへのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::DoRenderSample( IMediaSample * pSample )
 {
@@ -166,7 +166,7 @@ HRESULT TBufferRenderer::DoRenderSample( IMediaSample * pSample )
 
 //	if( m_bEOS ) return S_OK;
 
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 
 	// Get the video bitmap buffer
 	pSample->GetPointer( reinterpret_cast<BYTE**>(&pBmpBuffer) );
@@ -185,19 +185,19 @@ HRESULT TBufferRenderer::DoRenderSample( IMediaSample * pSample )
 		EventParam1 = (LONG)TimeStart;
 	}
 	if( m_StopFrame && EventParam1 >= m_StopFrame )
-		return S_OK;	// 嵞惗偟側偄僼儗乕儉
+		return S_OK;	// 再生しないフレーム
 
-	if( pTxtBuffer == pBmpBuffer )	// 帺慜偺傾儘働乕僞乕偑巊傢傟偰偄傞
+	if( pTxtBuffer == pBmpBuffer )	// 自前のアロケーターが使われている
 	{
-		SwapBuffer( pSample );	// Front偲Back僶僢僼傽傪擖傟懼偊傞
+		SwapBuffer( pSample );	// FrontとBackバッファを入れ替える
 		if( m_pSink )
 			m_pSink->Notify( EC_UPDATE, EventParam1, NULL );
 		return S_OK;
 	}
 
-	// 帺慜偺傾儘働乕僞乕偱偼側偄偺偱儊儌儕傪僐僺乕偡傞
+	// 自前のアロケーターではないのでメモリをコピーする
 #if 0
-	// 壓偐傜忋偵僐僺乕(忋壓斀揮壔)
+	// 下から上にコピー(上下反転化)
 	{
 		int		height = m_VideoHeight;
 		int		width = m_VideoWidth;
@@ -213,7 +213,7 @@ HRESULT TBufferRenderer::DoRenderSample( IMediaSample * pSample )
 		}
 	}
 #else
-	// 忋偐傜壓偵僐僺乕
+	// 上から下にコピー
 	{
 		int		height = m_VideoHeight;
 		int		width = m_VideoWidth;
@@ -230,16 +230,16 @@ HRESULT TBufferRenderer::DoRenderSample( IMediaSample * pSample )
 #endif
 	if( m_pSink )
 		m_pSink->Notify( EC_UPDATE, EventParam1, NULL );
-	SwapBuffer( pSample );	// Front偲Back僶僢僼傽傪擖傟懼偊傞
+	SwapBuffer( pSample );	// FrontとBackバッファを入れ替える
 	return S_OK;
 }
 //---------------------------------------------------------------------------
-//! @brief	  	僼儘儞僩僶僢僼傽偲僶僢僋僶僢僼傽傪擖傟懼偊傞
-//! @param		pSample : 僒儞僾儖丅偙偺拞偺億僀儞僞傪曄峏偡傞
+//! @brief	  	フロントバッファとバックバッファを入れ替える
+//! @param		pSample : サンプル。この中のポインタを変更する
 //----------------------------------------------------------------------------
 void TBufferRenderer::SwapBuffer( IMediaSample *pSample )
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	if( m_FrontBuffer == 1 )
 	{
 		SetPointer( pSample, m_Buffer[1] );
@@ -252,12 +252,12 @@ void TBufferRenderer::SwapBuffer( IMediaSample *pSample )
 	}
 }
 //---------------------------------------------------------------------------
-//! @brief	  	僼儘儞僩僶僢僼傽偵儊儌儕傪妱傝摉偰傞
-//! @param		size : 妱傝摉偰傞僒僀僘
+//! @brief	  	フロントバッファにメモリを割り当てる
+//! @param		size : 割り当てるサイズ
 //----------------------------------------------------------------------------
 void TBufferRenderer::AllocFrontBuffer( size_t size )
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	BYTE	*buff = NULL;
 
 	FreeFrontBuffer();
@@ -276,12 +276,12 @@ void TBufferRenderer::AllocFrontBuffer( size_t size )
 		throw L"Cannot allocate memory in filter.";
 }
 //---------------------------------------------------------------------------
-//! @brief	  	僶僢僋僶僢僼傽偵儊儌儕傪妱傝摉偰傞丅
-//! @param		size : 妱傝摉偰傞僒僀僘
+//! @brief	  	バックバッファにメモリを割り当てる。
+//! @param		size : 割り当てるサイズ
 //----------------------------------------------------------------------------
 void TBufferRenderer::AllocBackBuffer( size_t size )
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	BYTE	*buff = NULL;
 
 	FreeBackBuffer();
@@ -300,14 +300,14 @@ void TBufferRenderer::AllocBackBuffer( size_t size )
 		throw L"Cannot allocate memory in filter.";
 }
 //---------------------------------------------------------------------------
-//! @brief	  	僼儘儞僩僶僢僼傽偵妱傝摉偰傜傟偰偄傞儊儌儕傪奐曻偡傞
+//! @brief	  	フロントバッファに割り当てられているメモリを開放する
 //!
-//! 傕偟丄妱傝摉偰傜傟偰偄傞儊儌儕偑丄偙偺僋儔僗偵傛偭偰妱傝摉偰傜傟偨傕偺偱側偄応崌偼丄
-//! 夝曻偟側偄丅
+//! もし、割り当てられているメモリが、このクラスによって割り当てられたものでない場合は、
+//! 解放しない。
 //----------------------------------------------------------------------------
 void TBufferRenderer::FreeFrontBuffer()
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	if( m_FrontBuffer == 1 )
 	{
 		if( m_Buffer[1] != NULL )
@@ -330,14 +330,14 @@ void TBufferRenderer::FreeFrontBuffer()
 	}
 }
 //---------------------------------------------------------------------------
-//! @brief	  	僶僢僋僶僢僼傽偵妱傝摉偰傜傟偰偄傞儊儌儕傪奐曻偡傞
+//! @brief	  	バックバッファに割り当てられているメモリを開放する
 //!
-//! 傕偟丄妱傝摉偰傜傟偰偄傞儊儌儕偑丄偙偺僋儔僗偵傛偭偰妱傝摉偰傜傟偨傕偺偱側偄応崌偼丄
-//! 夝曻偟側偄丅
+//! もし、割り当てられているメモリが、このクラスによって割り当てられたものでない場合は、
+//! 解放しない。
 //----------------------------------------------------------------------------
 void TBufferRenderer::FreeBackBuffer()
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	if( m_FrontBuffer == 1 )
 	{
 		if( m_Buffer[0] != NULL )
@@ -360,12 +360,12 @@ void TBufferRenderer::FreeBackBuffer()
 	}
 }
 //---------------------------------------------------------------------------
-//! @brief	  	僼儘儞僩僶僢僼傽偵僶僢僼傽傊偺億僀儞僞傪愝掕偡傞
-//! @param		buff : 僶僢僼傽傊偺億僀儞僞
+//! @brief	  	フロントバッファにバッファへのポインタを設定する
+//! @param		buff : バッファへのポインタ
 //----------------------------------------------------------------------------
 void TBufferRenderer::SetFrontBuffer( BYTE *buff )
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	FreeFrontBuffer();
 	if( m_FrontBuffer == 1 )
 		m_Buffer[1] = buff;
@@ -373,12 +373,12 @@ void TBufferRenderer::SetFrontBuffer( BYTE *buff )
 		m_Buffer[0] = buff;
 }
 //---------------------------------------------------------------------------
-//! @brief	  	僶僢僋僶僢僼傽偵僶僢僼傽傊偺億僀儞僞傪愝掕偡傞
-//! @param		buff : 僶僢僼傽傊偺億僀儞僞
+//! @brief	  	バックバッファにバッファへのポインタを設定する
+//! @param		buff : バッファへのポインタ
 //----------------------------------------------------------------------------
 void TBufferRenderer::SetBackBuffer( BYTE *buff )
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	FreeBackBuffer();
 	if( m_FrontBuffer == 1 )
 		m_Buffer[0] = buff;
@@ -388,42 +388,42 @@ void TBufferRenderer::SetBackBuffer( BYTE *buff )
 	SetPointer( buff );
 }
 //---------------------------------------------------------------------------
-//! @brief	  	僼儘儞僩僶僢僼傽傊偺億僀儞僞傪庢摼偡傞
-//! @return		僶僢僼傽傊偺億僀儞僞
+//! @brief	  	フロントバッファへのポインタを取得する
+//! @return		バッファへのポインタ
 //----------------------------------------------------------------------------
 BYTE *TBufferRenderer::GetFrontBuffer()
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	if( m_FrontBuffer == 1 )
 		return m_Buffer[1];
 	else
 		return m_Buffer[0];
 }
 //---------------------------------------------------------------------------
-//! @brief	  	僶僢僋僶僢僼傽傊偺億僀儞僞傪庢摼偡傞
-//! @return		僶僢僼傽傊偺億僀儞僞
+//! @brief	  	バックバッファへのポインタを取得する
+//! @return		バッファへのポインタ
 //----------------------------------------------------------------------------
 BYTE *TBufferRenderer::GetBackBuffer()
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	if( m_FrontBuffer == 1 )
 		return m_Buffer[0];
 	else
 		return m_Buffer[1];
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僼儘儞僩僶僢僼傽傪愝掕偟傑偡丅
-//! @param		buff : 僼儘儞僩僶僢僼傽梡僶僢僼傽傊偺億僀儞僞
-//! @param		size : 僶僢僼傽偺僒僀僘傪搉偡曄悢傊偺億僀儞僞丅@n
-//!					buff偑NULL偺帪丄偙偙偵梸偟偄僒僀僘偑曉傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	フロントバッファを設定します。
+//! @param		buff : フロントバッファ用バッファへのポインタ
+//! @param		size : バッファのサイズを渡す変数へのポインタ。@n
+//!					buffがNULLの時、ここに欲しいサイズが返る
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::SetFrontBuffer( BYTE *buff, long *size )
 {
 	if( m_State == State_Running )
 		return S_FALSE;
 
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	if( buff == NULL && size != NULL )
 	{
 		*size = GetBufferSize();
@@ -440,18 +440,18 @@ HRESULT TBufferRenderer::SetFrontBuffer( BYTE *buff, long *size )
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僶僢僋僶僢僼傽傪愝掕偟傑偡丅
-//! @param		buff : 僶僢僋僶僢僼傽梡僶僢僼傽傊偺億僀儞僞
-//! @param		size : 僶僢僼傽偺僒僀僘傪搉偡曄悢傊偺億僀儞僞丅@n
-//!					buff偑NULL偺帪丄偙偙偵梸偟偄僒僀僘偑曉傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	バックバッファを設定します。
+//! @param		buff : バックバッファ用バッファへのポインタ
+//! @param		size : バッファのサイズを渡す変数へのポインタ。@n
+//!					buffがNULLの時、ここに欲しいサイズが返る
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::SetBackBuffer( BYTE *buff, long *size )
 {
 	if( m_State == State_Running )
 		return S_FALSE;
 
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	if( buff == NULL && size != NULL )
 	{
 		*size = GetBufferSize();
@@ -468,35 +468,35 @@ HRESULT TBufferRenderer::SetBackBuffer( BYTE *buff, long *size )
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief		僼儘儞僩僶僢僼傽傊偺億僀儞僞傪庢摼偟傑偡丅
-//! @param		buff : 僼儘儞僩僶僢僼傽傊偺億僀儞僞傪曉偡偨傔偺僶僢僼傽傊偺億僀儞僞
-//! @param		size : 僶僢僼傽偺僒僀僘傪曉偡曄悢傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief		フロントバッファへのポインタを取得します。
+//! @param		buff : フロントバッファへのポインタを返すためのバッファへのポインタ
+//! @param		size : バッファのサイズを返す変数へのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::GetFrontBuffer( BYTE **buff, long *size )
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	*buff = GetFrontBuffer();
 	*size = GetBufferSize();
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僶僢僋僶僢僼傽傊偺億僀儞僞傪庢摼偟傑偡丅
-//! @param		buff : 僶僢僋僶僢僼傽傊偺億僀儞僞傪曉偡偨傔偺僶僢僼傽傊偺億僀儞僞
-//! @param		size : 僶僢僼傽偺僒僀僘傪曉偡曄悢傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	バックバッファへのポインタを取得します。
+//! @param		buff : バックバッファへのポインタを返すためのバッファへのポインタ
+//! @param		size : バッファのサイズを返す変数へのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::GetBackBuffer( BYTE **buff, long *size )
 {
-	CAutoLock cAutoLock(&m_BufferLock);	// 僋儕僥傿僇儖僙僋僔儑儞
+	CAutoLock cAutoLock(&m_BufferLock);	// クリティカルセクション
 	*buff = GetBackBuffer();
 	*size = GetBufferSize();
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	1僼儗乕儉偺暯嬒昞帵帪娫傪庢摼偟傑偡
-//! @param		pAvgTimePerFrame : 1僼儗乕儉偺暯嬒昞帵帪娫
-//! @return		僄儔乕僐乕僪
+//! @brief	  	1フレームの平均表示時間を取得します
+//! @param		pAvgTimePerFrame : 1フレームの平均表示時間
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::get_AvgTimePerFrame( REFTIME *pAvgTimePerFrame )
 {
@@ -508,9 +508,9 @@ HRESULT TBufferRenderer::get_AvgTimePerFrame( REFTIME *pAvgTimePerFrame )
 		return E_POINTER;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺暆傪庢摼偟傑偡
-//! @param		pVideoWidth : 價僨僆偺暆
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ビデオの幅を取得します
+//! @param		pVideoWidth : ビデオの幅
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::get_VideoWidth( long *pVideoWidth )
 {
@@ -522,9 +522,9 @@ HRESULT TBufferRenderer::get_VideoWidth( long *pVideoWidth )
 		return E_POINTER;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺崅偝傪庢摼偟傑偡
-//! @param		pVideoHeight : 價僨僆偺崅偝
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ビデオの高さを取得します
+//! @param		pVideoHeight : ビデオの高さ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::get_VideoHeight( long *pVideoHeight )
 {
@@ -536,10 +536,10 @@ HRESULT TBufferRenderer::get_VideoHeight( long *pVideoHeight )
 		return E_POINTER;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儈儞僌偑奐巒偝傟偨帪偵僐乕儖偝傟傞
+//! @brief	  	ストリーミングが開始された時にコールされる
 //!
-//! 奐巒僼儗乕儉傪婰榐偡傞丅
-//! @return		僄儔乕僐乕僪
+//! 開始フレームを記録する。
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRenderer::OnStartStreaming(void)
 {
@@ -555,7 +555,7 @@ HRESULT TBufferRenderer::OnStartStreaming(void)
 	bool		bGetTime = false;
 	LONGLONG	Current = 0;
 	if( mediaSeeking.p != NULL )
-	{	// IMediaSeeking傪巊偭偰帪娫偺庢摼傪帋傒傞
+	{	// IMediaSeekingを使って時間の取得を試みる
 		GUID	Format;
 		if( SUCCEEDED(hr = mediaSeeking->GetTimeFormat( &Format ) ) )
 		{
@@ -564,7 +564,7 @@ HRESULT TBufferRenderer::OnStartStreaming(void)
 				if( IsEqualGUID( TIME_FORMAT_MEDIA_TIME, Format ) )
 				{
 					double	renderTime = Current / 10000000.0;
-					REFTIME	AvgTimePerFrame;	// REFTIME :  昩悢傪帵偡彫悢傪昞偡攞惛搙晜摦彫悢揰悢丅
+					REFTIME	AvgTimePerFrame;	// REFTIME :  秒数を示す小数を表す倍精度浮動小数点数。
 					if( SUCCEEDED( hr = get_AvgTimePerFrame( &AvgTimePerFrame ) ) )
 					{
 						m_StartFrame = (LONG)(renderTime / AvgTimePerFrame + 0.5);
@@ -587,15 +587,15 @@ HRESULT TBufferRenderer::OnStartStreaming(void)
 	return CBaseVideoRenderer::OnStartStreaming();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儗儞僟儕儞僌慜偵僐乕儖偝傟傞
+//! @brief	  	レンダリング前にコールされる
 //!
-//! 儊僨傿傾僒儞僾儖偵儊僨傿傾僞僀儉傪婰榐偡傞丅
-//! 儊僨傿傾僞僀儉偼奐巒僼儗乕儉偵尰嵼偺僗僩儕乕儉帪娫傪壛嶼偟偨傕偺偵側傞丅
-//! 傕偟丄僼傿儖僞偺IMediaSeeking僀儞僞乕僼僃僀僗偑棙梡偱偒側偄応崌偼丄
-//! 偙偺儗儞僟乕僼傿儖僞偑昤夋偟偨僼儗乕儉悢偲僪儘僢僾偟偨僼儗乕儉悢傪壛嶼偡傞丅
-//! 偙偺応崌丄傛傝忋埵偺僼傿儖僞偱僪儘僢僾偟偨僼儗乕儉悢偼傢偐傜側偄偺偱丄
-//! 庒姳惛搙偑棊偪傞丅
-//! @param		pMediaSample : 儊僨傿傾僒儞僾儖
+//! メディアサンプルにメディアタイムを記録する。
+//! メディアタイムは開始フレームに現在のストリーム時間を加算したものになる。
+//! もし、フィルタのIMediaSeekingインターフェイスが利用できない場合は、
+//! このレンダーフィルタが描画したフレーム数とドロップしたフレーム数を加算する。
+//! この場合、より上位のフィルタでドロップしたフレーム数はわからないので、
+//! 若干精度が落ちる。
+//! @param		pMediaSample : メディアサンプル
 //----------------------------------------------------------------------------
 void TBufferRenderer::OnRenderStart( IMediaSample *pMediaSample )
 {
@@ -617,7 +617,7 @@ void TBufferRenderer::OnRenderStart( IMediaSample *pMediaSample )
 				{
 					double	renderTime = Current / 10000000.0;
 					double	stopTime = Stop / 10000000.0;
-					REFTIME	AvgTimePerFrame;	// REFTIME :  昩悢傪帵偡彫悢傪昞偡攞惛搙晜摦彫悢揰悢丅
+					REFTIME	AvgTimePerFrame;	// REFTIME :  秒数を示す小数を表す倍精度浮動小数点数。
 					if( SUCCEEDED( hr = get_AvgTimePerFrame( &AvgTimePerFrame ) ) )
 					{
 						Current = (LONGLONG)(renderTime / AvgTimePerFrame + 0.5);
@@ -653,12 +653,12 @@ void TBufferRenderer::OnRenderStart( IMediaSample *pMediaSample )
 //----------------------------------------------------------------------------
 //##	TBufferRendererInputPin
 //----------------------------------------------------------------------------
-//! @brief	  	擖椡僺儞僆僽僕僃僋僩傪峔抸偟傑偡丅
-//! @param		pRenderer : 儗儞僟乕僆僽僕僃僋僩傪巜掕偟傑偡丅
-//! @param		pInterfaceLock : CCritSec 儘僢僋傊偺億僀儞僞偱丄忬懺堏峴傪宲懕偡傞偨傔偵巊梡偡傞丅@n
-//!					偙傟偼僼傿儖僞 儘僢僋 CBaseFilter.m_pLock 偲摨條偺僋儕僥傿僇儖 僙僋僔儑儞偲側傝偆傞丅 
-//! @param		phr : 儊僜僢僪偺惉岟丒幐攕傪帵偡 HRESULT 抣傪庢摼偡傞曄悢偺億僀儞僞丅
-//! @param		name : 僆僽僕僃僋僩偺僨僶僢僌梡偺柤慜偑擖傞暥帤楍丅
+//! @brief	  	入力ピンオブジェクトを構築します。
+//! @param		pRenderer : レンダーオブジェクトを指定します。
+//! @param		pInterfaceLock : CCritSec ロックへのポインタで、状態移行を継続するために使用する。@n
+//!					これはフィルタ ロック CBaseFilter.m_pLock と同様のクリティカル セクションとなりうる。 
+//! @param		phr : メソッドの成功．失敗を示す HRESULT 値を取得する変数のポインタ。
+//! @param		name : オブジェクトのデバッグ用の名前が入る文字列。
 //----------------------------------------------------------------------------
 TBufferRendererInputPin::TBufferRendererInputPin( TBufferRenderer *pRenderer, CCritSec *pInterfaceLock, HRESULT *phr, LPCWSTR name)
  : CRendererInputPin( pRenderer, phr, name ), m_pRenderer( pRenderer ), m_pInterfaceLock( pInterfaceLock ),
@@ -666,71 +666,71 @@ TBufferRendererInputPin::TBufferRendererInputPin( TBufferRenderer *pRenderer, CC
 {
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僨僗僩儔僋僞丅尰嵼偼壗傕偟側偄丅
+//! @brief	  	デストラクタ。現在は何もしない。
 //----------------------------------------------------------------------------
 TBufferRendererInputPin::~TBufferRendererInputPin()
 {
 }
 //----------------------------------------------------------------------------
-//! @brief	  	帺慜偺傾儘働乕僞偑桳岠偐偳偆偐挷傋傑偡丅
-//! @return		桳岠側傜TRUE傪曉偟傑偡丅
+//! @brief	  	自前のアロケータが有効かどうか調べます。
+//! @return		有効ならTRUEを返します。
 //----------------------------------------------------------------------------
 bool TBufferRendererInputPin::ActiveAllocator( void ) const
 {
 	return m_ActiveAllocator;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	帺慜偺傾儘働乕僞僆僽僕僃僋僩傪妱傝摉偰傑偡丅
-//! @param		ppAllocator : 曉偡傾儘働乕僞乕
+//! @brief	  	自前のアロケータオブジェクトを割り当てます。
+//! @param		ppAllocator : 返すアロケーター
 //----------------------------------------------------------------------------
 STDMETHODIMP TBufferRendererInputPin::GetAllocator( IMemAllocator **ppAllocator )
 {
 	CAutoLock cInterfaceLock(m_pInterfaceLock);
 	CheckPointer(ppAllocator,E_POINTER);
 
-	// 傾儘働乕僞偑傑偩愝掕偝傟偰偄側偄偲偒
+	// アロケータがまだ設定されていないとき
 	if (m_pAllocator == NULL) {
 		m_pAllocator = &(m_pRenderer->m_Allocator);
 		m_pAllocator->AddRef();
 	}
-	// 嶲徠僇僂儞僩傪巆偡偺偼僀儞僞僼僃乕僗偺巇條偱偡丅
+	// 参照カウントを残すのはインタフェースの仕様です。
 	m_pAllocator->AddRef();
 	*ppAllocator = m_pAllocator;
 
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	傾儘働乕僞偑寛傑偭偨偲偒偵屇傃弌偝傟傑偡丅
-//! @param		pAllocator 崱夞偺愙懕偱巊梡偡傞傾儘働乕僞傪巜掕偟傑偡丅
-//! @param		bReadOnly 偙偺傾儘働乕僞偐傜偺僒儞僾儖偑撉傒偲傝愱梡側傜TRUE傪巜掕偟傑偡丅
-//! @return		僄儔乕僐乕僪
+//! @brief	  	アロケータが決まったときに呼び出されます。
+//! @param		pAllocator 今回の接続で使用するアロケータを指定します。
+//! @param		bReadOnly このアロケータからのサンプルが読みとり専用ならTRUEを指定します。
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP TBufferRendererInputPin::NotifyAllocator( IMemAllocator * pAllocator, BOOL bReadOnly )
 {
 	CAutoLock cInterfaceLock(m_pInterfaceLock);
 
-	// 婎掙僋儔僗屇傃弌偟
+	// 基底クラス呼び出し
 	HRESULT hr = CBaseInputPin::NotifyAllocator(pAllocator, bReadOnly);
 	if( FAILED(hr) )
 		return hr;
 
-	//帺慜偺傾儘働乕僞偑桳岠偐偳偆偐傪婰榐偟傑偡
+	//自前のアロケータが有効かどうかを記録します
 	m_ActiveAllocator = (pAllocator == (&(m_pRenderer->m_Allocator)));
 
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巜掕偟偨儊僨傿傾僒儞僾儖偵億僀儞僞傪愝掕偟傑偡
-//! @param		media : 儊僨傿傾僒儞僾儖
-//! @param		ptr : 愝掕偡傞億僀儞僞
+//! @brief	  	指定したメディアサンプルにポインタを設定します
+//! @param		media : メディアサンプル
+//! @param		ptr : 設定するポインタ
 //----------------------------------------------------------------------------
 void TBufferRendererInputPin::SetPointer( IMediaSample *media, BYTE *ptr )
 {
 	m_pRenderer->m_Allocator.SetPointer( media, ptr );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	傾儘働乕僞乕偑帩偮儊僨傿傾僒儞僾儖偵億僀儞僞傪愝掕偟傑偡
-//! @param		ptr : 愝掕偡傞億僀儞僞
+//! @brief	  	アロケーターが持つメディアサンプルにポインタを設定します
+//! @param		ptr : 設定するポインタ
 //----------------------------------------------------------------------------
 void TBufferRendererInputPin::SetPointer( BYTE *ptr )
 {
@@ -739,17 +739,17 @@ void TBufferRendererInputPin::SetPointer( BYTE *ptr )
 //----------------------------------------------------------------------------
 //## TBufferRendererAllocator
 //----------------------------------------------------------------------------
-//! @brief	  	僐儞僗僩儔僋僞
-//! @param		pRenderer : 儗儞僟乕僆僽僕僃僋僩傪巜掕偟傑偡丅
-//! @param		pName : 僆僽僕僃僋僩偺僨僶僢僌梡偺柤慜偑擖傞暥帤楍丅
-//! @param		pUnk : 廤惉偝傟偨強桳幰僆僽僕僃僋僩傊偺億僀儞僞丅
-//! @param		phr : 儊僜僢僪偺惉岟丒幐攕傪帵偡 HRESULT 抣傪庢摼偡傞曄悢偺億僀儞僞丅
+//! @brief	  	コンストラクタ
+//! @param		pRenderer : レンダーオブジェクトを指定します。
+//! @param		pName : オブジェクトのデバッグ用の名前が入る文字列。
+//! @param		pUnk : 集成された所有者オブジェクトへのポインタ。
+//! @param		phr : メソッドの成功．失敗を示す HRESULT 値を取得する変数のポインタ。
 //----------------------------------------------------------------------------
 TBufferRendererAllocator::TBufferRendererAllocator( TBufferRenderer *pRenderer, TCHAR *pName, LPUNKNOWN pUnk, HRESULT *phr)
  : CBaseAllocator(pName, pUnk, phr), m_pMediaSample(NULL), m_pRenderer(pRenderer)
 {}
 //----------------------------------------------------------------------------
-//! @brief	  	CBaseAllocator::Decommit傪僐乕儖偟側偗傟偽側傜側偄偺偱丄僐乕儖偡傞丅
+//! @brief	  	CBaseAllocator::Decommitをコールしなければならないので、コールする。
 //----------------------------------------------------------------------------
 TBufferRendererAllocator::~TBufferRendererAllocator()
 {
@@ -768,14 +768,14 @@ TBufferRendererAllocator::~TBufferRendererAllocator()
 	m_lAllocated = 0;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	壗傕偟側偄丅傾儘働乕僞乕偑儊儌儕傪夝曻偡傞偙偲偼側偄丅
+//! @brief	  	何もしない。アロケーターがメモリを解放することはない。
 //----------------------------------------------------------------------------
 void TBufferRendererAllocator::Free( void )
 {
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儊儌儕傪妱傝摉偰偰丄偦傟傪儕僗僩偵捛壛偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	メモリを割り当てて、それをリストに追加する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT TBufferRendererAllocator::Alloc( void )
 {
@@ -806,10 +806,10 @@ HRESULT TBufferRendererAllocator::Alloc( void )
 }
 
 //----------------------------------------------------------------------------
-//! @brief	  	梫媮偡傞儊儌儕偺徻嵶傪愝掕偡傞丅
-//! @param		pRequest : 僶僢僼傽梫媮傪娷傓 ALLOCATOR_PROPERTIES 峔憿懱偺億僀儞僞
-//! @param		pActual : 幚嵺偺僶僢僼傽 僾儘僷僥傿傪庴偗庢傞 ALLOCATOR_PROPERTIES 峔憿懱偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	要求するメモリの詳細を設定する。
+//! @param		pRequest : バッファ要求を含む ALLOCATOR_PROPERTIES 構造体のポインタ
+//! @param		pActual : 実際のバッファ プロパティを受け取る ALLOCATOR_PROPERTIES 構造体のポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP TBufferRendererAllocator::SetProperties( ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_PROPERTIES* pActual )
 {
@@ -822,7 +822,7 @@ STDMETHODIMP TBufferRendererAllocator::SetProperties( ALLOCATOR_PROPERTIES* pReq
 	if( m_bCommitted == TRUE)
 		return VFW_E_ALREADY_COMMITTED;
 
-	if( m_lFree.GetCount() < m_lAllocated )	// m_lAllocated偑1屄埲忋偺帪偼僄儔乕偵偟偨曽偑傛偄丠
+	if( m_lFree.GetCount() < m_lAllocated )	// m_lAllocatedが1個以上の時はエラーにした方がよい？
 		return VFW_E_BUFFERS_OUTSTANDING;
 
 	if( pRequest->cBuffers == 1 && pRequest->cbBuffer == m_pRenderer->GetBufferSize() &&
@@ -840,9 +840,9 @@ STDMETHODIMP TBufferRendererAllocator::SetProperties( ALLOCATOR_PROPERTIES* pReq
 	return VFW_E_BADALIGN;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巜掕偟偨儊僨傿傾僒儞僾儖偵億僀儞僞傪愝掕偟傑偡
-//! @param		media : 儊僨傿傾僒儞僾儖
-//! @param		ptr : 愝掕偡傞億僀儞僞
+//! @brief	  	指定したメディアサンプルにポインタを設定します
+//! @param		media : メディアサンプル
+//! @param		ptr : 設定するポインタ
 //----------------------------------------------------------------------------
 void TBufferRendererAllocator::SetPointer( IMediaSample *media, BYTE *ptr )
 {
@@ -853,9 +853,9 @@ void TBufferRendererAllocator::SetPointer( IMediaSample *media, BYTE *ptr )
 		if( m_pMediaSample != NULL )
 		{
 			m_pMediaSample->GetPointer( &pBufferOwn );
-			if( pBufferOwn == pBufferParam )	// 摨偠僶僢僼傽傪巜偟偰偄傞偺偱丄曐帩偟偰偄傞僒儞僾儖偲摨偠偲尒側偡
+			if( pBufferOwn == pBufferParam )	// 同じバッファを指しているので、保持しているサンプルと同じと見なす
 			{
-				LONG	cBytes = m_pMediaSample->GetSize();	// 僒僀僘偼曄傢偭偰偄側偄偲尒側偡丄帠慜偵僠僃僢僋偟偰偍偔偙偲
+				LONG	cBytes = m_pMediaSample->GetSize();	// サイズは変わっていないと見なす、事前にチェックしておくこと
 				m_pMediaSample->SetPointer( ptr, cBytes );
 			}
 		}

@@ -2,8 +2,8 @@
 /*! @file
 @brief IMediaSeeking Proxy
 
-IMediaSeeking偺屇傃弌偟傪戙棟偡傞丅
-僺儞偑僜乕僗僼傿儖僞偺IMediaSeeking傪巊梡偟偨偄応崌側偳偵巊偆
+IMediaSeekingの呼び出しを代理する。
+ピンがソースフィルタのIMediaSeekingを使用したい場合などに使う
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
@@ -18,7 +18,7 @@ IMediaSeeking偺屇傃弌偟傪戙棟偡傞丅
 
 //----------------------------------------------------------------------------
 //! @brief	  	CMediaSeekingProxy constructor
-//! @param		delegate : 張棟傪埾擟偡傞偨傔偺僋儔僗
+//! @param		delegate : 処理を委任するためのクラス
 //----------------------------------------------------------------------------
 CMediaSeekingProxy::CMediaSeekingProxy(IMediaSeeking* delegate)
 : m_Delegate(delegate)
@@ -29,8 +29,8 @@ CMediaSeekingProxy::CMediaSeekingProxy(IMediaSeeking* delegate)
 CMediaSeekingProxy::~CMediaSeekingProxy()
 {}
 //----------------------------------------------------------------------------
-//! @brief	  	張棟傪埾擟偡傞僔乕僋僀儞僞乕僼僃僀僗傪愝掕偡傞
-//! @param		seeker : 張棟傪埾擟偡傞偨傔偺僋儔僗
+//! @brief	  	処理を委任するシークインターフェイスを設定する
+//! @param		seeker : 処理を委任するためのクラス
 //----------------------------------------------------------------------------
 void CMediaSeekingProxy::SetSeeker( IMediaSeeking *seeker )
 {
@@ -39,10 +39,10 @@ void CMediaSeekingProxy::SetSeeker( IMediaSeeking *seeker )
 	m_Delegate = seeker;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	梫媮偝傟偨僀儞僞乕僼僃僀僗傪曉偡
-//! @param		riid : 僀儞僞乕僼僃僀僗偺IID
-//! @param		ppvObj : 僀儞僞乕僼僃僀僗傪曉偡億僀儞僞乕傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	要求されたインターフェイスを返す
+//! @param		riid : インターフェイスのIID
+//! @param		ppvObj : インターフェイスを返すポインターへのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT STDMETHODCALLTYPE CMediaSeekingProxy::QueryInterface( REFIID riid, LPVOID *ppvObj )
 {
@@ -51,61 +51,61 @@ HRESULT STDMETHODCALLTYPE CMediaSeekingProxy::QueryInterface( REFIID riid, LPVOI
 	return E_NOINTERFACE;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僀儞僞乕僼僃僀僗偺嶲徠僇僂儞僩傪 1 偢偮憹傗偡
-//! @return		怴偟偄嶲徠僇僂儞僩抣傪曉偡
+//! @brief	  	インターフェイスの参照カウントを 1 ずつ増やす
+//! @return		新しい参照カウント値を返す
 //----------------------------------------------------------------------------
 ULONG STDMETHODCALLTYPE CMediaSeekingProxy::AddRef()
 {
 	return MediaSeeking()->AddRef();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僀儞僞乕僼僃僀僗偺嶲徠僇僂儞僩傪 1 偢偮尭彮偝偣傞
-//! @return		怴偟偄嶲徠僇僂儞僩抣傪曉偡
+//! @brief	  	インターフェイスの参照カウントを 1 ずつ減少させる
+//! @return		新しい参照カウント値を返す
 //----------------------------------------------------------------------------
 ULONG STDMETHODCALLTYPE CMediaSeekingProxy::Release()
 {
 	return MediaSeeking()->Release();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僔乕僋擻椡傪庢摼偡傞
-//! @param		pCapabilities : 僔乕僋擻椡
-//! @return		僄儔乕僐乕僪
+//! @brief	  	シーク能力を取得する
+//! @param		pCapabilities : シーク能力
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::GetCapabilities(DWORD *pCapabilities)
 {
 	return MediaSeeking()->GetCapabilities(pCapabilities);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巜掕偟偨僔乕僋擻椡傪僗僩儕乕儉偑帩偭偰偄傞偐偳偆偐傪栤偄崌傢偣傞
-//! @param		pCapabilities : 僔乕僋擻椡
-//! @return		僄儔乕僐乕僪
+//! @brief	  	指定したシーク能力をストリームが持っているかどうかを問い合わせる
+//! @param		pCapabilities : シーク能力
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::CheckCapabilities(DWORD *pCapabilities)
 {
 	return MediaSeeking()->CheckCapabilities(pCapabilities);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僞僀儉僼僅乕儅僢僩偑僒億乕僩偝傟偰偄傞偐偳偆偐妋擣偡傞
-//! @param		pFormat : 僞僀儉僼僅乕儅僢僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	タイムフォーマットがサポートされているかどうか確認する
+//! @param		pFormat : タイムフォーマット
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::IsFormatSupported(const GUID *pFormat)
 {
 	return MediaSeeking()->IsFormatSupported(pFormat);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偺桪愭僞僀儉 僼僅乕儅僢僩傪庢摼偡傞
-//! @param		pFormat : 僞僀儉僼僅乕儅僢僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ストリームの優先タイム フォーマットを取得する
+//! @param		pFormat : タイムフォーマット
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::QueryPreferredFormat(GUID *pFormat)
 {
 	return MediaSeeking()->QueryPreferredFormat(pFormat);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僞僀儉僼僅乕儅僢僩傪愝掕偡傞
-//! @param		pFormat : 僞僀儉僼僅乕儅僢僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	タイムフォーマットを設定する
+//! @param		pFormat : タイムフォーマット
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::SetTimeFormat(const GUID *pFormat)
 {
@@ -116,60 +116,60 @@ STDMETHODIMP CMediaSeekingProxy::SetTimeFormat(const GUID *pFormat)
 #endif
 }
 //----------------------------------------------------------------------------
-//! @brief	  	尰嵼偺僞僀儉 僼僅乕儅僢僩傪庢摼偡傞
-//! @param		pFormat : 僞僀儉僼僅乕儅僢僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	現在のタイム フォーマットを取得する
+//! @param		pFormat : タイムフォーマット
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::GetTimeFormat( GUID *pFormat)
 {
 	return MediaSeeking()->GetTimeFormat(pFormat);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偺帪娫暆傪庢摼偡傞
-//! @param		pDuration : 挿偝
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ストリームの時間幅を取得する
+//! @param		pDuration : 長さ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::GetDuration(LONGLONG *pDuration)
 {
 	return MediaSeeking()->GetDuration(pDuration);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偺掆巭帪娫傪庢摼偡傞
-//! @param		pStop : 掆巭帪娫
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ストリームの停止時間を取得する
+//! @param		pStop : 停止時間
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::GetStopPosition(LONGLONG *pStop)
 {
 	return MediaSeeking()->GetStopPosition(pStop);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偺尰嵼帪娫傪庢摼偡傞
-//! @param		pCurrent : 尰嵼帪娫
-//! @return		枹僒億乕僩
+//! @brief	  	ストリームの現在時間を取得する
+//! @param		pCurrent : 現在時間
+//! @return		未サポート
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::GetCurrentPosition(LONGLONG *pCurrent)
 {
 	return MediaSeeking()->GetCurrentPosition(pCurrent);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	1 偮偺僞僀儉 僼僅乕儅僢僩偐傜暿偺僞僀儉 僼僅乕儅僢僩偵曄姺偡傞
-//! @param		pTarget : 曄姺偝傟偨僞僀儉傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @param		pTargetFormat : 僞乕僎僢僩 僼僅乕儅僢僩偺僞僀儉 僼僅乕儅僢僩 GUID 傊偺億僀儞僞丅NULL 偺応崌偼丄尰嵼偺僼僅乕儅僢僩偑巊傢傟傞
-//! @param		Source : 曄姺偡傞僞僀儉抣
-//! @param		pSourceFormat : 曄姺偡傞僼僅乕儅僢僩偺僞僀儉 僼僅乕儅僢僩 GUID 傊偺億僀儞僞丅NULL 偺応崌偼丄尰嵼偺僼僅乕儅僢僩偑巊傢傟傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	1 つのタイム フォーマットから別のタイム フォーマットに変換する
+//! @param		pTarget : 変換されたタイムを受け取る変数へのポインタ
+//! @param		pTargetFormat : ターゲット フォーマットのタイム フォーマット GUID へのポインタ。NULL の場合は、現在のフォーマットが使われる
+//! @param		Source : 変換するタイム値
+//! @param		pSourceFormat : 変換するフォーマットのタイム フォーマット GUID へのポインタ。NULL の場合は、現在のフォーマットが使われる
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::ConvertTimeFormat(LONGLONG *pTarget, const GUID *pTargetFormat, LONGLONG Source, const GUID *pSourceFormat)
 {
 	return MediaSeeking()->ConvertTimeFormat(pTarget,pTargetFormat,Source,pSourceFormat);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	尰嵼埵抲偲掆巭埵抲傪愝掕偡傞
-//! @param		pCurrent : 尰嵼埵抲傪巜掕偡傞曄悢傊偺億僀儞僞丄尰嵼偺僞僀儉 僼僅乕儅僢僩偺扨埵
-//! @param		CurrentFlags : 埵抲傪巜掕偡傞偨傔偺僼儔僌偺價僢僩偛偲偺慻傒崌傢偣
-//! @param		pStop : 廔椆僞僀儉傪巜掕偡傞曄悢傊偺億僀儞僞丄尰嵼偺僞僀儉 僼僅乕儅僢僩偺扨埵
-//! @param		StopFlags : 埵抲傪巜掕偡傞偨傔偺僼儔僌偺價僢僩偛偲偺慻傒崌傢偣
-//! @return		僄儔乕僐乕僪
+//! @brief	  	現在位置と停止位置を設定する
+//! @param		pCurrent : 現在位置を指定する変数へのポインタ、現在のタイム フォーマットの単位
+//! @param		CurrentFlags : 位置を指定するためのフラグのビットごとの組み合わせ
+//! @param		pStop : 終了タイムを指定する変数へのポインタ、現在のタイム フォーマットの単位
+//! @param		StopFlags : 位置を指定するためのフラグのビットごとの組み合わせ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::SetPositions(LONGLONG *pCurrent,DWORD dwCurrentFlags,LONGLONG *pStop,DWORD dwStopFlags)
 {
@@ -180,29 +180,29 @@ STDMETHODIMP CMediaSeekingProxy::SetPositions(LONGLONG *pCurrent,DWORD dwCurrent
 #endif
 }
 //----------------------------------------------------------------------------
-//! @brief	  	尰嵼偺埵抲偲掆巭埵抲傪庢摼偡傞
-//! @param		pCurrent : 奐巒埵抲傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @param		pStop : 掆巭埵抲傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	現在の位置と停止位置を取得する
+//! @param		pCurrent : 開始位置を受け取る変数へのポインタ
+//! @param		pStop : 停止位置を受け取る変数へのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::GetPositions(LONGLONG *pCurrent, LONGLONG *pStop)
 {
 	return MediaSeeking()->GetPositions(pCurrent,pStop);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僔乕僋偑桳岠側僞僀儉偺斖埻傪庢摼偡傞
-//! @param		pEarliest : 僔乕僋偑桳岠側嵟傕憗偄僞僀儉傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @param		pLatest : 僔乕僋偑桳岠側嵟傕抶偄僞僀儉傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	シークが有効なタイムの範囲を取得する
+//! @param		pEarliest : シークが有効な最も早いタイムを受け取る変数へのポインタ
+//! @param		pLatest : シークが有効な最も遅いタイムを受け取る変数へのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::GetAvailable(LONGLONG *pEarliest, LONGLONG *pLatest)
 {
 	return MediaSeeking()->GetAvailable(pEarliest,pLatest);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗儗乕僩傪愝掕偡傞
-//! @param		dRate : 嵞惗儗乕僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生レートを設定する
+//! @param		dRate : 再生レート
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::SetRate(double dRate)
 {
@@ -213,27 +213,27 @@ STDMETHODIMP CMediaSeekingProxy::SetRate(double dRate)
 #endif
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗儗乕僩傪庢摼偡傞
-//! @param		dRate : 嵞惗儗乕僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生レートを取得する
+//! @param		dRate : 再生レート
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::GetRate(double *dRate)
 {
 	return MediaSeeking()->GetRate(dRate);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	奐巒埵抲偺慜偵僉儏乕偵擖傞僨乕僞偺検傪庢摼偡傞
-//! @param		pPreroll : 僾儕儘乕儖 僞僀儉傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	開始位置の前にキューに入るデータの量を取得する
+//! @param		pPreroll : プリロール タイムを受け取る変数へのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::GetPreroll(LONGLONG *pllPreroll)
 {
 	return MediaSeeking()->GetPreroll(pllPreroll);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巜掕偟偨僞僀儉 僼僅乕儅僢僩偑尰嵼巊傢傟偰偄傞僼僅乕儅僢僩偐偳偆偐傪妋擣偡傞
-//! @param		pFormat : 僞僀儉僼僅乕儅僢僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	指定したタイム フォーマットが現在使われているフォーマットかどうかを確認する
+//! @param		pFormat : タイムフォーマット
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CMediaSeekingProxy::IsUsingTimeFormat(const GUID *pFormat)
 {

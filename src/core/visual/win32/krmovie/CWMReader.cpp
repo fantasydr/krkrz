@@ -2,7 +2,7 @@
 /*! @file
 @brief Windows Media Reader
 
-Windows Media僼傽僀儖傪撉傒崬傓
+Windows Mediaファイルを読み込む
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
@@ -22,26 +22,26 @@ Windows Media僼傽僀儖傪撉傒崬傓
 CWMOutput::~CWMOutput()
 {}
 //----------------------------------------------------------------------------
-//! @brief	  	梫媮偝傟偨僀儞僞乕僼僃僀僗傪曉偡
-//! @param		riid : 僀儞僞乕僼僃僀僗偺IID
-//! @param		ppv : 僀儞僞乕僼僃僀僗傪曉偡億僀儞僞乕傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	要求されたインターフェイスを返す
+//! @param		riid : インターフェイスのIID
+//! @param		ppv : インターフェイスを返すポインターへのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CWMOutput::NonDelegatingQueryInterface( REFIID riid, void ** ppv )
 {
 	return CUnknown::NonDelegatingQueryInterface(riid, ppv);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	IWMSyncReader傪庢摼偡傞
-//! @return		IWMSyncReader傊偺億僀儞僞
+//! @brief	  	IWMSyncReaderを取得する
+//! @return		IWMSyncReaderへのポインタ
 //----------------------------------------------------------------------------
 IWMSyncReader *CWMOutput::WMReader()
 {
 	return Reader()->Reader();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偺愝掕傪峴偆
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ストリームの設定を行う
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMOutput::SetStream(void)
 {
@@ -58,12 +58,12 @@ HRESULT CWMOutput::SetStream(void)
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僒億乕僩偟偰偄傞儊僨傿傾僞僀僾傪庢摼偡傞
+//! @brief	  	サポートしているメディアタイプを取得する
 //!
-//! 埑弅僼僅乕儅僢僩偺傒弌椡偡傞傛偆偵側偭偰偄傞丅
-//! @param		iPosition : 儊僨傿傾僞僀僾偺彉悢
-//! @param		pmt : 儊僨傿傾僞僀僾
-//! @return		僄儔乕僐乕僪
+//! 圧縮フォーマットのみ出力するようになっている。
+//! @param		iPosition : メディアタイプの序数
+//! @param		pmt : メディアタイプ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMOutput::GetMediaType( int iPosition, CMediaType *pmt )
 {
@@ -104,9 +104,9 @@ HRESULT CWMOutput::GetMediaType( int iPosition, CMediaType *pmt )
 	return VFW_S_NO_MORE_ITEMS;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儊僨傿傾僞僀僾傪愝掕偡傞
-//! @param		pmt : 儊僨傿傾僞僀僾
-//! @return		僄儔乕僐乕僪
+//! @brief	  	メディアタイプを設定する
+//! @param		pmt : メディアタイプ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMOutput::SetMediaType( const CMediaType *pmt )
 {
@@ -126,10 +126,10 @@ HRESULT CWMOutput::SetMediaType( const CMediaType *pmt )
 	return VFW_E_INVALIDMEDIATYPE;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	昁梫側僶僢僼傽僒僀僘傪庢摼偡傞
-//! @param		buffers : 僶僢僼傽偺悢
-//! @param		bufsize : 僶僢僼傽偺僒僀僘
-//! @return		僄儔乕僐乕僪
+//! @brief	  	必要なバッファサイズを取得する
+//! @param		buffers : バッファの数
+//! @param		bufsize : バッファのサイズ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMOutput::GetNeedBufferSize( long &buffers, long &bufsize )
 {
@@ -144,28 +144,28 @@ HRESULT CWMOutput::GetNeedBufferSize( long &buffers, long &bufsize )
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僶僢僼傽僒僀僘偺寛掕傪捠抦偡傞
-//! @param		buffers : 僶僢僼傽偺悢
-//! @param		bufsize : 僶僢僼傽偺僒僀僘
-//! @param		aling : 傾儔僀儊儞僩
-//! @param		prefix : 僾儕僼傿僢僋僗
-//! @return		僄儔乕僐乕僪
+//! @brief	  	バッファサイズの決定を通知する
+//! @param		buffers : バッファの数
+//! @param		bufsize : バッファのサイズ
+//! @param		aling : アライメント
+//! @param		prefix : プリフィックス
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMOutput::SetDecidedBufferSize( long buffers, long bufsize, long aling, long prefix )
 {
-	// 摿偵壗傕偟側偄
+	// 特に何もしない
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	師偺僒儞僾儖傪摼傞
-//! @param		pSample : 僒儞僾儖傪曉偡億僀儞僞偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	次のサンプルを得る
+//! @param		pSample : サンプルを返すポインタのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMOutput::GetNextSample( IMediaSample **pSample )
 {
 	HRESULT hr;
 	if( m_StreamNum == 0 || pSample == NULL )
-		return S_FALSE;	// 偙偺僗僩儕乕儉偼側偄
+		return S_FALSE;	// このストリームはない
 
 	INSSBuffer	*pWMSample = NULL;
 	QWORD	cnsSampleTime;
@@ -199,9 +199,9 @@ HRESULT CWMOutput::GetNextSample( IMediaSample **pSample )
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	傾儘働乕僞乕傪愝掕偡傞
-//! @param		alloc : 傾儘働乕僞乕
-//! @return		僄儔乕僐乕僪
+//! @brief	  	アロケーターを設定する
+//! @param		alloc : アロケーター
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMOutput::SetAllocator( IMemAllocator *alloc )
 {
@@ -222,11 +222,11 @@ HRESULT CWMOutput::SetAllocator( IMemAllocator *alloc )
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儊僨傿傾僞僀僾偑DXVA偐偳偆偐妋擣偡傞
+//! @brief	  	メディアタイプがDXVAかどうか確認する
 //! 
-//! 敾掕曽朄偼WMF SDK Help偺 "Enabling DirectX Video Acceleration" 偵婰弎偝傟偰偄傞傕偺
-//! @param		pmt : 儊僨傿傾僞僀僾
-//! @return		DXVA偐偳偆偐
+//! 判定方法はWMF SDK Helpの "Enabling DirectX Video Acceleration" に記述されているもの
+//! @param		pmt : メディアタイプ
+//! @return		DXVAかどうか
 //----------------------------------------------------------------------------
 bool CWMOutput::IsDXVASubtype( const AM_MEDIA_TYPE *pmt )
 {
@@ -243,7 +243,7 @@ bool CWMOutput::IsDXVASubtype( const AM_MEDIA_TYPE *pmt )
 
 
 //## CWMReader
-#pragma warning(disable: 4355)	// 僐儞僗僩儔僋僞偺儀乕僗儊儞僶弶婜壔帪偵this傪巊偆偲儚乕僯儞僌偑弌傞偺偱偦傟傪梷巭
+#pragma warning(disable: 4355)	// コンストラクタのベースメンバ初期化時にthisを使うとワーニングが出るのでそれを抑止
 //----------------------------------------------------------------------------
 //! @brief	  	CWMReader constructor
 //----------------------------------------------------------------------------
@@ -266,17 +266,17 @@ CWMReader::~CWMReader()
 		m_WMReader.Release();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	弌椡悢傪庢摼偡傞 ( 塮憸偲壒惡側傜2偮側偳 )
-//! @return		弌椡悢
+//! @brief	  	出力数を取得する ( 映像と音声なら2つなど )
+//! @return		出力数
 //----------------------------------------------------------------------------
 int CWMReader::GetNumberOfOutput(void)
 {
 	return (m_AudioOut.IsEnable() != 0 ? 1 : 0) + (m_VideoOut.IsEnable() != 0 ? 1 : 0);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	弌椡僗僩儕乕儉傪摼傞
-//! @param		num : 弌椡僗僩儕乕儉斣崋
-//! @return		弌椡僗僩儕乕儉
+//! @brief	  	出力ストリームを得る
+//! @param		num : 出力ストリーム番号
+//! @return		出力ストリーム
 //----------------------------------------------------------------------------
 IOutputStream* CWMReader::GetOutputStream( int num )
 {
@@ -303,9 +303,9 @@ IOutputStream* CWMReader::GetOutputStream( int num )
 		return NULL;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉傪奐偔
-//! @param		stream : 僗僩儕乕儉
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ストリームを開く
+//! @param		stream : ストリーム
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMReader::OpenStream( IStream *stream )
 {
@@ -314,7 +314,7 @@ HRESULT CWMReader::OpenStream( IStream *stream )
 		return E_INVALIDARG;
 
 	if( m_WMReader.p == NULL )
-	{	// DLL偐傜WMCreateSyncReader傪撉傒崬傫偱巊梡偡傞
+	{	// DLLからWMCreateSyncReaderを読み込んで使用する
 		if( m_WmvDll.IsLoaded() == false )
 			m_WmvDll.Load("wmvcore.dll");
 		if( m_WmvDll.IsLoaded() == false )
@@ -348,8 +348,8 @@ HRESULT CWMReader::OpenStream( IStream *stream )
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗奐巒帪偵僐乕儖偝傟傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生開始時にコールされる
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMReader::OnStart()
 {
@@ -362,8 +362,8 @@ HRESULT CWMReader::OnStart()
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偑暵偠傜傟傞帪偵僐乕儖偝傟傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ストリームが閉じられる時にコールされる
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMReader::Close(void)
 {
@@ -376,9 +376,9 @@ HRESULT CWMReader::Close(void)
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	奐巒帪娫傪愝掕偡傞
-//! @param		start : 奐巒帪娫
-//! @return		僄儔乕僐乕僪
+//! @brief	  	開始時間を設定する
+//! @param		start : 開始時間
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMReader::SetStartTime( QWORD start )
 {
@@ -386,9 +386,9 @@ HRESULT CWMReader::SetStartTime( QWORD start )
 	return SetRange();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	掆巭帪娫傪愝掕偡傞
-//! @param		end : 掆巭帪娫
-//! @return		僄儔乕僐乕僪
+//! @brief	  	停止時間を設定する
+//! @param		end : 停止時間
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMReader::SetEndTime( QWORD end )
 {
@@ -396,19 +396,19 @@ HRESULT CWMReader::SetEndTime( QWORD end )
 	return SetRange();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗儗乕僩傪愝掕偡傞
-//! @param		rate : 嵞惗儗乕僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生レートを設定する
+//! @param		rate : 再生レート
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMReader::SetRate( double rate )
 {
 	m_Rate = rate;
-	// 摿偵巊傢側偄
+	// 特に使わない
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗斖埻偺愝掕傪斀塮偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生範囲の設定を反映する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMReader::SetRange(void)
 {
@@ -420,8 +420,8 @@ HRESULT CWMReader::SetRange(void)
 	return Reader()->SetRange( m_StartTime, duration );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	弌椡偡傞僗僩儕乕儉偺愝掕傪峴偆
-//! @return		僄儔乕僐乕僪
+//! @brief	  	出力するストリームの設定を行う
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMReader::SetStream(void)
 {
@@ -432,9 +432,9 @@ HRESULT CWMReader::SetStream(void)
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儊僨傿傾偺奺庬抣傪庢摼偡傞
-//! @param		name : 梫媮偡傞傕偺偺柤慜
-//! @return		梫媮偟偨抣
+//! @brief	  	メディアの各種値を取得する
+//! @param		name : 要求するものの名前
+//! @return		要求した値
 //----------------------------------------------------------------------------
 QWORD CWMReader::GetAttributeQWORD( LPCWSTR name )
 {
@@ -451,9 +451,9 @@ QWORD CWMReader::GetAttributeQWORD( LPCWSTR name )
 	return result;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儊僨傿傾偺奺庬抣傪庢摼偡傞
-//! @param		name : 梫媮偡傞傕偺偺柤慜
-//! @return		梫媮偟偨抣
+//! @brief	  	メディアの各種値を取得する
+//! @param		name : 要求するものの名前
+//! @return		要求した値
 //----------------------------------------------------------------------------
 DWORD CWMReader::GetAttributeDWORD( LPCWSTR name )
 {
@@ -470,52 +470,52 @@ DWORD CWMReader::GetAttributeDWORD( LPCWSTR name )
 	return result;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儊僨傿傾偺帪娫暆傪庢摼偡傞
-//! @return		帪娫暆
+//! @brief	  	メディアの時間幅を取得する
+//! @return		時間幅
 //----------------------------------------------------------------------------
 QWORD CWMReader::GetDuration(void)
 {
 	return GetAttributeQWORD(g_wszWMDuration);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儊僨傿傾偺僼儗乕儉悢傪庢摼偡傞
-//! @return		僼儗乕儉悢
+//! @brief	  	メディアのフレーム数を取得する
+//! @return		フレーム数
 //----------------------------------------------------------------------------
 QWORD CWMReader::GetNumberOfFrame(void)
 {
 	return GetAttributeQWORD(g_wszWMNumberOfFrames);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺暆傪庢摼偡傞
-//! @return		價僨僆偺暆
+//! @brief	  	ビデオの幅を取得する
+//! @return		ビデオの幅
 //----------------------------------------------------------------------------
 DWORD CWMReader::GetVideoWidth(void)
 {
 	return GetAttributeDWORD(g_wszWMVideoWidth);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺崅偝傪庢摼偡傞
-//! @return		價僨僆偺崅偝
+//! @brief	  	ビデオの高さを取得する
+//! @return		ビデオの高さ
 //----------------------------------------------------------------------------
 DWORD CWMReader::GetVideoHeight(void)
 {
 	return GetAttributeDWORD(g_wszWMVideoHeight);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺僼儗乕儉儗乕僩傪庢摼偡傞
-//! @return		價僨僆偺僼儗乕儉儗乕僩
+//! @brief	  	ビデオのフレームレートを取得する
+//! @return		ビデオのフレームレート
 //----------------------------------------------------------------------------
 DWORD CWMReader::GetVideoFrameRate(void)
 {
 	return GetAttributeDWORD(g_wszWMVideoFrameRate);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉斣崋傪庢摼偡傞
+//! @brief	  	ストリーム番号を取得する
 //!
-//! m_AudioOut.m_StreamNum偲m_VideoOut.m_StreamNum傊抣傪愝掕偡傞;
-//! 僗僩儕乕儉斣崋偼1-63偺抣傪偲傞
-//! @param		pProfile : 僾儘僼傽僀儖
-//! @return		僄儔乕僐乕僪
+//! m_AudioOut.m_StreamNumとm_VideoOut.m_StreamNumへ値を設定する;
+//! ストリーム番号は1-63の値をとる
+//! @param		pProfile : プロファイル
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CWMReader::GetStreamNumbers( IWMProfile* pProfile )
 {
@@ -545,7 +545,7 @@ HRESULT CWMReader::GetStreamNumbers( IWMProfile* pProfile )
 		if( FAILED(hr = pStream->GetStreamType( &streamType ) ) )
 			break;
 
-		// 堦斣弶傔偵尒偮偐偭偨僗僩儕乕儉傪巊偆
+		// 一番初めに見つかったストリームを使う
 		if( WMMEDIATYPE_Audio == streamType && m_AudioOut.GetStreamNumber() == 0 )
 			m_AudioOut.SetStreamNumber( streamNumber );
 		else if( WMMEDIATYPE_Video == streamType && m_VideoOut.GetStreamNumber() == 0 )

@@ -1,4 +1,4 @@
-僔儑乕僩僇僢僩偵巜掕壜擻側暥帤堦棗(僔儑乕僩僇僢僩偲偟偰婡擻偡傞偐偼暿栤戣丄偦偪傜偼枹妋擣)
+ショートカットに指定可能な文字一覧(ショートカットとして機能するかは別問題、そちらは未確認)
 Backspace
 Tab
 Num 5
@@ -7,8 +7,8 @@ Shift
 Ctrl
 Alt
 Esc
-曄姺
-柍曄姺
+変換
+無変換
 Space
 Num 9
 Num 3
@@ -114,5 +114,5 @@ F
 ^
 \
 Caps Lock
-傂傜偑側
-敿妏/慡妏
+ひらがな
+半角/全角

@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 /*
-	Risa [傝偝]      alias 媑棦媑棦3 [kirikiri-3]
+	Risa [りさ]      alias 吉里吉里3 [kirikiri-3]
 	 stands for "Risa Is a Stagecraft Architecture"
 	Copyright (C) 2000 W.Dee <dee@kikyou.info> and contributors
 
@@ -8,7 +8,7 @@
 */
 //---------------------------------------------------------------------------
 //! @file
-//! @brief Wave僙僌儊儞僩/儔儀儖僉儏乕娗棟
+//! @brief Waveセグメント/ラベルキュー管理
 //---------------------------------------------------------------------------
 #include "tjsCommHead.h"
 
@@ -27,8 +27,8 @@ void tTVPWaveSegmentQueue::Clear()
 //---------------------------------------------------------------------------
 void tTVPWaveSegmentQueue::Enqueue(const tTVPWaveSegmentQueue & queue)
 {
-	Enqueue(queue.Labels); // Labels 傪僄儞僉儏乕(偙偭偪傪愭偵偟側偄偲偩傔)
-	Enqueue(queue.Segments); // segments 傪僉儏乕(偙偭偪偼屻)
+	Enqueue(queue.Labels); // Labels をエンキュー(こっちを先にしないとだめ)
+	Enqueue(queue.Segments); // segments をキュー(こっちは後)
 }
 //---------------------------------------------------------------------------
 
@@ -38,24 +38,24 @@ void tTVPWaveSegmentQueue::Enqueue(const tTVPWaveSegment & segment)
 {
 	if(Segments.size() > 0)
 	{
-		// 婛懚偺僙僌儊儞僩偑 1 屄埲忋偁傞
+		// 既存のセグメントが 1 個以上ある
 		tTVPWaveSegment & last = Segments.back();
-		// 嵟屻偺僙僌儊儞僩偲偙傟偐傜捛壛偟傛偆偲偡傞僙僌儊儞僩偑楢懕偟偰傞偐丠
+		// 最後のセグメントとこれから追加しようとするセグメントが連続してるか？
 		if(last.Start + last.Length == segment.Start &&
 			(double)last.FilteredLength / last.Length ==
 			(double)segment.FilteredLength / segment.Length)
 		{
-			// 楢懕偟偰偄偰丄偐偮丄斾棪傕姰慡偵摨偠側偺偱
-			// 婛懚偺嵟屻偺僙僌儊儞僩傪墑挿偡傞
-			// (偪側傒偵偙偙偱斾棪偺斾妑偺嵺偵岆嵎偑惗偠偨偲偟偰傕
-			//  戝偒側栤戣偲偼側傜側偄)
+			// 連続していて、かつ、比率も完全に同じなので
+			// 既存の最後のセグメントを延長する
+			// (ちなみにここで比率の比較の際に誤差が生じたとしても
+			//  大きな問題とはならない)
 			last.FilteredLength += segment.FilteredLength;
 			last.Length += segment.Length;
-			return ; // 偍傢傝
+			return ; // おわり
 		}
 	}
 
-	// 扨弮偵嵟屻偵梫慺傪捛壛
+	// 単純に最後に要素を追加
 	Segments.push_back(segment);
 }
 //---------------------------------------------------------------------------
@@ -72,7 +72,7 @@ void tTVPWaveSegmentQueue::Enqueue(const tTVPWaveLabel & Label)
 //---------------------------------------------------------------------------
 void tTVPWaveSegmentQueue::Enqueue(const std::deque<tTVPWaveSegment> & segments)
 {
-	// segment 偺捛壛
+	// segment の追加
 	for(std::deque<tTVPWaveSegment>::const_iterator i = segments.begin();
 		i != segments.end(); i++)
 		Enqueue(*i);
@@ -83,15 +83,15 @@ void tTVPWaveSegmentQueue::Enqueue(const std::deque<tTVPWaveSegment> & segments)
 //---------------------------------------------------------------------------
 void tTVPWaveSegmentQueue::Enqueue(const std::deque<tTVPWaveLabel> & Labels)
 {
-	// 僆僼僙僢僩偵壛嶼偡傞抣傪摼傞
+	// オフセットに加算する値を得る
 	tjs_int64 Label_offset = GetFilteredLength();
 
-	// Label 偺捛壛
+	// Label の追加
 	for(std::deque<tTVPWaveLabel>::const_iterator i = Labels.begin();
 		i != Labels.end(); i++)
 	{
 		tTVPWaveLabel one_Label(*i);
-		one_Label.Offset += static_cast<tjs_int>(Label_offset); // offset 偺廋惓
+		one_Label.Offset += static_cast<tjs_int>(Label_offset); // offset の修正
 		Enqueue(one_Label);
 	}
 }
@@ -102,48 +102,48 @@ void tTVPWaveSegmentQueue::Enqueue(const std::deque<tTVPWaveLabel> & Labels)
 void tTVPWaveSegmentQueue::Dequeue(tTVPWaveSegmentQueue & dest, tjs_int64 length)
 {
 	tjs_int64 remain;
-	// dest 傪僋儕傾
+	// dest をクリア
 	dest.Clear();
 
-	// Segments 傪愗傝弌偡
+	// Segments を切り出す
 	remain = length;
 	while(Segments.size() > 0 && remain > 0)
 	{
 		if(Segments.front().FilteredLength <= remain)
 		{
-			// Segments.front().FilteredLength 偑 remain 埲壓
-			// 仺 偙偺梫慺傪 dest 偵僄儞僉儏乕偟偰 this 偐傜嶍彍
+			// Segments.front().FilteredLength が remain 以下
+			// → この要素を dest にエンキューして this から削除
 			remain -= Segments.front().FilteredLength;
 			dest.Enqueue(Segments.front());
 			Segments.pop_front();
 		}
 		else
 		{
-			// Segments.front().FilteredLength 偑 remain 傛傝傕戝偒偄
-			// 仺 梫慺傪搑拞偱傇偭偨偓偭偰 dest 偵僄儞僉儏乕
-			// FilteredLength 傪尦偵愗傝弌偟傪峴偭偰傞偺偱
-			// Length 偼 慄宍曗娫傪峴偆
+			// Segments.front().FilteredLength が remain よりも大きい
+			// → 要素を途中でぶったぎって dest にエンキュー
+			// FilteredLength を元に切り出しを行ってるので
+			// Length は 線形補間を行う
 			tjs_int64 newlength =
 				static_cast<tjs_int64>(
 					(double)Segments.front().Length / (double)Segments.front().FilteredLength * remain);
 			if(newlength > 0)
 				dest.Enqueue(tTVPWaveSegment(Segments.front().Start, newlength, remain));
 
-			// Segments.front() 偺 Start, Length 偲 FilteredLength 傪廋惓
+			// Segments.front() の Start, Length と FilteredLength を修正
 			Segments.front().Start += newlength;
 			Segments.front().Length -= newlength;
 			Segments.front().FilteredLength -= remain;
 			if(Segments.front().Length == 0 || Segments.front().FilteredLength == 0)
 			{
-				// 傇偭偨愗偭偨寢壥 (慄宍曗姰偟偨寢壥偺岆嵎偱)
-				// 挿偝偑0偵側偭偰偟傑偭偨
-				Segments.pop_front(); // 僙僌儊儞僩傪幪偰傞
+				// ぶった切った結果 (線形補完した結果の誤差で)
+				// 長さが0になってしまった
+				Segments.pop_front(); // セグメントを捨てる
 			}
-			remain = 0; // 儖乕僾傪敳偗傞
+			remain = 0; // ループを抜ける
 		}
 	}
 
-	// Labels 傪愗傝弌偡
+	// Labels を切り出す
 	size_t Labels_to_dequeue = 0;
 	for(std::deque<tTVPWaveLabel>::iterator i = Labels.begin();
 		i != Labels.end(); i++)
@@ -151,18 +151,18 @@ void tTVPWaveSegmentQueue::Dequeue(tTVPWaveSegmentQueue & dest, tjs_int64 length
 		tjs_int64 newoffset = i->Offset - length;
 		if(newoffset < 0)
 		{
-			// newoffset 偑晧 側偺偱 dest 偵擖傟傞
+			// newoffset が負 なので dest に入れる
 			dest.Enqueue(*i);
-			Labels_to_dequeue ++; // 偁偲偱 dequeue
+			Labels_to_dequeue ++; // あとで dequeue
 		}
 		else
 		{
-			// *i 偺僆僼僙僢僩傪廋惓
+			// *i のオフセットを修正
 			i->Offset = static_cast<tjs_int>(newoffset);
 		}
 	}
 
-	while(Labels_to_dequeue--) Labels.pop_front(); // 僐僺乕偟偨Labels 傪嶍彍
+	while(Labels_to_dequeue--) Labels.pop_front(); // コピーしたLabels を削除
 }
 //---------------------------------------------------------------------------
 
@@ -170,7 +170,7 @@ void tTVPWaveSegmentQueue::Dequeue(tTVPWaveSegmentQueue & dest, tjs_int64 length
 //---------------------------------------------------------------------------
 tjs_int64 tTVPWaveSegmentQueue::GetFilteredLength() const
 {
-	// 僉儏乕偺挿偝偼 偡傋偰偺 Segments 偺FilteredLength偺崌寁
+	// キューの長さは すべての Segments のFilteredLengthの合計
 	tjs_int64 length = 0;
 	for(std::deque<tTVPWaveSegment>::const_iterator i = Segments.begin();
 		i != Segments.end(); i++)
@@ -184,14 +184,14 @@ tjs_int64 tTVPWaveSegmentQueue::GetFilteredLength() const
 //---------------------------------------------------------------------------
 void tTVPWaveSegmentQueue::Scale(tjs_int64 new_total_filtered_length)
 {
-	// 僉儏乕偺 FilteredLength 傪曄壔偝偣傞
-	tjs_int64 total_length_was = GetFilteredLength(); // 曄壔慜偺挿偝
+	// キューの FilteredLength を変化させる
+	tjs_int64 total_length_was = GetFilteredLength(); // 変化前の長さ
 
-	if(total_length_was == 0) return; // 尦偺挿偝偑側偄偺偱僗働乕儖弌棃側偄
+	if(total_length_was == 0) return; // 元の長さがないのでスケール出来ない
 
-	// Segments 偺廋惓
-	tjs_int64 offset_was = 0; // 曄壔慜偺僆僼僙僢僩
-	tjs_int64 offset_is = 0; // 曄壔屻偺僆僼僙僢僩
+	// Segments の修正
+	tjs_int64 offset_was = 0; // 変化前のオフセット
+	tjs_int64 offset_is = 0; // 変化後のオフセット
 
 	for(std::deque<tTVPWaveSegment>::iterator i = Segments.begin();
 		i != Segments.end(); i++)
@@ -199,20 +199,20 @@ void tTVPWaveSegmentQueue::Scale(tjs_int64 new_total_filtered_length)
 		tjs_int64 old_end = offset_was + i->FilteredLength;
 		offset_was += i->FilteredLength;
 
-		// old_end 偼慡懱偐傜尒偰偳偺埵抲偵偁傞丠
+		// old_end は全体から見てどの位置にある？
 		double ratio = static_cast<double>(old_end) /
 						static_cast<double>(total_length_was);
 
-		// 怴偟偄 old_end 偼偳偺埵抲偵偁傞傋偒丠
+		// 新しい old_end はどの位置にあるべき？
 		tjs_int64 new_end = static_cast<tjs_int64>(ratio * new_total_filtered_length);
 
-		// FilteredLength 偺廋惓
+		// FilteredLength の修正
 		i->FilteredLength = new_end - offset_is;
 
 		offset_is += i->FilteredLength;
 	}
 
-	// 偐傜偭傐偺Segments 偺彍嫀
+	// からっぽのSegments の除去
 	for(std::deque<tTVPWaveSegment>::iterator i = Segments.begin();
 		i != Segments.end() ; )
 	{
@@ -222,7 +222,7 @@ void tTVPWaveSegmentQueue::Scale(tjs_int64 new_total_filtered_length)
 			i++;
 	}
 
-	// Labels 偺廋惓
+	// Labels の修正
 	double ratio = (double)new_total_filtered_length / (double)total_length_was;
 	for(std::deque<tTVPWaveLabel>::iterator i = Labels.begin();
 		i != Labels.end(); i++)
@@ -236,7 +236,7 @@ void tTVPWaveSegmentQueue::Scale(tjs_int64 new_total_filtered_length)
 //---------------------------------------------------------------------------
 tjs_int64 tTVPWaveSegmentQueue::FilteredPositionToDecodePosition(tjs_int64 pos) const
 {
-	// Segments 偺廋惓
+	// Segments の修正
 	tjs_int64 offset_filtered = 0;
 
 	for(std::deque<tTVPWaveSegment>::const_iterator i = Segments.begin();
@@ -244,7 +244,7 @@ tjs_int64 tTVPWaveSegmentQueue::FilteredPositionToDecodePosition(tjs_int64 pos) 
 	{
 		if(offset_filtered <= pos && pos < offset_filtered + i->FilteredLength)
 		{
-			// 懳墳偡傞嬫娫偑尒偮偐偭偨偺偱慄宍偱曗姰偟偰曉偡
+			// 対応する区間が見つかったので線形で補完して返す
 			return (tjs_int64)(i->Start + (pos - offset_filtered) *
 				(double)i->Length / (double)i->FilteredLength );
 		}
@@ -252,8 +252,8 @@ tjs_int64 tTVPWaveSegmentQueue::FilteredPositionToDecodePosition(tjs_int64 pos) 
 		offset_filtered += i->FilteredLength;
 	}
 
-	// 懳墳偡傞嬫娫偑尒偮偐傜側偄偺偱丄柧傜偐偵晧偱偁傟偽 0 傪丄
-	// 偦偆偱側偗傟偽嵟屻偺埵抲傪曉偡
+	// 対応する区間が見つからないので、明らかに負であれば 0 を、
+	// そうでなければ最後の位置を返す
 	if(pos<0) return 0;
 	if(Segments.size() == 0) return 0;
 	return Segments[Segments.size()-1].Start + Segments[Segments.size()-1].Length;

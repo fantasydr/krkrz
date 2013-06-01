@@ -2,14 +2,14 @@
 /*! @file
 @brief part of KRLMOVIE.DLL
 
-幚峴偵偼DirectX9埲崀偑昁梫
+実行にはDirectX9以降が必要
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
 @author		T.Imoto
 @date		2005/09/25
 @note
-			2005/09/25	T.Imoto		嶌惉
+			2005/09/25	T.Imoto		作成
 *****************************************************************************/
 
 
@@ -25,14 +25,14 @@
 
 
 //----------------------------------------------------------------------------
-//! @brief	  	VideoOverlay Object (儈僉僔儞僌嵞惗梡) 傪庢摼偡傞
-//! @param		callbackwin : 僐乕儖僶僢僋僂傿儞僪僂偺僴儞僪儖
-//! @param		stream : 擖椡僗僩儕乕儉
-//! @param		streamname : 僗僩儕乕儉偺柤慜
-//! @param		type : 僗僩儕乕儉偺奼挘巕
-//! @param		size : 僗僩儕乕儉偺僒僀僘
+//! @brief	  	VideoOverlay Object (ミキシング再生用) を取得する
+//! @param		callbackwin : コールバックウィンドウのハンドル
+//! @param		stream : 入力ストリーム
+//! @param		streamname : ストリームの名前
+//! @param		type : ストリームの拡張子
+//! @param		size : ストリームのサイズ
 //! @param		out : VideoOverlay Object
-//! @return		僄儔乕暥帤楍
+//! @return		エラー文字列
 //----------------------------------------------------------------------------
 void __stdcall GetMixingVideoOverlayObject(
 	HWND callbackwin, IStream *stream, const wchar_t * streamname,

@@ -1024,7 +1024,7 @@ void TVPBeforeSystemInit()
 		if(buf[curdirlen-1] != '\\') buf[curdirlen] = '\\', buf[curdirlen+1] = 0;
 	}
 
-#pragma message (__LOC__ "TODO : ëIëÉ_ÉCÉAÉçÉOÇèoÇ∑")
+#pragma message (__LOC__ "TODO : ﬂxík•¿•§•¢•Ì•∞§Ú≥ˆ§π")
 	if(!forcedataxp3 && (!nosel || forcesel))
 	{
 #if 0
@@ -1101,7 +1101,7 @@ void TVPBeforeSystemInit()
 	tjs_int buflen = _tcslen(buf);
 	if(buflen >= 1)
 	{
-		if(buf[buflen-1] != _T('\\')) buf[buflen] = static_cast<TCHAR>(TVPArchiveDelimiter), buf[buflen+1] = 0; // TODO Ç±Ç±ÇÃÉLÉÉÉXÉgÇÕÇ†Ç‹ÇËçDÇ‹ÇµÇ≠Ç»Ç¢Ç»
+		if(buf[buflen-1] != _T('\\')) buf[buflen] = static_cast<TCHAR>(TVPArchiveDelimiter), buf[buflen+1] = 0; // TODO §≥§≥§Œ•≠•„•π•»§œ§¢§ﬁ§Í∫√§ﬁ§∑§Ø§ §§§ 
 	}
 
 	TVPProjectDir = TVPNormalizeStorageName(buf);

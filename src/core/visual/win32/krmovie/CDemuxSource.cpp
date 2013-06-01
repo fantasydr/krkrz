@@ -2,7 +2,7 @@
 /*! @file
 @brief Demux source filter
 
-僨儅儖僠僾儗僋僒僜乕僗僼傿儖僞傪幚憰偡傞
+デマルチプレクサソースフィルタを実装する
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
@@ -22,10 +22,10 @@ static const GUID CLSID_DemuxSource = { 0x68d40d07, 0x25db, 0x4c49, { 0xaa, 0xaa
 
 //----------------------------------------------------------------------------
 //! @brief	  	CDemuxSource constructor
-//! @param		lpunk : 廤惉偝傟偨強桳幰僆僽僕僃僋僩傊偺億僀儞僞丅
-//! @param		phr : HRESULT 抣傊偺億僀儞僞丅
-//! @param		reader : 偙偺僼傿儖僞偺儕乕僟乕
-//! @param		clsid : 偙偺僼傿儖僞偺僋儔僗ID
+//! @param		lpunk : 集成された所有者オブジェクトへのポインタ。
+//! @param		phr : HRESULT 値へのポインタ。
+//! @param		reader : このフィルタのリーダー
+//! @param		clsid : このフィルタのクラスID
 //----------------------------------------------------------------------------
 CDemuxSource::CDemuxSource( LPUNKNOWN lpunk, HRESULT *phr, IDemuxReader *reader, CLSID clsid )
 : CSource( NAME("Demux Source"), lpunk, clsid, phr ), m_DemuxReader(reader)//, m_cRef(0)
@@ -44,10 +44,10 @@ CDemuxSource::~CDemuxSource()
 	delete m_DemuxReader;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	梫媮偝傟偨僀儞僞乕僼僃僀僗傪曉偡
-//! @param		riid : 僀儞僞乕僼僃僀僗偺IID
-//! @param		ppv : 僀儞僞乕僼僃僀僗傪曉偡億僀儞僞乕傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	要求されたインターフェイスを返す
+//! @param		riid : インターフェイスのIID
+//! @param		ppv : インターフェイスを返すポインターへのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CDemuxSource::NonDelegatingQueryInterface( REFIID riid, void ** ppv )
 {
@@ -60,9 +60,9 @@ STDMETHODIMP CDemuxSource::NonDelegatingQueryInterface( REFIID riid, void ** ppv
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗偟偨偄僗僩儕乕儉傪奐偔
-//! @param		stream : 儉乕價乕傊偺僗僩儕乕儉
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生したいストリームを開く
+//! @param		stream : ムービーへのストリーム
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::OpenStream( IStream *stream )
 {
@@ -82,20 +82,20 @@ HRESULT CDemuxSource::OpenStream( IStream *stream )
 		assert( outStream );
 		CDemuxOutputPin *pin = new CDemuxOutputPin( NAME("Demux Source"), this, &hr, L"Demux output pin", this, outStream, &m_crtFilterLock );
 //		pin->AddRef();
-		// AddPin偼new偟偨抜奒偱僐乕儖偝傟傞偺偱丄柧帵揑偵捛壛偡傞昁梫偼側偄
+		// AddPinはnewした段階でコールされるので、明示的に追加する必要はない
 	}
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗儗乕僩偑曄峏偝傟偨帪偵僐乕儖偝傟傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生レートが変更された時にコールされる
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::ChangeRate(void)
 {
-	{	// 僋儕僥傿僇儖 僙僋僔儑儞 儘僢僋偺僗僐乕僾丅
+	{	// クリティカル セクション ロックのスコープ。
 		CAutoLock cAutoLock(&m_crtFilterLock);
 		if( m_dRateSeeking <= 0 ) {
-			m_dRateSeeking = 1.0;  // 揔愗側抣偵儕僙僢僩偡傞丅
+			m_dRateSeeking = 1.0;  // 適切な値にリセットする。
 			return E_FAIL;
 		}
 	}
@@ -103,20 +103,20 @@ HRESULT CDemuxSource::ChangeRate(void)
 	return Reader()->SetRate( m_dRateSeeking );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗偑奐巒偝傟偨帪偵僐乕儖偝傟傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生が開始された時にコールされる
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::ChangeStart(void)
 {
 	UpdateFromSeek();
 	if( m_rtStart > m_rtDuration  )
-		m_rtStart = m_rtDuration;	// 娵傔
+		m_rtStart = m_rtDuration;	// 丸め
 
 	return Reader()->SetStartTime( m_rtStart );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗偑掆巭偝傟偨帪偵僐乕儖偝傟傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生が停止された時にコールされる
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::ChangeStop(void)
 {
@@ -124,8 +124,8 @@ HRESULT CDemuxSource::ChangeStop(void)
 	return Reader()->SetEndTime(m_rtStop);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	曐帩偟偰偄傞僺儞傪偡傋偰嶍彍偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	保持しているピンをすべて削除する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 void CDemuxSource::ClearPins()
 {
@@ -133,8 +133,8 @@ void CDemuxSource::ClearPins()
 		delete GetPin(GetPinCount()-1);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僼傿儖僞傪億乕僘偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	フィルタをポーズする
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CDemuxSource::Pause()
 {
@@ -151,8 +151,8 @@ STDMETHODIMP CDemuxSource::Pause()
 	return CSource::Pause();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僔乕僋偐傜偺曄峏傪斀塮偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	シークからの変更を反映する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 void CDemuxSource::UpdateFromSeek()
 {
@@ -161,19 +161,19 @@ void CDemuxSource::UpdateFromSeek()
 	DeliverEndFlush();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	怴偨偵嵞惗偑奐巒偝傟偨偙偲傪捠抦偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	新たに再生が開始されたことを通知する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::NewSegment()
 {
 	return DeliverNewSegment(m_rtStart, m_rtStop, m_dRateSeeking);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	怴偨偵嵞惗偑奐巒偝傟偨偙偲傪僟僂儞僗僩儕乕儉傊捠抦偡傞
-//! @param		tStart : 奐巒帪娫
-//! @param		tStop : 掆巭帪娫
-//! @param		dRate : 嵞惗儗乕僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	新たに再生が開始されたことをダウンストリームへ通知する
+//! @param		tStart : 開始時間
+//! @param		tStop : 停止時間
+//! @param		dRate : 再生レート
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::DeliverNewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tStop, double dRate)
 {
@@ -191,8 +191,8 @@ HRESULT CDemuxSource::DeliverNewSegment(REFERENCE_TIME tStart, REFERENCE_TIME tS
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偑廔抂偵払偟偨偙偲傪僟僂儞僗僩儕乕儉傊捠抦偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ストリームが終端に達したことをダウンストリームへ通知する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::DeliverEndOfStream(void)
 {
@@ -210,8 +210,8 @@ HRESULT CDemuxSource::DeliverEndOfStream(void)
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僼儔僢僔儏張棟偺廔椆傪僟僂儞僗僩儕乕儉傊梫媮偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	フラッシュ処理の終了をダウンストリームへ要求する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::DeliverEndFlush(void)
 {
@@ -229,8 +229,8 @@ HRESULT CDemuxSource::DeliverEndFlush(void)
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僼儔僢僔儏張棟偺奐巒傪僟僂儞僗僩儕乕儉傊梫媮偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	フラッシュ処理の開始をダウンストリームへ要求する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::DeliverBeginFlush(void)
 {
@@ -248,16 +248,16 @@ HRESULT CDemuxSource::DeliverBeginFlush(void)
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僼傿儖僞僞僀僾傪庢摼偡傞
-//! @return		僼傿儖僞僞僀僾
+//! @brief	  	フィルタタイプを取得する
+//! @return		フィルタタイプ
 //----------------------------------------------------------------------------
 ULONG STDMETHODCALLTYPE CDemuxSource::GetMiscFlags(void)
 {
 	return AM_FILTER_MISC_FLAGS_IS_SOURCE;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	尰嵼愙懕偝傟偰偄傞僺儞偺悢傪庢摼偡傞
-//! @return		愙懕悢
+//! @brief	  	現在接続されているピンの数を取得する
+//! @return		接続数
 //----------------------------------------------------------------------------
 ULONG CDemuxSource::GetNumberOfConnection()
 {
@@ -273,9 +273,9 @@ ULONG CDemuxSource::GetNumberOfConnection()
 	return result;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僞僀儉僼僅乕儅僢僩偑僒億乕僩偝傟偰偄傞偐偳偆偐妋擣偡傞
-//! @param		pFormat : 僞僀儉僼僅乕儅僢僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	タイムフォーマットがサポートされているかどうか確認する
+//! @param		pFormat : タイムフォーマット
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::IsFormatSupported(const GUID * pFormat)
 {
@@ -284,9 +284,9 @@ HRESULT CDemuxSource::IsFormatSupported(const GUID * pFormat)
 	return *pFormat == TIME_FORMAT_MEDIA_TIME ? S_OK : S_FALSE;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偺桪愭僞僀儉 僼僅乕儅僢僩傪庢摼偡傞
-//! @param		pFormat : 僞僀儉僼僅乕儅僢僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ストリームの優先タイム フォーマットを取得する
+//! @param		pFormat : タイムフォーマット
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::QueryPreferredFormat(GUID *pFormat)
 {
@@ -295,9 +295,9 @@ HRESULT CDemuxSource::QueryPreferredFormat(GUID *pFormat)
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僞僀儉僼僅乕儅僢僩傪愝掕偡傞
-//! @param		pFormat : 僞僀儉僼僅乕儅僢僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	タイムフォーマットを設定する
+//! @param		pFormat : タイムフォーマット
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::SetTimeFormat(const GUID * pFormat)
 {
@@ -306,9 +306,9 @@ HRESULT CDemuxSource::SetTimeFormat(const GUID * pFormat)
 	return *pFormat == TIME_FORMAT_MEDIA_TIME ? S_OK : E_INVALIDARG;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巜掕偟偨僞僀儉 僼僅乕儅僢僩偑尰嵼巊傢傟偰偄傞僼僅乕儅僢僩偐偳偆偐傪妋擣偡傞
-//! @param		pFormat : 僞僀儉僼僅乕儅僢僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	指定したタイム フォーマットが現在使われているフォーマットかどうかを確認する
+//! @param		pFormat : タイムフォーマット
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::IsUsingTimeFormat(const GUID * pFormat)
 {
@@ -316,9 +316,9 @@ HRESULT CDemuxSource::IsUsingTimeFormat(const GUID * pFormat)
 	return *pFormat == TIME_FORMAT_MEDIA_TIME ? S_OK : S_FALSE;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	尰嵼偺僞僀儉 僼僅乕儅僢僩傪庢摼偡傞
-//! @param		pFormat : 僞僀儉僼僅乕儅僢僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	現在のタイム フォーマットを取得する
+//! @param		pFormat : タイムフォーマット
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::GetTimeFormat(GUID *pFormat)
 {
@@ -327,9 +327,9 @@ HRESULT CDemuxSource::GetTimeFormat(GUID *pFormat)
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偺帪娫暆傪庢摼偡傞
-//! @param		pDuration : 挿偝
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ストリームの時間幅を取得する
+//! @param		pDuration : 長さ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::GetDuration(LONGLONG *pDuration)
 {
@@ -339,9 +339,9 @@ HRESULT CDemuxSource::GetDuration(LONGLONG *pDuration)
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偺掆巭帪娫傪庢摼偡傞
-//! @param		pStop : 掆巭帪娫
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ストリームの停止時間を取得する
+//! @param		pStop : 停止時間
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::GetStopPosition(LONGLONG *pStop)
 {
@@ -351,9 +351,9 @@ HRESULT CDemuxSource::GetStopPosition(LONGLONG *pStop)
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僩儕乕儉偺尰嵼帪娫傪庢摼偡傞
-//! @param		pCurrent : 尰嵼帪娫
-//! @return		枹僒億乕僩
+//! @brief	  	ストリームの現在時間を取得する
+//! @param		pCurrent : 現在時間
+//! @return		未サポート
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::GetCurrentPosition(LONGLONG *pCurrent)
 {
@@ -362,9 +362,9 @@ HRESULT CDemuxSource::GetCurrentPosition(LONGLONG *pCurrent)
 	return E_NOTIMPL;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僔乕僋擻椡傪庢摼偡傞
-//! @param		pCapabilities : 僔乕僋擻椡
-//! @return		僄儔乕僐乕僪
+//! @brief	  	シーク能力を取得する
+//! @param		pCapabilities : シーク能力
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::GetCapabilities( DWORD * pCapabilities )
 {
@@ -373,9 +373,9 @@ HRESULT CDemuxSource::GetCapabilities( DWORD * pCapabilities )
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巜掕偟偨僔乕僋擻椡傪僗僩儕乕儉偑帩偭偰偄傞偐偳偆偐傪栤偄崌傢偣傞
-//! @param		pCapabilities : 僔乕僋擻椡
-//! @return		僄儔乕僐乕僪
+//! @brief	  	指定したシーク能力をストリームが持っているかどうかを問い合わせる
+//! @param		pCapabilities : シーク能力
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::CheckCapabilities( DWORD * pCapabilities )
 {
@@ -384,13 +384,13 @@ HRESULT CDemuxSource::CheckCapabilities( DWORD * pCapabilities )
 	return (~m_dwSeekingCaps & *pCapabilities) ? S_FALSE : S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	1 偮偺僞僀儉 僼僅乕儅僢僩偐傜暿偺僞僀儉 僼僅乕儅僢僩偵曄姺偡傞
-//! @param		pTarget : 曄姺偝傟偨僞僀儉傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @param		pTargetFormat : 僞乕僎僢僩 僼僅乕儅僢僩偺僞僀儉 僼僅乕儅僢僩 GUID 傊偺億僀儞僞丅NULL 偺応崌偼丄尰嵼偺僼僅乕儅僢僩偑巊傢傟傞
-//! @param		Source : 曄姺偡傞僞僀儉抣
-//! @param		pSourceFormat : 曄姺偡傞僼僅乕儅僢僩偺僞僀儉 僼僅乕儅僢僩 GUID 傊偺億僀儞僞丅NULL 偺応崌偼丄尰嵼偺僼僅乕儅僢僩偑巊傢傟傞
-//! @return		僄儔乕僐乕僪
-//! @note	TIME_FORMAT_MEDIA_TIME埲奜偼僒億乕僩偟偰偄側偄
+//! @brief	  	1 つのタイム フォーマットから別のタイム フォーマットに変換する
+//! @param		pTarget : 変換されたタイムを受け取る変数へのポインタ
+//! @param		pTargetFormat : ターゲット フォーマットのタイム フォーマット GUID へのポインタ。NULL の場合は、現在のフォーマットが使われる
+//! @param		Source : 変換するタイム値
+//! @param		pSourceFormat : 変換するフォーマットのタイム フォーマット GUID へのポインタ。NULL の場合は、現在のフォーマットが使われる
+//! @return		エラーコード
+//! @note	TIME_FORMAT_MEDIA_TIME以外はサポートしていない
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::ConvertTimeFormat( LONGLONG * pTarget, const GUID * pTargetFormat, LONGLONG Source, const GUID * pSourceFormat )
 {
@@ -410,12 +410,12 @@ HRESULT CDemuxSource::ConvertTimeFormat( LONGLONG * pTarget, const GUID * pTarge
 	return E_INVALIDARG;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	尰嵼埵抲偲掆巭埵抲傪愝掕偡傞
-//! @param		pCurrent : 尰嵼埵抲傪巜掕偡傞曄悢傊偺億僀儞僞丄尰嵼偺僞僀儉 僼僅乕儅僢僩偺扨埵
-//! @param		CurrentFlags : 埵抲傪巜掕偡傞偨傔偺僼儔僌偺價僢僩偛偲偺慻傒崌傢偣
-//! @param		pStop : 廔椆僞僀儉傪巜掕偡傞曄悢傊偺億僀儞僞丄尰嵼偺僞僀儉 僼僅乕儅僢僩偺扨埵
-//! @param		StopFlags : 埵抲傪巜掕偡傞偨傔偺僼儔僌偺價僢僩偛偲偺慻傒崌傢偣
-//! @return		僄儔乕僐乕僪
+//! @brief	  	現在位置と停止位置を設定する
+//! @param		pCurrent : 現在位置を指定する変数へのポインタ、現在のタイム フォーマットの単位
+//! @param		CurrentFlags : 位置を指定するためのフラグのビットごとの組み合わせ
+//! @param		pStop : 終了タイムを指定する変数へのポインタ、現在のタイム フォーマットの単位
+//! @param		StopFlags : 位置を指定するためのフラグのビットごとの組み合わせ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags, LONGLONG * pStop,  DWORD StopFlags )
 {
@@ -468,10 +468,10 @@ HRESULT CDemuxSource::SetPositions( LONGLONG * pCurrent, DWORD CurrentFlags, LON
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	尰嵼偺埵抲偲掆巭埵抲傪庢摼偡傞
-//! @param		pCurrent : 奐巒埵抲傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @param		pStop : 掆巭埵抲傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	現在の位置と停止位置を取得する
+//! @param		pCurrent : 開始位置を受け取る変数へのポインタ
+//! @param		pStop : 停止位置を受け取る変数へのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::GetPositions( LONGLONG * pCurrent, LONGLONG * pStop )
 {
@@ -484,10 +484,10 @@ HRESULT CDemuxSource::GetPositions( LONGLONG * pCurrent, LONGLONG * pStop )
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僔乕僋偑桳岠側僞僀儉偺斖埻傪庢摼偡傞
-//! @param		pEarliest : 僔乕僋偑桳岠側嵟傕憗偄僞僀儉傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @param		pLatest : 僔乕僋偑桳岠側嵟傕抶偄僞僀儉傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	シークが有効なタイムの範囲を取得する
+//! @param		pEarliest : シークが有効な最も早いタイムを受け取る変数へのポインタ
+//! @param		pLatest : シークが有効な最も遅いタイムを受け取る変数へのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::GetAvailable( LONGLONG * pEarliest, LONGLONG * pLatest )
 {
@@ -501,9 +501,9 @@ HRESULT CDemuxSource::GetAvailable( LONGLONG * pEarliest, LONGLONG * pLatest )
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗儗乕僩傪愝掕偡傞
-//! @param		dRate : 嵞惗儗乕僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生レートを設定する
+//! @param		dRate : 再生レート
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::SetRate( double dRate)
 {
@@ -514,9 +514,9 @@ HRESULT CDemuxSource::SetRate( double dRate)
 	return ChangeRate();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵞惗儗乕僩傪庢摼偡傞
-//! @param		dRate : 嵞惗儗乕僩
-//! @return		僄儔乕僐乕僪
+//! @brief	  	再生レートを取得する
+//! @param		dRate : 再生レート
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::GetRate( double * pdRate)
 {
@@ -526,9 +526,9 @@ HRESULT CDemuxSource::GetRate( double * pdRate)
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	奐巒埵抲偺慜偵僉儏乕偵擖傞僨乕僞偺検傪庢摼偡傞
-//! @param		pPreroll : 僾儕儘乕儖 僞僀儉傪庴偗庢傞曄悢傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	開始位置の前にキューに入るデータの量を取得する
+//! @param		pPreroll : プリロール タイムを受け取る変数へのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxSource::GetPreroll(LONGLONG *pPreroll)
 {

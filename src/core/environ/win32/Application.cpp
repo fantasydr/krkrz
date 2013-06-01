@@ -64,7 +64,7 @@ char ** _argv;
 extern void TVPInitCompatibleNativeFunctions();
 
 AcceleratorKeyTable::AcceleratorKeyTable() {
-	// 僨僼僅儖僩傪撉傒崬傓
+	// デフォルトを読み込む
 	hAccel_ = ::LoadAccelerators( (HINSTANCE)GetModuleHandle(0), MAKEINTRESOURCE(IDC_TVPWIN32));
 }
 AcceleratorKeyTable::~AcceleratorKeyTable() {
@@ -104,7 +104,7 @@ AcceleratorKey::~AcceleratorKey() {
 	delete[] keys_;
 }
 void AcceleratorKey::AddKey( WORD id, WORD key, BYTE virt ) {
-	// 傑偢偼懚嵼偡傞偐僠僃僢僋偡傞
+	// まずは存在するかチェックする
 	bool found = false;
 	int index = 0;
 	for( int i = 0; i < key_count_; i++ ) {
@@ -115,9 +115,9 @@ void AcceleratorKey::AddKey( WORD id, WORD key, BYTE virt ) {
 		}
 	}
 	if( found ) {
-		// 婛偵搊榐偝傟偰偄傞僐儅儞僪側偺偱僉乕忣曬偺峏怴傪峴偆
+		// 既に登録されているコマンドなのでキー情報の更新を行う
 		if( keys_[index].key == key && keys_[index].fVirt == virt ) {
-			// 曄峏偝傟偰偄側偄
+			// 変更されていない
 			return;
 		}
 		keys_[index].key = key;
@@ -143,7 +143,7 @@ void AcceleratorKey::AddKey( WORD id, WORD key, BYTE virt ) {
 
 }
 void AcceleratorKey::DelKey( WORD id ) {
-	// 傑偢偼懚嵼偡傞偐僠僃僢僋偡傞
+	// まずは存在するかチェックする
 	bool found = false;
 	for( int i = 0; i < key_count_; i++ ) {
 		if( keys_[i].cmd == id ) {
@@ -153,7 +153,7 @@ void AcceleratorKey::DelKey( WORD id ) {
 	}
 	if( found == false ) return;
 
-	// 懚嵼偟偨応崌嶌傝捈偟
+	// 存在した場合作り直し
 	ACCEL* table = new ACCEL[key_count_-1];
 	int dest = 0;
 	for( int i = 0; i < key_count_; i++ ) {
@@ -206,13 +206,13 @@ int APIENTRY WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 
 		if(TVPCheckPrintDataPath()) return 0;
 		if(TVPCheckCmdDescription()) return 0;
-		//if(TVPExecuteUserConfig()) return 0; // userconf 僄儞僕儞愝掕婲摦偼偟側偄 TODO
+		//if(TVPExecuteUserConfig()) return 0; // userconf エンジン設定起動はしない TODO
 
 		TVPSystemInit();
 
 		if(TVPCheckAbout()) return 0; // version information dialog box;
 
-		Application->SetTitle( _T("媑棦媑棦") );
+		Application->SetTitle( _T("吉里吉里") );
 		// Application->CreateForm(__classid(TTVPMainForm), &TVPMainForm);
 		TVPMainForm = new TTVPMainForm();
 
@@ -259,13 +259,13 @@ int APIENTRY WinMain( _In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance
 	return TVPTerminateCode;
 }
 /**
- * 僐儞僜乕儖偐傜偺婲摦偐妋擣偟丄僐儞僜乕儖偐傜偺婲摦偺応崌偼丄昗弨弌椡傪妱傝摉偰傞
+ * コンソールからの起動か確認し、コンソールからの起動の場合は、標準出力を割り当てる
  */
 void TApplication::CheckConsole() {
 #ifdef TVP_LOG_TO_COMMANDLINE_CONSOLE
 	if( ::AttachConsole(ATTACH_PARENT_PROCESS) ) {
-		_wfreopen_s( &oldstdin_, L"CON", L"r", stdin );     // 昗弨擖椡偺妱傝摉偰
-		_wfreopen_s( &oldstdout_, L"CON", L"w", stdout);    // 昗弨弌椡偺妱傝摉偰
+		_wfreopen_s( &oldstdin_, L"CON", L"r", stdin );     // 標準入力の割り当て
+		_wfreopen_s( &oldstdout_, L"CON", L"w", stdout);    // 標準出力の割り当て
 		is_attach_console_ = true;
 
 		TCHAR console[256];
@@ -314,14 +314,14 @@ void TApplication::BringToFront() {
 	}
 }
 void TApplication::ShowException( class Exception* e ) {
-	::MessageBox( NULL, e->what(), _T("抳柦揑側僄儔乕"), MB_OK );
+	::MessageBox( NULL, e->what(), _T("致命的なエラー"), MB_OK );
 }
 void TApplication::Run() {
 	MSG msg;
 	HACCEL hAccelTable;
 	//hAccelTable = LoadAccelerators( (HINSTANCE)GetModuleHandle(0), MAKEINTRESOURCE(IDC_TVPWIN32));
 
-	// 儊僀儞 儊僢僙乕僕 儖乕僾:
+	// メイン メッセージ ループ:
 	HWND mainWnd = INVALID_HANDLE_VALUE;
 	if( ( windows_list_.size() > 0 ) ) {
 		mainWnd = windows_list_[0]->GetHandle();
@@ -343,7 +343,7 @@ void TApplication::Run() {
 		if( TVPMainForm ) {
 			done = TVPMainForm->ApplicationIdel();
 		}
-		if( done ) { // idle 張棟偑廔傢偭偨傜丄儊僢僙乕僕懸偪傊
+		if( done ) { // idle 処理が終わったら、メッセージ待ちへ
 			BOOL dret = ::GetMessage( &msg, NULL, 0, 0 );
 			hAccelTable = accel_key_.GetHandle(msg.hwnd);
 			if( dret && !TranslateAccelerator(msg.hwnd, hAccelTable, &msg) ) {
@@ -425,7 +425,7 @@ void TApplication::DeleteAcceleratorKeyTable( HWND hWnd ) {
 	accel_key_.DelTable( hWnd );
 }
 /**
- 壖幚憰 TODO
+ 仮実装 TODO
 */
 std::vector<std::string>* LoadLinesFromFile( const tstring& path ) {
 	FILE *fp = NULL;

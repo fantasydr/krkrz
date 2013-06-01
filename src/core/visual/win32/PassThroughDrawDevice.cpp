@@ -6,7 +6,7 @@
 	See details of license at "license.txt"
 */
 //---------------------------------------------------------------------------
-//!@file "PassThrough" 昤夋僨僶僀僗娗棟
+//!@file "PassThrough" 描画デバイス管理
 //---------------------------------------------------------------------------
 #define NOMINMAX
 #include "tjsCommHead.h"
@@ -24,46 +24,46 @@
 #include <d3d.h>
 
 /*
-	PassThroughDrawDevice 僋儔僗偵偼丄Window.PassThroughDrawDevice 偲偟偰
-	傾僋僙僗偱偒傞丅捠忢丄Window 僋儔僗傪惗惉偡傞偲丄偦偺 drawDevice 僾儘僷
-	僥傿偵偼帺摦揑偵偙偺僋儔僗偺僀儞僗僞儞僗偑愝掕偝傟傞偺偱丄(傎偐偺DrawDevice
-	傪巊傢側偄尷傝偼) 摿偵堄幆偡傞昁梫偼側偄丅
+	PassThroughDrawDevice クラスには、Window.PassThroughDrawDevice として
+	アクセスできる。通常、Window クラスを生成すると、その drawDevice プロパ
+	ティには自動的にこのクラスのインスタンスが設定されるので、(ほかのDrawDevice
+	を使わない限りは) 特に意識する必要はない。
 
-	PassThroughDrawDevice 偼埲壓偺儊僜僢僪偲僾儘僷僥傿傪帩偮丅
+	PassThroughDrawDevice は以下のメソッドとプロパティを持つ。
 
 	recreate()
-		Drawer (撪晹偱巊梡偟偰偄傞昤夋曽幃) 傪愗傝懼偊傞丅preferredDrawer 僾儘僷僥傿
-		偑 dtNone 埲奜偱偁傟偽偦傟偵廬偆偑丄昁偢巜掕偝傟偨 drawer 偑巊梡偝傟傞曐徹偼側偄丅
+		Drawer (内部で使用している描画方式) を切り替える。preferredDrawer プロパティ
+		が dtNone 以外であればそれに従うが、必ず指定された drawer が使用される保証はない。
 
 	preferredDrawer
-		巊梡偟偨偄 drawer 傪昞偡僾儘僷僥傿丅埲壓偺偄偢傟偐偺抣傪偲傞丅
-		抣傪愝掕偡傞偙偲傕壜擻丅new 捈屻偺抣偼 僐儅儞僪儔僀儞僆僾僔儑儞偺 dbstyle 偱
-		愝掕偟偨抣偵側傞丅
-		drawer偑偙偺抣偵側傞曐徹偼側偄 (偨偲偊偽 dtDBD3D 傪巜掕偟偰偄偰傕壗傜偐偺
-		尨場偱 Direct3D 偺弶婜壔偵幐攕偟偨応崌偼 DirectDraw 偑巊梡偝傟傞壜擻惈偑偁傞)丅
-		僂傿儞僪僂嶌惉捈屻丄嵟弶偵僾儔僀儅儕儗僀儎傪嶌惉偡傞傛傝傕慜偵偙偺僾儘僷僥傿傪
-		愝掕偡傞帠偵傛傝丄recreate() 傪傢偞傢偞幚峴偟側偔偰傕巜掕偺 drawer 傪巊梡
-		偝偣傞偙偲偑偱偒傞丅
-		Window.PassThroughDrawDevice.dtNone			巜掕偟側偄
-		Window.PassThroughDrawDevice.dtDrawDib		奼戝弅彫偑昁梫側応崌偼GDI丄
-													偦偆偱側偗傟偽DB側偟
-		Window.PassThroughDrawDevice.dtDBGDI		GDI偵傛傞DB
-		Window.PassThroughDrawDevice.dtDBDD			DirectDraw偵傛傞DB
-		Window.PassThroughDrawDevice.dtDBD3D		Direct3D偵傛傞DB
+		使用したい drawer を表すプロパティ。以下のいずれかの値をとる。
+		値を設定することも可能。new 直後の値は コマンドラインオプションの dbstyle で
+		設定した値になる。
+		drawerがこの値になる保証はない (たとえば dtDBD3D を指定していても何らかの
+		原因で Direct3D の初期化に失敗した場合は DirectDraw が使用される可能性がある)。
+		ウィンドウ作成直後、最初にプライマリレイヤを作成するよりも前にこのプロパティを
+		設定する事により、recreate() をわざわざ実行しなくても指定の drawer を使用
+		させることができる。
+		Window.PassThroughDrawDevice.dtNone			指定しない
+		Window.PassThroughDrawDevice.dtDrawDib		拡大縮小が必要な場合はGDI、
+													そうでなければDBなし
+		Window.PassThroughDrawDevice.dtDBGDI		GDIによるDB
+		Window.PassThroughDrawDevice.dtDBDD			DirectDrawによるDB
+		Window.PassThroughDrawDevice.dtDBD3D		Direct3DによるDB
 
 	drawer
-		尰嵼巊梡偝傟偰偄傞 drawer 傪昞偡僾儘僷僥傿丅埲壓偺偄偢傟偐偺抣傪偲傞丅
-		撉傒庢傝愱梡丅
-		Window.PassThroughDrawDevice.dtNone			晛捠偼偙傟偼側偄
-		Window.PassThroughDrawDevice.dtDrawDib		僟僽儖僶僢僼傽儕儞僌(DB)側偟
-		Window.PassThroughDrawDevice.dtDBGDI		GDI偵傛傞DB
-		Window.PassThroughDrawDevice.dtDBDD			DirectDraw偵傛傞DB
-		Window.PassThroughDrawDevice.dtDBD3D		Direct3D偵傛傞DB
+		現在使用されている drawer を表すプロパティ。以下のいずれかの値をとる。
+		読み取り専用。
+		Window.PassThroughDrawDevice.dtNone			普通はこれはない
+		Window.PassThroughDrawDevice.dtDrawDib		ダブルバッファリング(DB)なし
+		Window.PassThroughDrawDevice.dtDBGDI		GDIによるDB
+		Window.PassThroughDrawDevice.dtDBDD			DirectDrawによるDB
+		Window.PassThroughDrawDevice.dtDBD3D		Direct3DによるDB
 */
 
 
 //---------------------------------------------------------------------------
-// 僆僾僔儑儞
+// オプション
 //---------------------------------------------------------------------------
 static tjs_int TVPPassThroughOptionsGeneration = 0;
 static bool TVPZoomInterpolation = true;
@@ -120,7 +120,7 @@ static void TVPInitPassThroughOptions()
 
 
 //---------------------------------------------------------------------------
-//! @brief	PassThrough 偱梡偄傞昤夋曽朄梡僀儞僞乕僼僃乕僗
+//! @brief	PassThrough で用いる描画方法用インターフェース
 //---------------------------------------------------------------------------
 class tTVPDrawer
 {
@@ -191,7 +191,7 @@ public:
 
 
 //---------------------------------------------------------------------------
-//! @brief	GDI偵傛傞昤夋傪昁梫偲偡傞婎杮僋儔僗
+//! @brief	GDIによる描画を必要とする基本クラス
 //---------------------------------------------------------------------------
 class tTVPDrawer_GDI : public tTVPDrawer
 {
@@ -200,13 +200,13 @@ protected:
 	HDC TargetDC;
 
 public:
-	//! @brief	僐儞僗僩儔僋僞
+	//! @brief	コンストラクタ
 	tTVPDrawer_GDI(tTVPPassThroughDrawDevice * device) : tTVPDrawer(device)
 	{
 		TargetDC = NULL;
 	}
 
-	//! @brief	僨僗僩儔僋僞
+	//! @brief	デストラクタ
 	~tTVPDrawer_GDI()
 	{
 		if(TargetDC && TargetWindow) ReleaseDC(TargetWindow, TargetDC);
@@ -216,12 +216,12 @@ public:
 	{
 		if(wnd)
 		{
-			// 昤夋梡 DC 傪庢摼偡傞
+			// 描画用 DC を取得する
 			TargetDC = GetDC(wnd);
 		}
 		else
 		{
-			// 昤夋梡 DC 傪奐曻偡傞
+			// 描画用 DC を開放する
 			if(TargetDC) ReleaseDC(TargetWindow, TargetDC), TargetDC = NULL;
 		}
 
@@ -234,7 +234,7 @@ public:
 
 
 //---------------------------------------------------------------------------
-//! @brief	DrawDib偵傛傞僶僢僼傽柍偟昤夋傪峴偆婎杮僋儔僗
+//! @brief	DrawDibによるバッファ無し描画を行う基本クラス
 //---------------------------------------------------------------------------
 class tTVPDrawer_DrawDibNoBuffering : public tTVPDrawer_GDI
 {
@@ -244,14 +244,14 @@ class tTVPDrawer_DrawDibNoBuffering : public tTVPDrawer_GDI
 	HPEN YellowPen;
 
 public:
-	//! @brief	僐儞僗僩儔僋僞
+	//! @brief	コンストラクタ
 	tTVPDrawer_DrawDibNoBuffering(tTVPPassThroughDrawDevice * device) : tTVPDrawer_GDI(device)
 	{
 		BluePen = NULL;
 		YellowPen = NULL;
 	}
 
-	//! @brief	僨僗僩儔僋僞
+	//! @brief	デストラクタ
 	~tTVPDrawer_DrawDibNoBuffering()
 	{
 		if(BluePen)   DeleteObject(BluePen);
@@ -262,8 +262,8 @@ public:
 
 	bool SetDestSize(tjs_int width, tjs_int height)
 	{
-		// 偙偺僨僶僀僗偱偼奼戝弅彫偼偱偒側偄偺偱
-		// 奼戝弅彫偑昁梫側応崌偼 false 傪曉偡
+		// このデバイスでは拡大縮小はできないので
+		// 拡大縮小が必要な場合は false を返す
 		tjs_int w, h;
 		Device->GetSrcSize(w, h);
 		if(width != w || height != h)
@@ -284,13 +284,13 @@ public:
 
 	void StartBitmapCompletion()
 	{
-		// 傗傞偙偲側偟
+		// やることなし
 	}
 
 	void NotifyBitmapCompleted(tjs_int x, tjs_int y, const void * bits, const BITMAPINFO * bitmapinfo,
 		const tTVPRect &cliprect)
 	{
-		// DrawDibDraw 偵偰 TargetDC 偵昤夋傪峴偆
+		// DrawDibDraw にて TargetDC に描画を行う
 		if(DrawDibHandle && TargetDC)
 			DrawDibDraw(DrawDibHandle,
 				TargetDC,
@@ -306,7 +306,7 @@ public:
 				cliprect.get_height(),
 				0);
 
-		// 峏怴嬮宍偺昞帵
+		// 更新矩形の表示
 		if(DrawUpdateRectangle)
 		{
 			if(!BluePen) BluePen = CreatePen(PS_SOLID, 1, RGB(0, 0, 255));
@@ -346,7 +346,7 @@ public:
 
 	void EndBitmapCompletion()
 	{
-		// 傗傞偙偲側偟
+		// やることなし
 	}
 
 	virtual int GetInterpolationCapability() { return 1; }
@@ -360,19 +360,19 @@ public:
 
 
 //---------------------------------------------------------------------------
-//! @brief	GDI偵傛傞僟僽儖僶僢僼傽儕儞僌傪峴偆僋儔僗
+//! @brief	GDIによるダブルバッファリングを行うクラス
 //---------------------------------------------------------------------------
 class tTVPDrawer_GDIDoubleBuffering : public tTVPDrawer_GDI
 {
 	typedef tTVPDrawer_GDI inherited;
-	HBITMAP OffScreenBitmap; //!< 僆僼僗僋儕乕儞價僢僩儅僢僾
-	HDC OffScreenDC; //!< 僆僼僗僋儕乕儞 DC
-	HBITMAP OldOffScreenBitmap; //!< OffScreenDC 偵埲慜慖戰偝傟偰偄偨 價僢僩儅僢僾
-	bool ShouldShow; //!< show 偱幚嵺偵夋柺偵夋憸傪揮憲偡傋偒偐
-	bool InBenchMark; //!< 儀儞僠儅乕僋拞偐偳偆偐
+	HBITMAP OffScreenBitmap; //!< オフスクリーンビットマップ
+	HDC OffScreenDC; //!< オフスクリーン DC
+	HBITMAP OldOffScreenBitmap; //!< OffScreenDC に以前選択されていた ビットマップ
+	bool ShouldShow; //!< show で実際に画面に画像を転送すべきか
+	bool InBenchMark; //!< ベンチマーク中かどうか
 
 public:
-	//! @brief	僐儞僗僩儔僋僞
+	//! @brief	コンストラクタ
 	tTVPDrawer_GDIDoubleBuffering(tTVPPassThroughDrawDevice * device) : tTVPDrawer_GDI(device)
 	{
 		OffScreenBitmap = NULL;
@@ -382,7 +382,7 @@ public:
 		InBenchMark = false;
 	}
 
-	//! @brief	僨僗僩儔僋僞
+	//! @brief	デストラクタ
 	~tTVPDrawer_GDIDoubleBuffering()
 	{
 		DestroyBitmap();
@@ -402,8 +402,8 @@ public:
 
 	void CreateBitmap()
 	{
-		// 僗僋儕乕儞屳姺偺 DDB 傪嶌惉偡傞丅
-		// 偙傟偼偨偄偰偄偺応崌丄價僨僆儊儌儕忋偵嶌惉偝傟傞丅
+		// スクリーン互換の DDB を作成する。
+		// これはたいていの場合、ビデオメモリ上に作成される。
 		DestroyBitmap();
 		if(TargetWindow && SrcWidth > 0 && SrcHeight > 0)
 		{
@@ -449,13 +449,13 @@ public:
 
 	void StartBitmapCompletion()
 	{
-		// 傗傞偙偲側偟
+		// やることなし
 	}
 
 	void NotifyBitmapCompleted(tjs_int x, tjs_int y, const void * bits, const BITMAPINFO * bitmapinfo,
 		const tTVPRect &cliprect)
 	{
-		// DrawDibDraw 偵偰 OffScreenDC 偵昤夋傪峴偆
+		// DrawDibDraw にて OffScreenDC に描画を行う
 		if(DrawDibHandle && OffScreenDC)
 		{
 			ShouldShow = true;
@@ -483,10 +483,10 @@ public:
 	{
 		if(TargetDC && OffScreenDC && ShouldShow)
 		{
-			// 僆僼僗僋儕乕儞價僢僩儅僢僾傪 TargetDC 偵揮憲偡傞
+			// オフスクリーンビットマップを TargetDC に転送する
 			if(DestWidth == SrcWidth && DestHeight == SrcHeight)
 			{
-				// 奼戝丒弅彫偼昁梫側偄
+				// 拡大．縮小は必要ない
 				BitBlt(TargetDC,
 					DestLeft,
 					DestTop,
@@ -499,7 +499,7 @@ public:
 			}
 			else
 			{
-				// 奼戝丒弅彫偑昁梫
+				// 拡大．縮小が必要
 				if(TVPZoomInterpolation)
 					SetStretchBltMode(TargetDC, HALFTONE);
 				else
@@ -521,9 +521,9 @@ public:
 
 			if(InBenchMark)
 			{
-				// 夋柺偐傜偺撉傒弌偟傪峴偆娭悢傪幚峴偡傞
-				// 偙偆偟側偄偲 StrechBlt 側偳偼僐儅儞僪僉儏乕偵偨偨偒崬傑傟傞
-				// 偩偗偱丄幚嵺偺昤夋傪懸偨偢偵婣傞壜擻惈偑偁傞丅
+				// 画面からの読み出しを行う関数を実行する
+				// こうしないと StrechBlt などはコマンドキューにたたき込まれる
+				// だけで、実際の描画を待たずに帰る可能性がある。
 				(void)GetPixel(TargetDC, DestLeft + DestWidth / 2, DestTop + DestHeight / 2);
 			}
 
@@ -547,7 +547,7 @@ public:
 
 
 //---------------------------------------------------------------------------
-//! @brief	DirectDraw偵傛傞僟僽儖僶僢僼傽儕儞僌傪峴偆僋儔僗
+//! @brief	DirectDrawによるダブルバッファリングを行うクラス
 //---------------------------------------------------------------------------
 class tTVPDrawer_DDDoubleBuffering : public tTVPDrawer
 {
@@ -558,10 +558,10 @@ class tTVPDrawer_DDDoubleBuffering : public tTVPDrawer
 	IDirectDrawClipper * Clipper;
 
 	bool LastOffScreenDCGot;
-	bool ShouldShow; //!< show 偱幚嵺偵夋柺偵夋憸傪揮憲偡傋偒偐
+	bool ShouldShow; //!< show で実際に画面に画像を転送すべきか
 
 public:
-	//! @brief	僐儞僗僩儔僋僞
+	//! @brief	コンストラクタ
 	tTVPDrawer_DDDoubleBuffering(tTVPPassThroughDrawDevice * device) : tTVPDrawer(device)
 	{
 		TVPEnsureDirectDrawObject();
@@ -572,7 +572,7 @@ public:
 		ShouldShow = false;
 	}
 
-	//! @brief	僨僗僩儔僋僞
+	//! @brief	デストラクタ
 	~tTVPDrawer_DDDoubleBuffering()
 	{
 		DestroyOffScreenSurface();
@@ -590,14 +590,14 @@ public:
 
 	void InvalidateAll()
 	{
-		// 儗僀儎墘嶼寢壥傪偡傋偰儕僋僄僗僩偡傞
-		// 僒乕僼僃乕僗偑 lost 偟偨嵺偵撪梕傪嵞峔抸偡傞栚揑偱梡偄傞
+		// レイヤ演算結果をすべてリクエストする
+		// サーフェースが lost した際に内容を再構築する目的で用いる
 		Device->RequestInvalidation(tTVPRect(0, 0, DestWidth, DestHeight));
 	}
 
 	void CreateOffScreenSurface()
 	{
-		// 僆僼僗僋儕乕儞僒乕僼僃乕僗傪愝掕偡傞
+		// オフスクリーンサーフェースを設定する
 		DestroyOffScreenSurface();
 		if(TargetWindow && SrcWidth > 0 && SrcHeight > 0)
 		{
@@ -736,7 +736,7 @@ public:
 	void NotifyBitmapCompleted(tjs_int x, tjs_int y, const void * bits, const BITMAPINFO * bitmapinfo,
 		const tTVPRect &cliprect)
 	{
-		// DrawDibDraw 偵偰 OffScreenDC 偵昤夋傪峴偆
+		// DrawDibDraw にて OffScreenDC に描画を行う
 		if(DrawDibHandle && OffScreenDC && TargetWindow)
 		{
 			ShouldShow = true;
@@ -820,19 +820,19 @@ public:
 	virtual int GetInterpolationCapability()
 	{
 		// bit 0 for point-on-point, bit 1 for bilinear interpolation
-		// 偝偰丄DirectDraw 偺 blt 偑曗娫傪峴偆偐偳偆偐傪妋擣偡傞偺偼偪傚偭偲
-		// 傗偭偐偄偱偁傞丅
-		// GetCaps 側偳偺儊僜僢僪偑偁偭偰丄偦偙偐傜摼傜傟傞抣偵曗娫傪峴偆偐偳偆偐偺
-		// 忣曬偑偁傞側傜偽榖偼憗偄偑丄偦傫側傕傫偼扵偟偨尷傝偱偼傒偮偐傜側偄丅
-		// 僾儔僀儅儕僒乕僼僃乕僗傊幚嵺偵夋憸傪揮憲偟偰妋偐傔偰傒傞偲偄偆庤偼偁傞偑
-		// 夋柺傪墭偡忋偵昤夋偟偰偐傜妋擣偡傞傑偱偺娫偵懠偺傾僾儕偑偦偙偺夋憸傪
-		// 徚偟偰偟傑偆偐傕偟傟側偄 (傗偭偐偄側傕傫偩偄偱偡側偁)
-		// 偟傚偆偑側偄偺偱丄俀屄偪偭偙偄僆僼僗僋儕乕儞僒乕僼僃乕僗傪嶌偭偰傒偰丄
-		// 偦偙偺娫摨巑偱偺揮憲傪峴偭偰傒傞偙偲偵偡傞丅僆僼僗僋儕乕儞僒乕僼僃乕僗偱偼
-		// 偁傞偑丄僾儔僀儅儕僒乕僼僃乕僗偲摨偠偔價僨僆儊儌儕忋偵攝抲偝傟傞偺偱
-		// 摨偠傛偆側曗娫偺巇曽傪偟偰偔傟傞偲婜懸偡傞丅
-		// 偪偭偙偄偲偄偭偰傕丄偁傞掱搙偺戝偒偝偑側偄偲曗娫傪峴偭偰偔傟側偄
-		// 僨僶僀僗偑懚嵼偡傞偐傕偟傟側偄偺偱丄100x100偲200x200傪妋曐偟偰傒傞偙偲偵偡傞丅
+		// さて、DirectDraw の blt が補間を行うかどうかを確認するのはちょっと
+		// やっかいである。
+		// GetCaps などのメソッドがあって、そこから得られる値に補間を行うかどうかの
+		// 情報があるならば話は早いが、そんなもんは探した限りではみつからない。
+		// プライマリサーフェースへ実際に画像を転送して確かめてみるという手はあるが
+		// 画面を汚す上に描画してから確認するまでの間に他のアプリがそこの画像を
+		// 消してしまうかもしれない (やっかいなもんだいですなあ)
+		// しょうがないので、２個ちっこいオフスクリーンサーフェースを作ってみて、
+		// そこの間同士での転送を行ってみることにする。オフスクリーンサーフェースでは
+		// あるが、プライマリサーフェースと同じくビデオメモリ上に配置されるので
+		// 同じような補間の仕方をしてくれると期待する。
+		// ちっこいといっても、ある程度の大きさがないと補間を行ってくれない
+		// デバイスが存在するかもしれないので、100x100と200x200を確保してみることにする。
 		IDirectDraw2 *object = TVPGetDirectDrawObjectNoAddRef();
 		if(!object) return 0;
 
@@ -843,7 +843,7 @@ public:
 		HDC s1dc = NULL;
 		HDC s2dc = NULL;
 
-		// 僒乕僼僃乕僗偺妋曐
+		// サーフェースの確保
 		for(int i = 0; i < 2; i++)
 		{
 			IDirectDrawSurface * & surface = (i == 0) ? s1 : s2;
@@ -882,7 +882,7 @@ public:
 			}
 		}
 
-		// s1 偵 偟傠 偲 偔傠 偺嵶偐偄廲偺僗僩儔僀僾傪彂偔
+		// s1 に しろ と くろ の細かい縦のストライプを書く
 		while(true)
 		{
 			HDC dc = NULL;
@@ -895,7 +895,7 @@ public:
 			else if(FAILED(hr))
 				goto got_error;
 
-			// s1 偺僒僀僘(100x100) 偵僗僩儔僀僾傪彂偔
+			// s1 のサイズ(100x100) にストライプを書く
 			HPEN white_pen   = CreatePen(PS_SOLID, 1, RGB(255, 255, 255));
 			HPEN black_pen   = CreatePen(PS_SOLID, 1, RGB(0, 0, 0));
 
@@ -921,7 +921,7 @@ public:
 			break;
 		}
 
-		// s1 傪 s2 偵奼戝 Blt 偡傞
+		// s1 を s2 に拡大 Blt する
 		RECT drect;
 		drect.left   = 0;
 		drect.top    = 0;
@@ -937,7 +937,7 @@ public:
 		if(FAILED(s2->Blt(&drect, s1, &srect, DDBLT_WAIT, NULL)))
 			goto got_error;
 
-		// s2 偑偳偆奼戝偝傟偨偐傪挷嵏偡傞
+		// s2 がどう拡大されたかを調査する
 		while(true)
 		{
 			HDC dc = NULL;
@@ -950,14 +950,14 @@ public:
 			else if(FAILED(hr))
 				goto got_error;
 
-			// 傑傫側偐傊傫偺夋慺傪挷傋傞
+			// まんなかへんの画素を調べる
 			bool halftone_detected = false;
 			for(int i = 90; i < 110; i++)
 			{
-				// 怓傪get
+				// 色をget
 				COLORREF color = GetPixel(s2dc, i, 100);
-				// 傕偟丄曗娫偑峴傢傟偰偄傟偽丄偟傠偲偔傠埲奜偺怓偑
-				// 弌偰偒偰偄傞偼偢
+				// もし、補間が行われていれば、しろとくろ以外の色が
+				// 出てきているはず
 				halftone_detected = halftone_detected ||
 					(color != 0xffffff && color != 0x000000);
 			}
@@ -967,7 +967,7 @@ public:
 			break;
 		}
 
-		// 夝曻偡傞
+		// 解放する
 	got_error:
 		if(s1dc && s1)
 			s1->ReleaseDC(s1dc), s1dc = NULL;
@@ -1000,17 +1000,17 @@ public:
 
 
 //---------------------------------------------------------------------------
-//! @brief	Direct3D7 偵傛傞僟僽儖僶僢僼傽儕儞僌傪峴偆僋儔僗
-//! @note	tTVPDrawer_DDDoubleBuffering 偲傛偔帡偰偄傞偑暿僋儔僗偵側偭偰偄傞丅
-//!			廋惓傪峴偆応崌偼丄屳偄偵傛偔尒斾傋丄帡偨傛偆側偲偙傠偑偁傟偽偲傕偵廋惓傪帋傒傞偙偲丅
+//! @brief	Direct3D7 によるダブルバッファリングを行うクラス
+//! @note	tTVPDrawer_DDDoubleBuffering とよく似ているが別クラスになっている。
+//!			修正を行う場合は、互いによく見比べ、似たようなところがあればともに修正を試みること。
 //---------------------------------------------------------------------------
 class tTVPDrawer_D3DDoubleBuffering : public tTVPDrawer
 {
 	typedef tTVPDrawer inherited;
 
 /*
-	note: Texture 偵懳偟偰偄偭偨傫昤夋偝傟偨撪梕偼 Surface 偵揮憲偝傟丄
-			偝傜偵偦偙偐傜僾儔僀儅儕僒乕僼僃乕僗偵僐僺乕偝傟傞丅
+	note: Texture に対していったん描画された内容は Surface に転送され、
+			さらにそこからプライマリサーフェースにコピーされる。
 */
 
 	HDC OffScreenDC;
@@ -1021,18 +1021,18 @@ class tTVPDrawer_D3DDoubleBuffering : public tTVPDrawer
 	IDirectDrawSurface7 * Texture;
 	IDirectDrawClipper * Clipper;
 
-	void * TextureBuffer; //!< 僥僋僗僠儍偺僒乕僼僃乕僗傊偺儊儌儕億僀儞僞
-	long TexturePitch; //!< 僥僋僗僠儍偺僺僢僠
+	void * TextureBuffer; //!< テクスチャのサーフェースへのメモリポインタ
+	long TexturePitch; //!< テクスチャのピッチ
 
-	tjs_uint TextureWidth; //!< 僥僋僗僠儍偺墶暆
-	tjs_uint TextureHeight; //!< 僥僋僗僠儍偺廲暆
+	tjs_uint TextureWidth; //!< テクスチャの横幅
+	tjs_uint TextureHeight; //!< テクスチャの縦幅
 
 	bool LastOffScreenDCGot;
-	bool ShouldShow; //!< show 偱幚嵺偵夋柺偵夋憸傪揮憲偡傋偒偐
-	bool UseDirectTransfer; //!< 儊儌儕捈愙揮憲傪峴偆偐偳偆偐
+	bool ShouldShow; //!< show で実際に画面に画像を転送すべきか
+	bool UseDirectTransfer; //!< メモリ直接転送を行うかどうか
 
 public:
-	//! @brief	僐儞僗僩儔僋僞
+	//! @brief	コンストラクタ
 	tTVPDrawer_D3DDoubleBuffering(tTVPPassThroughDrawDevice * device) : tTVPDrawer(device)
 	{
 		TVPEnsureDirectDrawObject();
@@ -1050,7 +1050,7 @@ public:
 		TextureWidth = TextureHeight = 0;
 	}
 
-	//! @brief	僨僗僩儔僋僞
+	//! @brief	デストラクタ
 	~tTVPDrawer_D3DDoubleBuffering()
 	{
 		DestroyOffScreenSurface();
@@ -1073,8 +1073,8 @@ public:
 
 	void InvalidateAll()
 	{
-		// 儗僀儎墘嶼寢壥傪偡傋偰儕僋僄僗僩偡傞
-		// 僒乕僼僃乕僗偑 lost 偟偨嵺偵撪梕傪嵞峔抸偡傞栚揑偱梡偄傞
+		// レイヤ演算結果をすべてリクエストする
+		// サーフェースが lost した際に内容を再構築する目的で用いる
 		Device->RequestInvalidation(tTVPRect(0, 0, DestWidth, DestHeight));
 	}
 
@@ -1095,7 +1095,7 @@ public:
 
 	void CreateOffScreenSurface()
 	{
-		// Direct3D 僨僶僀僗丄僥僋僗僠儍側偳傪嶌惉偡傞
+		// Direct3D デバイス、テクスチャなどを作成する
 		DestroyOffScreenSurface();
 		if(TargetWindow && SrcWidth > 0 && SrcHeight > 0)
 		{
@@ -1228,11 +1228,11 @@ public:
 
 			if(hr == DD_OK)
 			{
-				UseDirectTransfer = true; // 捈愙偺儊儌儕揮憲傪桳岠偵偡傞
+				UseDirectTransfer = true; // 直接のメモリ転送を有効にする
 			}
 			else /*if(hr != DD_OK) */
 			{
-				// 僺僋僙儖僼僅乕儅僢僩傪巜掕偣偢偵惗惉傪帋傒傞
+				// ピクセルフォーマットを指定せずに生成を試みる
 
 				ZeroMemory(&ddsd, sizeof(ddsd));
 				ddsd.dwSize = sizeof(ddsd);
@@ -1455,7 +1455,7 @@ GetDCTime += timeGetTime() - StartTick;
 	{
 		if(UseDirectTransfer)
 		{
-			// 捈愙儊儌儕揮憲傪梡偄偰昤夋傪峴偆
+			// 直接メモリ転送を用いて描画を行う
 #ifdef TVPD3DTIMING
 StartTick = timeGetTime();
 #endif
@@ -1467,10 +1467,10 @@ StartTick = timeGetTime();
 					cliprect.right > bitmapinfo->bmiHeader.biWidth ||
 					cliprect.bottom > bitmapinfo->bmiHeader.biHeight))
 			{
-				// 斖埻奜偺揮憲偼(堦晹偩偗揮憲偡傞偺偱偼側偔偰)柍帇偟偰傛偄
+				// 範囲外の転送は(一部だけ転送するのではなくて)無視してよい
 				ShouldShow = true;
 
-				// bitmapinfo 偱昞偝傟偨 cliprect 偺椞堟傪 x,y 偵僐僺乕偡傞
+				// bitmapinfo で表された cliprect の領域を x,y にコピーする
 				long src_y       = cliprect.top;
 				long src_y_limit = cliprect.bottom;
 				long src_x       = cliprect.left;
@@ -1505,7 +1505,7 @@ DrawDibDrawTime += timeGetTime() - StartTick;
 		}
 		else
 		{
-			// DrawDibDraw 偵偰 OffScreenDC 偵昤夋傪峴偆
+			// DrawDibDraw にて OffScreenDC に描画を行う
 #ifdef TVPD3DTIMING
 StartTick = timeGetTime();
 #endif
@@ -1848,50 +1848,50 @@ void tTVPPassThroughDrawDevice::CreateDrawer(tDrawerType type)
 //---------------------------------------------------------------------------
 void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_benchmark)
 {
-	// 僾儔僀儅儕儗僀儎偺僒僀僘傪庢摼
+	// プライマリレイヤのサイズを取得
 	tjs_int srcw, srch;
 	GetSrcSize(srcw, srch);
 
-	// 偄偭偨傫 Drawer 傪嶍彍
+	// いったん Drawer を削除
 	tDrawerType last_type = DrawerType;
 	DestroyDrawer();
 
-	// 僾儔僀儅儕儗僀儎偑側偄側傜偽 DrawDevice 偼嶌惉偟側偄
+	// プライマリレイヤがないならば DrawDevice は作成しない
 	if(srcw == 0 || srch == 0) return;
 
-	// should_benchmark 偑婾偱丄慜夞 Drawer 傪嶌惉偟偰偄傟偽丄偦傟偲摨偠僞僀僾偺
-	// Drawer 傪梡偄傞
+	// should_benchmark が偽で、前回 Drawer を作成していれば、それと同じタイプの
+	// Drawer を用いる
 	if(!Drawer && !should_benchmark && last_type != dtNone)
 		CreateDrawer(last_type);
 
-	// PreferredDrawerType 偑巜掕偝傟偰偄傟偽偦傟傪巊偆
+	// PreferredDrawerType が指定されていればそれを使う
 	if(!Drawer)
 	{
-		// PreferredDrawerType 偑 dtDrawDib 偺応崌偼丄僘乕儉偑昁梫側応崌偼
-		// dtGDI 傪梡偄傞
+		// PreferredDrawerType が dtDrawDib の場合は、ズームが必要な場合は
+		// dtGDI を用いる
 		if (PreferredDrawerType == dtDrawDib)
 			CreateDrawer(zoom_required ? dtDBGDI : dtDrawDib);
 		else if(PreferredDrawerType != dtNone)
 			CreateDrawer(PreferredDrawerType);
 	}
 
-	// 傕偟僘乕儉偑昁梫側偔丄僟僽儖僶僢僼傽儕儞僌傕昁梫側偄側傜偽
-	// 堦斣婎杮揑側 DrawDib 偺傗偮傪巊偆
+	// もしズームが必要なく、ダブルバッファリングも必要ないならば
+	// 一番基本的な DrawDib のやつを使う
 	if(!Drawer && !zoom_required && !TVPForceDoublebuffer)
 		CreateDrawer(dtDrawDib);
 
 	if(!Drawer)
 	{
-		// 儊僀儞僂傿儞僪僂埲奜偺応崌偼僘乕儉偑昁梫側偗傟偽婎杮揑側儊僜僢僪傪巊偆
+		// メインウィンドウ以外の場合はズームが必要なければ基本的なメソッドを使う
 		if(!IsMainWindow && !zoom_required)
 			CreateDrawer(dtDrawDib);
 	}
 
 	if(!Drawer)
 	{
-		// 傑偩 Drawer 偑嶌惉偝傟偰側偄偤
+		// まだ Drawer が作成されてないぜ
 
-		// 儀儞僠儅乕僋偟傑偡偐偹
+		// ベンチマークしますかね
 		static tDrawerType bench_types[] = { dtDBDD, dtDBGDI, dtDBD3D };
 		const static tjs_char * type_names[] = { TJS_W("DirectDraw"), TJS_W("GDI"), TJS_W("Direct3D") };
 		static const int num_types = sizeof(bench_types) / sizeof(bench_types[0]);
@@ -1901,7 +1901,7 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 			tDrawerType type;
 		} results[num_types];
 
-		// 儀儞僠儅乕僋梡偺尦夋憸傪妋曐
+		// ベンチマーク用の元画像を確保
 		BITMAPINFOHEADER bmi;
 		bmi.biSize = sizeof(BITMAPINFOHEADER);
 		bmi.biWidth = srcw;
@@ -1909,13 +1909,13 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 		bmi.biPlanes = 1;
 		bmi.biBitCount = 32;
 		bmi.biCompression = BI_RGB;
-		bmi.biSizeImage = srcw * 4 * srch; // 32bpp 偺応崌偼偙傟偱偄偄
+		bmi.biSizeImage = srcw * 4 * srch; // 32bpp の場合はこれでいい
 		bmi.biXPelsPerMeter = 0;
 		bmi.biYPelsPerMeter = 0;
 		bmi.biClrUsed = 0;
 		bmi.biClrImportant = 0;
 
-		void * memblk = GlobalAlloc(GMEM_FIXED, bmi.biSizeImage + 64); // 64 = 梋桾(柍偔偰傕偄偄偐傕偟傟側偄)
+		void * memblk = GlobalAlloc(GMEM_FIXED, bmi.biSizeImage + 64); // 64 = 余裕(無くてもいいかもしれない)
 		ZeroMemory(memblk, bmi.biSizeImage);
 
 		tTVPRect cliprect;
@@ -1924,7 +1924,7 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 		cliprect.right = srcw;
 		cliprect.bottom = srch;
 
-		// 儀儞僠儅乕僋傪峴偆
+		// ベンチマークを行う
 		for(int i = 0; i < num_types; i++)
 		{
 			results[i].type = bench_types[i];
@@ -1932,7 +1932,7 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 
 			try
 			{
-				// drawer 傪嶌惉
+				// drawer を作成
 				CreateDrawer(results[i].type);
 				if(!Drawer)
 				{
@@ -1940,7 +1940,7 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 					continue;
 				}
 
-				// 僘乕儉曗娫偺愝掕偼庴偗擖傟傜傟傞偐丠
+				// ズーム補間の設定は受け入れられるか？
 				int caps = Drawer->GetInterpolationCapability();
 				if(TVPZoomInterpolation && !(caps & 2))
 				{
@@ -1955,8 +1955,8 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 					continue;
 				}
 
-				// 儀儞僠儅乕僋傪峴偆
-				// 帩偪帪娫栺333ms偱丄偦偺娫偵壗夞揮憲傪峴偊傞偐傪尒傞
+				// ベンチマークを行う
+				// 持ち時間約333msで、その間に何回転送を行えるかを見る
 				Drawer->InitTimings();
 				static const DWORD timeout = 333;
 				DWORD start_tick = timeGetTime();
@@ -1972,22 +1972,22 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 				DWORD end_tick = timeGetTime();
 				Drawer->ReportTimings();
 
-				// 寢壥傪奿擺丄偦傟偲僨僶僢僌梡偵昞帵
+				// 結果を格納、それとデバッグ用に表示
 				results[i].score = count * 1000 / (float)(end_tick - start_tick);
 				char msg[80];
 				sprintf(msg, "%.2f fps", (float)results[i].score);
 				TVPAddImportantLog(TJS_W("Passthrough: benchmark result: ") + ttstr(type_names[i]) + TJS_W(" : ") +
 					msg);
 
-				// GDI 偼嵟屻偺庤抜
-				// 寢壥偩偗偼寁偭偰偍偔偑丄偙傟偑岓曗偵側傞偺偼
-				// 傎偐偺drawer偵幐攕偟偨偲偒偺傒
+				// GDI は最後の手段
+				// 結果だけは計っておくが、これが候補になるのは
+				// ほかのdrawerに失敗したときのみ
 				if(results[i].type == dtDBGDI)
 					results[i].score = 0.0f;
 
-				// DirectDraw + Vista 僠僃僢僋
-				// 偙傟傕寢壥偩偗偼應偭偰偍偔偑丄偙傟偑岓曗偵側傞偺偼
-				// 傎偐偺 drawer 偵幐攕偟偨偲偒偺傒
+				// DirectDraw + Vista チェック
+				// これも結果だけは測っておくが、これが候補になるのは
+				// ほかの drawer に失敗したときのみ
 				if(results[i].type == dtDBDD)
 				{
 					OSVERSIONINFO osinfo;
@@ -2008,12 +2008,12 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 			DestroyDrawer();
 		}
 
-		// 儀儞僠儅乕僋偵巊偭偨夋憸傪夝曻
+		// ベンチマークに使った画像を解放
 		GlobalFree((HGLOBAL)memblk);
 
 
-		// 寢壥傪僗僐傾弴偵僜乕僩
-		// 偦傫側偵悢偼懡偔側偄偺偱尨巒揑偵僶僽儖僜乕僩
+		// 結果をスコア順にソート
+		// そんなに数は多くないので原始的にバブルソート
 		while(true)
 		{
 			bool swapped = false;
@@ -2030,7 +2030,7 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 			if(!swapped) break;
 		}
 	
-		// 僗僐傾偺崅偄弴偐傜嶌惉傪帋傒傞
+		// スコアの高い順から作成を試みる
 		for(int i = 0; i < num_types; i++)
 		{
 			CreateDrawer(results[i].type);
@@ -2041,9 +2041,9 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 
 	if(!Drawer)
 	{
-		// Drawer 傪慡偔嶌惉偱偒側偐偭偨
-		// 偙傟偼儎僶偄
-		// 傑偢偁傝摼側偄偑抳柦揑丅
+		// Drawer を全く作成できなかった
+		// これはヤバい
+		// まずあり得ないが致命的。
 		TVPThrowExceptionMessage(TJS_W("Fatal: Could not create any drawer objects."));
 	}
 
@@ -2059,15 +2059,15 @@ void tTVPPassThroughDrawDevice::CreateDrawer(bool zoom_required, bool should_ben
 //---------------------------------------------------------------------------
 void tTVPPassThroughDrawDevice::EnsureDrawer()
 {
-	// 偙偺儊僜僢僪偱偼丄埲壓偺忦審偺嵺偵 drawer 傪嶌傞(嶌傝捈偡)丅
-	// 1. Drawer 偑 NULL 偺応崌
-	// 2. 尰嵼偺 Drawer 偺僞僀僾偑揔愗偱側偔側偭偨偲偒
-	// 3. 尦偺儗僀儎偺僒僀僘偑曄峏偝傟偨偲偒
+	// このメソッドでは、以下の条件の際に drawer を作る(作り直す)。
+	// 1. Drawer が NULL の場合
+	// 2. 現在の Drawer のタイプが適切でなくなったとき
+	// 3. 元のレイヤのサイズが変更されたとき
 	TVPInitPassThroughOptions();
 
 	if(TargetWindow)
 	{
-		// 僘乕儉偼昁梫偩偭偨偐丠
+		// ズームは必要だったか？
 		bool zoom_was_required = false;
 		if(Drawer)
 		{
@@ -2079,7 +2079,7 @@ void tTVPPassThroughDrawDevice::EnsureDrawer()
 				zoom_was_required = true;
 		}
 
-		// 僘乕儉偼(崱夞偼)昁梫偐丠
+		// ズームは(今回は)必要か？
 		bool zoom_is_required = false;
 		tjs_int srcw, srch;
 		GetSrcSize(srcw, srch);
@@ -2093,12 +2093,12 @@ void tTVPPassThroughDrawDevice::EnsureDrawer()
 		if(zoom_was_required != zoom_is_required) need_recreate = true;
 		if(need_recreate) should_benchmark = true;
 		if(SrcSizeChanged) { SrcSizeChanged = false; need_recreate = true; }
-			// SrcSizeChanged 偲偄偆棟桼偩偗偱偼 should_benchmark 偼恀偵偼
-			// 愝掕偟側偄
+			// SrcSizeChanged という理由だけでは should_benchmark は真には
+			// 設定しない
 
 		if(need_recreate)
 		{
-			// Drawer 偺嵞嶌惉偑昁梫
+			// Drawer の再作成が必要
 			CreateDrawer(zoom_is_required, should_benchmark);
 		}
 	}
@@ -2111,13 +2111,13 @@ void TJS_INTF_METHOD tTVPPassThroughDrawDevice::AddLayerManager(iTVPLayerManager
 {
 	if(inherited::Managers.size() > 0)
 	{
-		// "Pass Through" 僨僶僀僗偱偼俀偮埲忋偺Layer Manager傪搊榐偱偒側偄
+		// "Pass Through" デバイスでは２つ以上のLayer Managerを登録できない
 		TVPThrowExceptionMessage(TJS_W("\"passthrough\" device does not support layer manager more than 1"));
 			// TODO: i18n
 	}
 	inherited::AddLayerManager(manager);
 
-	manager->SetDesiredLayerType(ltOpaque); // ltOpaque 側弌椡傪庴偗庢傝偨偄
+	manager->SetDesiredLayerType(ltOpaque); // ltOpaque な出力を受け取りたい
 }
 //---------------------------------------------------------------------------
 
@@ -2136,23 +2136,23 @@ void TJS_INTF_METHOD tTVPPassThroughDrawDevice::SetTargetWindow(HWND wnd, bool i
 //---------------------------------------------------------------------------
 void TJS_INTF_METHOD tTVPPassThroughDrawDevice::SetDestRectangle(const tTVPRect & rect)
 {
-	// 埵抲偩偗偺曄峏偺応崌偐偳偆偐傪僠僃僢僋偡傞
+	// 位置だけの変更の場合かどうかをチェックする
 	if(rect.get_width() == DestRect.get_width() && rect.get_height() == DestRect.get_height())
 	{
-		// 埵抲偩偗偺曄峏偩
+		// 位置だけの変更だ
 		if(Drawer) Drawer->SetDestPos(rect.left, rect.top);
 		inherited::SetDestRectangle(rect);
 	}
 	else
 	{
-		// 僒僀僘傕堘偆
+		// サイズも違う
 		DestSizeChanged = true;
 		inherited::SetDestRectangle(rect);
 		EnsureDrawer();
 		if(Drawer)
 		{
 			if(!Drawer->SetDestSize(rect.get_width(), rect.get_height()))
-				DestroyDrawer(); // 僄儔乕偑婲偙偭偨偺偱偦偺 drawer 傪攋婞偡傞
+				DestroyDrawer(); // エラーが起こったのでその drawer を破棄する
 		}
 	}
 }
@@ -2181,12 +2181,12 @@ void TJS_INTF_METHOD tTVPPassThroughDrawDevice::StartBitmapCompletion(iTVPLayerM
 {
 	EnsureDrawer();
 
-	// 偙偺拞偱 DestroyDrawer 偑屇偽傟傞壜擻惈偵拲堄偡傞偙偲
+	// この中で DestroyDrawer が呼ばれる可能性に注意すること
 	if(Drawer) Drawer->StartBitmapCompletion();
 
 	if(!Drawer)
 	{
-		// 儕僩儔僀偡傞
+		// リトライする
 		EnsureDrawer();
 		if(Drawer) Drawer->StartBitmapCompletion();
 	}
@@ -2199,9 +2199,9 @@ void TJS_INTF_METHOD tTVPPassThroughDrawDevice::NotifyBitmapCompleted(iTVPLayerM
 	tjs_int x, tjs_int y, const void * bits, const BITMAPINFO * bitmapinfo,
 	const tTVPRect &cliprect, tTVPLayerType type, tjs_int opacity)
 {
-	// bits, bitmapinfo 偱昞偝傟傞價僢僩儅僢僾偺 cliprect 偺椞堟傪丄x, y 偵昤夋
-	// 偡傞丅
-	// opacity 偲 type 偼柍帇偡傞偟偐側偄偺偱柍帇偡傞
+	// bits, bitmapinfo で表されるビットマップの cliprect の領域を、x, y に描画
+	// する。
+	// opacity と type は無視するしかないので無視する
 	if(Drawer)
 	{
 		TVPInitPassThroughOptions();

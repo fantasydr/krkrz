@@ -1,8 +1,8 @@
-// stdafx.cpp : 昗弨僀儞僋儖乕僪 tvpwin32.pch 偺傒傪
-// 娷傓僜乕僗 僼傽僀儖偼丄僾儕僐儞僷僀儖嵪傒僿僢僟乕偵側傝傑偡丅
-// stdafx.obj 偵偼僾儕僐儞僷僀儖嵪傒宆忣曬偑娷傑傟傑偡丅
+// stdafx.cpp : 標準インクルード tvpwin32.pch のみを
+// 含むソース ファイルは、プリコンパイル済みヘッダーになります。
+// stdafx.obj にはプリコンパイル済み型情報が含まれます。
 
 #include "stdafx.h"
 
-// TODO: 偙偺僼傽僀儖偱偼側偔丄STDAFX.H 偱昁梫側
-// 捛壛僿僢僟乕傪嶲徠偟偰偔偩偝偄丅
+// TODO: このファイルではなく、STDAFX.H で必要な
+// 追加ヘッダーを参照してください。

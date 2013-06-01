@@ -1,6 +1,6 @@
 /****************************************************************************/
 /*! @file
-@brief DirectShow偺HRESULT傪儊僢僙乕僕偵曄偊傞椺奜僋儔僗
+@brief DirectShowのHRESULTをメッセージに変える例外クラス
 
 -----------------------------------------------------------------------------
 	Copyright (C) 2004 T.Imoto <http://www.kaede-software.com>
@@ -24,7 +24,7 @@ DShowException::DShowException()
 }
 //----------------------------------------------------------------------------
 //! @brief	  	DShowException constructor
-//! @param 		hr : DirectShow偺娭悢偺曉抣
+//! @param 		hr : DirectShowの関数の返値
 //----------------------------------------------------------------------------
 DShowException::DShowException( HRESULT hr ) : m_Hr(hr)
 {
@@ -33,7 +33,7 @@ DShowException::DShowException( HRESULT hr ) : m_Hr(hr)
 
 //----------------------------------------------------------------------------
 //! @brief	  	DShowException constructor
-//! @param 		right : 僐僺乕傕偲
+//! @param 		right : コピーもと
 //----------------------------------------------------------------------------
 DShowException::DShowException(const DShowException& right)
 {
@@ -41,9 +41,9 @@ DShowException::DShowException(const DShowException& right)
 }
 
 //----------------------------------------------------------------------------
-//! @brief	  	戙擖
-//! @param 		right : 僐僺乕傕偲
-//! @return		帺恎
+//! @brief	  	代入
+//! @param 		right : コピーもと
+//! @return		自身
 //----------------------------------------------------------------------------
 DShowException& DShowException::operator=(const DShowException& right)
 {
@@ -54,9 +54,9 @@ DShowException& DShowException::operator=(const DShowException& right)
 
 
 //----------------------------------------------------------------------------
-//! @brief	  	僄儔乕僐乕僪傪戙擖偟丄儊僢僙乕僕傪惗惉偡傞
-//! @param 		right : 僐僺乕傕偲
-//! @return		帺恎
+//! @brief	  	エラーコードを代入し、メッセージを生成する
+//! @param 		right : コピーもと
+//! @return		自身
 //----------------------------------------------------------------------------
 void DShowException::SetHResult( HRESULT hr )
 {
@@ -66,14 +66,14 @@ void DShowException::SetHResult( HRESULT hr )
 
 
 //----------------------------------------------------------------------------
-//! @brief	  	僨僗僩儔僋僞偱偼摿偵壗傕偟側偄
+//! @brief	  	デストラクタでは特に何もしない
 //----------------------------------------------------------------------------
 DShowException::~DShowException()
 {
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僄儔乕偺徻嵶傪栤偄崌傢偣傞
-//! @return		僄儔乕儊僢僙乕僕
+//! @brief	  	エラーの詳細を問い合わせる
+//! @return		エラーメッセージ
 //----------------------------------------------------------------------------
 const TCHAR *DShowException::what( ) const
 {
@@ -83,9 +83,9 @@ const TCHAR *DShowException::what( ) const
 
 
 //----------------------------------------------------------------------------
-//! @brief	  	DirectShow 椺奜傪 媑棦媑棦椺奜偲偟偰憲弌
-//! 偙偺娭悢偼栠傜側偄(椺奜偑敪惗偡傞偨傔)
-//! @param 		comment : 僐儊儞僩
+//! @brief	  	DirectShow 例外を 吉里吉里例外として送出
+//! この関数は戻らない(例外が発生するため)
+//! @param 		comment : コメント
 //! @param		hr : HRESULT
 //----------------------------------------------------------------------------
 void ThrowDShowException(const tjs_char *comment, HRESULT hr)

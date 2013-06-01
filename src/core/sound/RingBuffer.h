@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 /*
-	Risa [傝偝]      alias 媑棦媑棦3 [kirikiri-3]
+	Risa [りさ]      alias 吉里吉里3 [kirikiri-3]
 	 stands for "Risa Is a Stagecraft Architecture"
 	Copyright (C) 2000 W.Dee <dee@kikyou.info> and contributors
 
@@ -8,30 +8,30 @@
 */
 //---------------------------------------------------------------------------
 //! @file
-//! @brief 儕儞僌僶僢僼傽傪幚尰偡傞帺壠惢僥儞僾儗乕僩僋儔僗
+//! @brief リングバッファを実現する自家製テンプレートクラス
 //---------------------------------------------------------------------------
 #ifndef RingBufferH
 #define RingBufferH
 
 #include <stddef.h>
 /*
-	儕儞僌僶僢僼傽, ring buffer, circular buffer, 娐忬僶僢僼傽
+	リングバッファ, ring buffer, circular buffer, 環状バッファ
 */
 
 //---------------------------------------------------------------------------
-//! @brief		屌掕挿儕儞僌僶僢僼傽偺幚憰
+//! @brief		固定長リングバッファの実装
 //---------------------------------------------------------------------------
 template <typename T>
 class tRisaRingBuffer
 {
-	T * Buffer; //!< 僶僢僼傽
-	size_t Size; //!< 僶僢僼傽偺僒僀僘
-	size_t WritePos; //!< 彂偒崬傒埵抲
-	size_t ReadPos; //!< 撉傒崬傒埵抲
-	size_t DataSize; //!< 僶僢僼傽偵擖偭偰偄傞僨乕僞偺僒僀僘
+	T * Buffer; //!< バッファ
+	size_t Size; //!< バッファのサイズ
+	size_t WritePos; //!< 書き込み位置
+	size_t ReadPos; //!< 読み込み位置
+	size_t DataSize; //!< バッファに入っているデータのサイズ
 
 public:
-	//! @brief 僐儞僗僩儔僋僞
+	//! @brief コンストラクタ
 	tRisaRingBuffer(size_t size)
 	{
 		Size = size;
@@ -40,40 +40,40 @@ public:
 		DataSize = 0;
 	}
 
-	//! @brief 僨僗僩儔僋僞
+	//! @brief デストラクタ
 	~tRisaRingBuffer()
 	{
 		delete [] Buffer;
 	}
 
-	//! @brief	僒僀僘傪摼傞
+	//! @brief	サイズを得る
 	size_t GetSize() { return Size; }
 
-	//! @brief	彂偒崬傒埵抲傪摼傞
+	//! @brief	書き込み位置を得る
 	size_t GetWritePos() { return WritePos; }
 
-	//! @brief	撉傒崬傒埵抲傪摼傞
+	//! @brief	読み込み位置を得る
 	size_t GetReadPos() { return ReadPos; }
 
-	//! @brief	僶僢僼傽偵擖偭偰偄傞僨乕僞偺僒僀僘傪摼傞
+	//! @brief	バッファに入っているデータのサイズを得る
 	size_t GetDataSize() { return DataSize; }
 
-	//! @brief	僶僢僼傽偺嬻偒梕検傪摼傞
+	//! @brief	バッファの空き容量を得る
 	size_t GetFreeSize() { return Size - DataSize; }
 
-	//! @brief	僶僢僼傽偐傜撉傒崬傓偨傔偺億僀儞僞傪摼傞
-	//! @param	readsize 撉傒崬傒偨偄僨乕僞悢 ( 1 埲忋偺惍悢; 0 傪搉偝側偄偙偲 )
-	//! @param	p1		僽儘僢僋1偺愭摢傊偺億僀儞僞傪奿擺偡傞偨傔偺曄悢
-	//! @param	p1size	p1偺昞偡僽儘僢僋偺僒僀僘
-	//! @param	p2		僽儘僢僋2偺愭摢傊偺億僀儞僞傪奿擺偡傞偨傔偺曄悢(NULL偑偁傝摼傞)
-	//! @param	p2size	p2偺昞偡僽儘僢僋偺僒僀僘(0偑偁傝摼傞)
-	//! @param	offset	ReadPos 偵壛嶼偝傟傞僆僼僙僢僩
-	//! @note	娐忬僶僢僼傽偲偄偭偰傕丄幚嵺偼儕僯傾側椞堟偵僶僢僼傽偑妋曐偝傟偰偄傞丅
-	//!			偦偺偨傔丄 ReadPos + readsize 偑僶僢僼傽偺廔抂傪挻偊偰偄傞応崌丄摼偨偄
-	//!			僽儘僢僋偼俀偮偵暘抐偝傟傞偙偲偵側傞丅
-	//!			偙偺儊僜僢僪偼丄readsize偑幚嵺偵僶僢僼傽偵擖偭偰偄傞僨乕僞偺僒僀僘埲壓偱偁傞偐
-	//!			側偳偺僠僃僢僋偼偄偭偝偄峴傢側偄丅帠慜偵 GetDataSize 傪挷傋丄撉傒崬傒偨偄
-	//!			僒僀僘偑幚嵺偵僶僢僼傽偵偁傞偐偳偆偐傪僠僃僢僋偡傞偙偲丅
+	//! @brief	バッファから読み込むためのポインタを得る
+	//! @param	readsize 読み込みたいデータ数 ( 1 以上の整数; 0 を渡さないこと )
+	//! @param	p1		ブロック1の先頭へのポインタを格納するための変数
+	//! @param	p1size	p1の表すブロックのサイズ
+	//! @param	p2		ブロック2の先頭へのポインタを格納するための変数(NULLがあり得る)
+	//! @param	p2size	p2の表すブロックのサイズ(0があり得る)
+	//! @param	offset	ReadPos に加算されるオフセット
+	//! @note	環状バッファといっても、実際はリニアな領域にバッファが確保されている。
+	//!			そのため、 ReadPos + readsize がバッファの終端を超えている場合、得たい
+	//!			ブロックは２つに分断されることになる。
+	//!			このメソッドは、readsizeが実際にバッファに入っているデータのサイズ以下であるか
+	//!			などのチェックはいっさい行わない。事前に GetDataSize を調べ、読み込みたい
+	//!			サイズが実際にバッファにあるかどうかをチェックすること。
 	void GetReadPointer(size_t readsize,
 						const T * & p1, size_t &p1size,
 						const T * & p2, size_t &p2size,
@@ -83,8 +83,8 @@ public:
 		while(pos >= Size) pos -= Size;
 		if(readsize + pos > Size)
 		{
-			// readsize + pos 偑僶僢僼傽偺廔抂傪挻偊偰偄傞
-			//  仺 曉偝傟傞僽儘僢僋偼2偮
+			// readsize + pos がバッファの終端を超えている
+			//  → 返されるブロックは2つ
 			p1 = pos + Buffer;
 			p1size = Size - pos;
 			p2 = Buffer;
@@ -92,8 +92,8 @@ public:
 		}
 		else
 		{
-			// readsize + pos 偑僶僢僼傽偺廔抂傪挻偊偰偄側偄
-			//  仺 曉偝傟傞僽儘僢僋偼1偮
+			// readsize + pos がバッファの終端を超えていない
+			//  → 返されるブロックは1つ
 			p1 = pos + Buffer;
 			p1size = readsize;
 			p2 = NULL;
@@ -101,10 +101,10 @@ public:
 		}
 	}
 
-	//! @brief	撉傒崬傒億僀儞僞傪恑傔傞
-	//! @param	advance		恑傔傞梫慺悢
-	//! @note	偙偺儊僜僢僪偼幚嵺偵 advance < GetDataSize() 偱偁傞偙偲傪妋擣偟側偄丅
-	//!			昁梫側傜偽屇傃弌偟懁偱僠僃僢僋偡傞偙偲丅
+	//! @brief	読み込みポインタを進める
+	//! @param	advance		進める要素数
+	//! @note	このメソッドは実際に advance < GetDataSize() であることを確認しない。
+	//!			必要ならば呼び出し側でチェックすること。
 	void AdvanceReadPos(size_t advance = 1)
 	{
 		ReadPos += advance;
@@ -112,21 +112,21 @@ public:
 		DataSize -= advance;
 	}
 
-	//! @brief	嵟弶偺梫慺傪曉偡
-	//! @return	嵟弶偺梫慺傊偺嶲徠
-	//! @note	嵟弶偺梫慺傊偺嶲徠偑婣偭偰偔傞丅梫慺偑僶僢僼傽撪偵柍偄偲偒偼柍岠側梫慺
-	//!			(傾僋僙僗偱偒側偄梫慺)偑婣偭偰偔傞偺偱丄帠慜偵僶僢僼傽撪偵梫慺偑1偮埲忋
-	//!			懚嵼偡傞偙偲傪妋擣偡傞偙偲丅偙偺儊僜僢僪偼撉傒崬傒億僀儞僞傪堏摦偟側偄丅
+	//! @brief	最初の要素を返す
+	//! @return	最初の要素への参照
+	//! @note	最初の要素への参照が帰ってくる。要素がバッファ内に無いときは無効な要素
+	//!			(アクセスできない要素)が帰ってくるので、事前にバッファ内に要素が1つ以上
+	//!			存在することを確認すること。このメソッドは読み込みポインタを移動しない。
 	const T & GetFirst() const
 	{
 		size_t pos = ReadPos;
 		return Buffer[pos];
 	}
 
-	//! @brief	n斣栚偺梫慺傪曉偡
-	//! @return	n斣栚偺梫慺傊偺嶲徠
-	//! @note	n斣栚偺梫慺傊偺嶲徠偑婣偭偰偔傞丅梫慺偑僶僢僼傽撪偵柍偄偲偒傗斖埻奜偺帪
-	//!			偺摦嶌偼枹掕媊偱偁傞丅偙偺儊僜僢僪偼撉傒崬傒億僀儞僞傪堏摦偟側偄丅
+	//! @brief	n番目の要素を返す
+	//! @return	n番目の要素への参照
+	//! @note	n番目の要素への参照が帰ってくる。要素がバッファ内に無いときや範囲外の時
+	//!			の動作は未定義である。このメソッドは読み込みポインタを移動しない。
 	const T & GetAt(size_t n) const
 	{
 		size_t pos = ReadPos + n;
@@ -134,14 +134,14 @@ public:
 		return Buffer[pos];
 	}
 
-	//! @brief	僶僢僼傽偵彂偒崬傓偨傔偺億僀儞僞傪摼傞
-	//! @param	writesize 彂偒崬傒偨偄僨乕僞悢 ( 1 埲忋偺惍悢; 0 傪搉偝側偄偙偲 )
-	//! @param	p1		僽儘僢僋1偺愭摢傊偺億僀儞僞傪奿擺偡傞偨傔偺曄悢
-	//! @param	p1size	p1偺昞偡僽儘僢僋偺僒僀僘
-	//! @param	p2		僽儘僢僋2偺愭摢傊偺億僀儞僞傪奿擺偡傞偨傔偺曄悢(NULL偑偁傝摼傞)
-	//! @param	p2size	p2偺昞偡僽儘僢僋偺僒僀僘(0偑偁傝摼傞)
-	//! @param	offset	WritePos 偵壛嶼偝傟傞僆僼僙僢僩
-	//! @note	GetReadPointer偺愢柧傕嶲徠偺偙偲
+	//! @brief	バッファに書き込むためのポインタを得る
+	//! @param	writesize 書き込みたいデータ数 ( 1 以上の整数; 0 を渡さないこと )
+	//! @param	p1		ブロック1の先頭へのポインタを格納するための変数
+	//! @param	p1size	p1の表すブロックのサイズ
+	//! @param	p2		ブロック2の先頭へのポインタを格納するための変数(NULLがあり得る)
+	//! @param	p2size	p2の表すブロックのサイズ(0があり得る)
+	//! @param	offset	WritePos に加算されるオフセット
+	//! @note	GetReadPointerの説明も参照のこと
 	void GetWritePointer(size_t writesize,
 						T * & p1, size_t &p1size,
 						T * & p2, size_t &p2size,
@@ -151,8 +151,8 @@ public:
 		while(pos >= Size) pos -= Size;
 		if(writesize + pos > Size)
 		{
-			// writesize + pos 偑僶僢僼傽偺廔抂傪挻偊偰偄傞
-			//  仺 曉偝傟傞僽儘僢僋偼2偮
+			// writesize + pos がバッファの終端を超えている
+			//  → 返されるブロックは2つ
 			p1 = pos + Buffer;
 			p1size = Size - pos;
 			p2 = Buffer;
@@ -160,8 +160,8 @@ public:
 		}
 		else
 		{
-			// writesize + pos 偑僶僢僼傽偺廔抂傪挻偊偰偄側偄
-			//  仺 曉偝傟傞僽儘僢僋偼1偮
+			// writesize + pos がバッファの終端を超えていない
+			//  → 返されるブロックは1つ
 			p1 = pos + Buffer;
 			p1size = writesize;
 			p2 = NULL;
@@ -169,10 +169,10 @@ public:
 		}
 	}
 
-	//! @brief	彂偒崬傒億僀儞僞傪恑傔傞
-	//! @param	advance		恑傔傞梫慺悢
-	//! @note	偙偺儊僜僢僪偼幚嵺偵 advance < GetFreeSize() 偱偁傞偙偲傪妋擣偟側偄丅
-	//!			昁梫側傜偽屇傃弌偟懁偱僠僃僢僋偡傞偙偲丅
+	//! @brief	書き込みポインタを進める
+	//! @param	advance		進める要素数
+	//! @note	このメソッドは実際に advance < GetFreeSize() であることを確認しない。
+	//!			必要ならば呼び出し側でチェックすること。
 	void AdvanceWritePos(size_t advance = 1)
 	{
 		WritePos += advance;
@@ -180,9 +180,9 @@ public:
 		DataSize += advance;
 	}
 
-	//! @brief	彂偒崬傒億僀儞僞傪恑傔丄僶僢僼傽偑偁傆傟偨傜愭摢傪幪偰傞
-	//! @param	advance		恑傔傞梫慺悢
-	//! @note	AdvanceWritePos 偲堎側傝丄僶僢僼傽偑偁傆傟偨傜丄僨乕僞偺愭摢傪幪偰傞丅
+	//! @brief	書き込みポインタを進め、バッファがあふれたら先頭を捨てる
+	//! @param	advance		進める要素数
+	//! @note	AdvanceWritePos と異なり、バッファがあふれたら、データの先頭を捨てる。
 	void AdvanceWritePosWithDiscard(size_t advance = 1)
 	{
 		WritePos += advance;
@@ -194,11 +194,11 @@ public:
 		}
 	}
 
-	//! @brief	彂偒崬傒埵抲偺梫慺傪曉偡
-	//! @return	彂偒崬傒埵抲偺梫慺傊偺嶲徠
-	//! @note	彂偒崬傒埵抲偺梫慺傊偺嶲徠偑婣偭偰偔傞丅偙偺儊僜僢僪偼僶僢僼傽偵嬻偒
-	//!			偑偁傞偐偳偆偐偺僠僃僢僋偼峴傢側偄偺偱拲堄偡傞偙偲丅
-	//!			偙偺儊僜僢僪偼僶僢僼傽偺彂偒崬傒埵抲傪堏摦偟側偄丅
+	//! @brief	書き込み位置の要素を返す
+	//! @return	書き込み位置の要素への参照
+	//! @note	書き込み位置の要素への参照が帰ってくる。このメソッドはバッファに空き
+	//!			があるかどうかのチェックは行わないので注意すること。
+	//!			このメソッドはバッファの書き込み位置を移動しない。
 	T & GetLast()
 	{
 		return Buffer[WritePos];

@@ -3,59 +3,59 @@
 class IWaveUnpacker
 {
 public:
-// IUnknown 攈惗僋儔僗偱偼側偄偺偱拲堄
+// IUnknown 派生クラスではないので注意
 	virtual ULONG STDMETHODCALLTYPE AddRef(void) = 0;
 	virtual ULONG STDMETHODCALLTYPE Release(void) = 0;
 
 // IWaveUnpacker
 	virtual HRESULT STDMETHODCALLTYPE GetTypeName(char *buf,long buflen)=0;
 		/*
-			buf 偵丄偙偺 Wave 宍幃傪昞偡暥帤楍傪 *buf 偵愝掕偟偰偔偩偝偄丅
-			buflen 偼丄buf 偵妋曐偝傟偨暥帤楍偱丄null terminater 傕娷傓偺偱
-			拲堄丅
+			buf に、この Wave 形式を表す文字列を *buf に設定してください。
+			buflen は、buf に確保された文字列で、null terminater も含むので
+			注意。
 		*/
 
 	virtual HRESULT STDMETHODCALLTYPE GetWaveFormat(long *samplepersec,
 		long *channels,long *bitspersample)=0;
 		/*
-			弌椡偡傞 Wave 偺宍幃傪 *samplepersec, *channels, *bitspersample 偵
-			曉偟偰偔偩偝偄丅
+			出力する Wave の形式を *samplepersec, *channels, *bitspersample に
+			返してください。
 		*/
 
 	virtual HRESULT STDMETHODCALLTYPE Render(void *buffer,long bufsize,
 		long *numwrite) =0;
 		/*
-			僨僐乕僪偟偰偔偩偝偄丅
-			bufsize 偵偼 buffer 偺僒僀僘偑僶僀僩扨埵偱巜掕偝傟傑偡丅
-			numwrite 偵偼丄僶僢僼傽偵彂偐傟偨僨乕僞偺悢傪僶僀僩扨埵偱曉偟傑偡丅
-			偨偩偟丄WaveUnpacker 偼丄numwrite<bufsize 偺応崌偼丄巆傝傪
-			0 偱杽傔偰偔偩偝偄丅
+			デコードしてください。
+			bufsize には buffer のサイズがバイト単位で指定されます。
+			numwrite には、バッファに書かれたデータの数をバイト単位で返します。
+			ただし、WaveUnpacker は、numwrite<bufsize の場合は、残りを
+			0 で埋めてください。
 		*/
 	
 	virtual HRESULT STDMETHODCALLTYPE GetLength(long *length)=0;
 		/*
-			僨乕僞挿傪 ms 扨埵偱 *length 偵曉偟偰偔偩偝偄丅
-			懳墳偱偒側偄応崌偼 E_NOTIMPL 傪曉偟偰偔偩偝偄丅偦偺応崌偼
-			WaveSoundBuffer 偺 totalTime 僾儘僷僥傿偼 0 傪昞偡傛偆偵側傝傑偡丅
+			データ長を ms 単位で *length に返してください。
+			対応できない場合は E_NOTIMPL を返してください。その場合は
+			WaveSoundBuffer の totalTime プロパティは 0 を表すようになります。
 		*/
 
 	virtual HRESULT STDMETHODCALLTYPE GetCurrentPosition(long *pos)=0;
 		/*
-			尰嵼偺僨僐乕僪埵抲傪 *pos 偵曉偟偰偔偩偝偄丅
-			懳墳偱偒側偄応崌偼 E_NOTIMPL 傪曉偟偰偔偩偝偄丅偦偺応崌偼
-			WaveSoundBuffer 偺 position 僾儘僷僥傿偼堄枴偺側偄悢抣傪
-			帵偡傛偆偵側傝傑偡丅
+			現在のデコード位置を *pos に返してください。
+			対応できない場合は E_NOTIMPL を返してください。その場合は
+			WaveSoundBuffer の position プロパティは意味のない数値を
+			示すようになります。
 		*/
 
 	virtual HRESULT STDMETHODCALLTYPE SetCurrentPosition(long pos)=0;
 		/*
-			尰嵼偺僨僐乕僪埵抲傪愝掕偟偰偔偩偝偄丅pos 偼 ms 扨埵偱偺
-			埵抲偱偡丅
-			嵟掅偱傕 pos=0 偲偟偰屇偽傟偨偲偒偵丄愭摢傊偺姫偒栠偟偑
-			弌棃傛偆偵偟偰偔偩偝偄丅
+			現在のデコード位置を設定してください。pos は ms 単位での
+			位置です。
+			最低でも pos=0 として呼ばれたときに、先頭への巻き戻しが
+			出来ようにしてください。
 
-			偦偺傎偐偺応崌丄懳墳偱偒側偄応崌偼 E_NOTIMPL 傪曉偟偰偔偩偝偄丅
-			偦偺応崌偼WaveSoundBuffer 偺 position 僾儘僷僥傿傊偺戙擖偼柍帇偝傟傑偡丅
+			そのほかの場合、対応できない場合は E_NOTIMPL を返してください。
+			その場合はWaveSoundBuffer の position プロパティへの代入は無視されます。
 		*/
 
 	virtual HRESULT STDMETHODCALLTYPE Invoke(); // reserved

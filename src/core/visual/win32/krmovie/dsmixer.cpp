@@ -1,15 +1,15 @@
 /****************************************************************************/
 /*! @file
-@brief VMR9傪巊偆僆乕僶乕儗僀僋儔僗
+@brief VMR9を使うオーバーレイクラス
 
-幚峴偵偼DirectX9埲崀偑昁梫
+実行にはDirectX9以降が必要
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto
 -----------------------------------------------------------------------------
 @author		T.Imoto
 @date		2005/09/25
 @note
-			2005/09/25	T.Imoto		嶌惉
+			2005/09/25	T.Imoto		作成
 *****************************************************************************/
 
 
@@ -26,7 +26,7 @@
 #include "CVMRCustomAllocatorPresenter9.h"
 
 //----------------------------------------------------------------------------
-//! @brief	  	弶婜壔
+//! @brief	  	初期化
 //----------------------------------------------------------------------------
 tTVPDSMixerVideoOverlay::tTVPDSMixerVideoOverlay()
 {
@@ -38,7 +38,7 @@ tTVPDSMixerVideoOverlay::tTVPDSMixerVideoOverlay()
 	m_hMessageDrainWnd = NULL;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僀儞僞乕僼僃僀僗傪夝曻偡傞
+//! @brief	  	インターフェイスを解放する
 //----------------------------------------------------------------------------
 tTVPDSMixerVideoOverlay::~tTVPDSMixerVideoOverlay()
 {
@@ -47,7 +47,7 @@ tTVPDSMixerVideoOverlay::~tTVPDSMixerVideoOverlay()
 	m_hMessageDrainWnd = NULL;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僀儞僞乕僼僃僀僗傪夝曻偡傞
+//! @brief	  	インターフェイスを解放する
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::ReleaseAll()
 {
@@ -78,12 +78,12 @@ void __stdcall tTVPDSMixerVideoOverlay::ReleaseAll()
 	tTVPDSMovie::ReleaseAll();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僼傿儖僞僌儔僼偺峔抸
-//! @param 		callbackwin : 儊僢僙乕僕傪憲怣偡傞僂傿儞僪僂
-//! @param 		stream : 撉傒崬傒尦僗僩儕乕儉
-//! @param 		streamname : 僗僩儕乕儉偺柤慜
-//! @param 		type : 儊僨傿傾僞僀僾(奼挘巕)
-//! @param 		size : 儊僨傿傾僒僀僘
+//! @brief	  	フィルタグラフの構築
+//! @param 		callbackwin : メッセージを送信するウィンドウ
+//! @param 		stream : 読み込み元ストリーム
+//! @param 		streamname : ストリームの名前
+//! @param 		type : メディアタイプ(拡張子)
+//! @param 		size : メディアサイズ
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::BuildGraph( HWND callbackwin, IStream *stream, const wchar_t * streamname, const wchar_t *type, unsigned __int64 size )
 {
@@ -143,7 +143,7 @@ void __stdcall tTVPDSMixerVideoOverlay::BuildGraph( HWND callbackwin, IStream *s
 			if( FAILED(hr = GraphBuilder()->AddFilter( m_Reader, L"Stream Reader")) )
 				ThrowDShowException(L"Failed to call IFilterGraph::AddFilter.", hr);
 	
-			// AddFilter偟偨偺偱Release
+			// AddFilterしたのでRelease
 			m_Reader->Release();
 
 			if( mt.subtype == MEDIASUBTYPE_Avi || mt.subtype == MEDIASUBTYPE_QTMovie )
@@ -201,7 +201,7 @@ void __stdcall tTVPDSMixerVideoOverlay::BuildGraph( HWND callbackwin, IStream *s
 			}
 		}
 #if 1
-		{	// 暯嬒僼儗乕儉昞帵帪娫傪庢摼偡傞
+		{	// 平均フレーム表示時間を取得する
 			CComPtr<IBaseFilter>	pRender;
 			if( FAILED(hr = FindVideoRenderer( &pRender ) ) )
 				ThrowDShowException(L"Failed to call FindVideoRenderer( &pRender ).", hr);
@@ -268,8 +268,8 @@ void __stdcall tTVPDSMixerVideoOverlay::BuildGraph( HWND callbackwin, IStream *s
 	CoUninitialize();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	VMR9僼傿儖僞傪僼傿儖僞僌儔僼傊捛壛偡傞
-//! @param 		pVMR9 : VMR9僼傿儖僞
+//! @brief	  	VMR9フィルタをフィルタグラフへ追加する
+//! @param 		pVMR9 : VMR9フィルタ
 //----------------------------------------------------------------------------
 void tTVPDSMixerVideoOverlay::AddVMR9Filer( CComPtr<IBaseFilter> &pVMR9 )
 {
@@ -308,10 +308,10 @@ void tTVPDSMixerVideoOverlay::AddVMR9Filer( CComPtr<IBaseFilter> &pVMR9 )
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儈僉僔儞僌偡傞價僢僩儅僢僾傪愝掕偡傞
-//! @param 		hdc : 愝掕偟偰偄傞價僢僩儅僢僾傪曐帩偟偰偄傞僨僶僀僗僐儞僥僉僗僩
-//! @param 		dest : 揮憲愭埵抲
-//! @param 		alpha : 傾儖僼傽抣 (0.0 - 1.0偱巜掕)
+//! @brief	  	ミキシングするビットマップを設定する
+//! @param 		hdc : 設定しているビットマップを保持しているデバイスコンテキスト
+//! @param 		dest : 転送先位置
+//! @param 		alpha : アルファ値 (0.0 - 1.0で指定)
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetMixingBitmap( HDC hdc, RECT *dest, float alpha )
 {
@@ -329,10 +329,10 @@ void __stdcall tTVPDSMixerVideoOverlay::SetMixingBitmap( HDC hdc, RECT *dest, fl
 	long width;
 	long height;
 //	GetVideoSize( &width, &height );
-	// 價僨僆僒僀僘偱偼側偔丄嵟廔弌椡夋憸偺僒僀僘偱埵抲傪寁嶼偡傞
+	// ビデオサイズではなく、最終出力画像のサイズで位置を計算する
 	width = Rect.right - Rect.left;
 	height = Rect.bottom - Rect.top;
-	// 0妱傝夞旔
+	// 0割り回避
 	if( width <= 0 ) width = 1;
 	if( height <= 0 ) height = 1;
 	if( dest )
@@ -343,7 +343,7 @@ void __stdcall tTVPDSMixerVideoOverlay::SetMixingBitmap( HDC hdc, RECT *dest, fl
 		bmpInfo.rDest.bottom = (static_cast<float>(dest->bottom)+0.5f)/static_cast<float>(height);
 	}
 	else
-	{	// NULL偺帪偼丄慡懱偵僽儗儞僪偡傞傛偆偵偡傞
+	{	// NULLの時は、全体にブレンドするようにする
 		bmpInfo.rDest.left = 0.0f;
 		bmpInfo.rDest.top = 0.0f;
 		bmpInfo.rDest.right = 1.0f;
@@ -356,7 +356,7 @@ void __stdcall tTVPDSMixerVideoOverlay::SetMixingBitmap( HDC hdc, RECT *dest, fl
 		ThrowDShowException(L"Failed to set IVMRMixerBitmap9::SetAlphaBitmap.", hr);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儈僉僔儞僌偟偰偄傞價僢僩儅僢僾偺愝掕傪夝彍偡傞
+//! @brief	  	ミキシングしているビットマップの設定を解除する
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::ResetMixingBitmap()
 {
@@ -365,18 +365,18 @@ void __stdcall tTVPDSMixerVideoOverlay::ResetMixingBitmap()
 	if(FAILED(hr = m_VMR9MixerBmp->GetAlphaBitmapParameters(&bmpInfo)) )
 		ThrowDShowException(L"Failed to set IVMRMixerBitmap9::GetAlphaBitmapParameters.", hr);
 
-	if( bmpInfo.hdc == NULL )	// 愝掕偝傟偰偄側偄偺偱儕僞乕儞
+	if( bmpInfo.hdc == NULL )	// 設定されていないのでリターン
 		return;
 
 	ZeroMemory(&bmpInfo, sizeof(bmpInfo));
 
-	// 愝掕偣偢偵偙偺儊僜僢僪傪僐乕儖偡傞偲丄價僢僩儅僢僾傪夝彍偡傞偲偄偆巇條傜偟偄丅
+	// 設定せずにこのメソッドをコールすると、ビットマップを解除するという仕様らしい。
 	if(FAILED(hr = MixerBmp()->UpdateAlphaBitmapParameters( &bmpInfo )) )
 		ThrowDShowException(L"Failed to set IVMRMixerBitmap9::UpdateAlphaBitmapParameters.", hr);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儈僉僔儞僌偡傞價僨僆僗僩儕乕儉偺傾儖僼傽抣傪愝掕偡傞
-//! @param		a : 愝掕偡傞傾儖僼傽抣
+//! @brief	  	ミキシングするビデオストリームのアルファ値を設定する
+//! @param		a : 設定するアルファ値
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetMixingMovieAlpha( float a )
 {
@@ -385,8 +385,8 @@ void __stdcall tTVPDSMixerVideoOverlay::SetMixingMovieAlpha( float a )
 		ThrowDShowException(L"Failed to set IVMRMixerControl9::SetAlpha.", hr);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儈僉僔儞僌偡傞價僨僆僗僩儕乕儉偺傾儖僼傽抣傪庢摼偡傞
-//! @param		a : 傾儖僼傽抣傪庴偗庢傞億僀儞僞
+//! @brief	  	ミキシングするビデオストリームのアルファ値を取得する
+//! @param		a : アルファ値を受け取るポインタ
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetMixingMovieAlpha( float *a )
 {
@@ -395,8 +395,8 @@ void __stdcall tTVPDSMixerVideoOverlay::GetMixingMovieAlpha( float *a )
 		ThrowDShowException(L"Failed to set IVMRMixerControl9::GetAlpha.", hr);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儈僉僔儞僌偡傞價僨僆僗僩儕乕儉偺攚宨怓傪愝掕偡傞
-//! @param		col : 愝掕偡傞攚宨怓
+//! @brief	  	ミキシングするビデオストリームの背景色を設定する
+//! @param		col : 設定する背景色
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetMixingMovieBGColor( unsigned long col )
 {
@@ -406,8 +406,8 @@ void __stdcall tTVPDSMixerVideoOverlay::SetMixingMovieBGColor( unsigned long col
 		ThrowDShowException(L"Failed to set IVMRMixerControl9::SetBackgroundClr.", hr);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儈僉僔儞僌偡傞價僨僆僗僩儕乕儉偺攚宨怓傪庢摼偡傞
-//! @param		col : 攚宨怓傪庴偗庢傞億僀儞僞
+//! @brief	  	ミキシングするビデオストリームの背景色を取得する
+//! @param		col : 背景色を受け取るポインタ
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetMixingMovieBGColor( unsigned long *col )
 {
@@ -419,8 +419,8 @@ void __stdcall tTVPDSMixerVideoOverlay::GetMixingMovieBGColor( unsigned long *co
 	*col >>= 8;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僂傿儞僪僂僴儞僪儖傪愝掕偡傞
-//! @param 		window : 僂傿儞僪僂僴儞僪儖
+//! @brief	  	ウィンドウハンドルを設定する
+//! @param 		window : ウィンドウハンドル
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetWindow(HWND window)
 {
@@ -434,8 +434,8 @@ void __stdcall tTVPDSMixerVideoOverlay::SetWindow(HWND window)
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺昞帵嬮宍傪愝掕偡傞
-//! @param 		rect : 昞帵嬮宍
+//! @brief	  	ビデオの表示矩形を設定する
+//! @param 		rect : 表示矩形
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetRect(RECT *rect)
 {
@@ -444,17 +444,17 @@ void __stdcall tTVPDSMixerVideoOverlay::SetRect(RECT *rect)
 	AllocatorPresenter()->SetRect(rect);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺昞帵/旕昞帵傪愝掕偡傞
-//! @param 		b : 昞帵/旕昞帵
+//! @brief	  	ビデオの表示/非表示を設定する
+//! @param 		b : 表示/非表示
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetVisible(bool b)
 {
 	AllocatorPresenter()->SetVisible(b);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺僒僀僘傪庢摼偡傞
-//! @param 		width : 暆
-//! @param 		height : 崅偝
+//! @brief	  	ビデオのサイズを取得する
+//! @param 		width : 幅
+//! @param 		height : 高さ
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetVideoSize( long *width, long *height )
 {
@@ -465,9 +465,9 @@ void __stdcall tTVPDSMixerVideoOverlay::GetVideoSize( long *width, long *height 
 	*height = m_Height;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	奺僼儗乕儉偺暯嬒昞帵帪娫傪庢摼偡傞
-//! @param 		pAvgTimePerFrame : 奺僼儗乕儉偺暯嬒昞帵帪娫
-//! @return		僄儔乕僐乕僪
+//! @brief	  	各フレームの平均表示時間を取得する
+//! @param 		pAvgTimePerFrame : 各フレームの平均表示時間
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT __stdcall tTVPDSMixerVideoOverlay::GetAvgTimePerFrame( REFTIME *pAvgTimePerFrame )
 {
@@ -475,21 +475,21 @@ HRESULT __stdcall tTVPDSMixerVideoOverlay::GetAvgTimePerFrame( REFTIME *pAvgTime
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆夋憸傪夋柺傊斀塮偡傞
+//! @brief	  	ビデオ画像を画面へ反映する
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::PresentVideoImage()
 {
 	AllocatorPresenter()->PresentVideoImage();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	儊僢僙乕僕傪憲傞僂傿儞僪僂傪愝掕偡傞
+//! @brief	  	メッセージを送るウィンドウを設定する
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetMessageDrainWindow(HWND window)
 {
 	m_hMessageDrainWnd = window;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵟彫抣傪摼傞
+//! @brief	  	最小値を得る
 //----------------------------------------------------------------------------
 void tTVPDSMixerVideoOverlay::GetAmpControlRangeMin( float *v, int flag )
 {
@@ -505,7 +505,7 @@ void tTVPDSMixerVideoOverlay::GetAmpControlRangeMin( float *v, int flag )
 	*v = proc.MinValue;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵟戝抣傪摼傞
+//! @brief	  	最大値を得る
 //----------------------------------------------------------------------------
 void tTVPDSMixerVideoOverlay::GetAmpControlRangeMax( float *v, int flag )
 {
@@ -521,7 +521,7 @@ void tTVPDSMixerVideoOverlay::GetAmpControlRangeMax( float *v, int flag )
 	*v = proc.MaxValue;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僨僼僅儖僩抣傪摼傞
+//! @brief	  	デフォルト値を得る
 //----------------------------------------------------------------------------
 void tTVPDSMixerVideoOverlay::GetAmpControlDefaultValue( float *v, int flag )
 {
@@ -537,7 +537,7 @@ void tTVPDSMixerVideoOverlay::GetAmpControlDefaultValue( float *v, int flag )
 	*v = proc.DefaultValue;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僗僥僢僾僒僀僘傪摼傞
+//! @brief	  	ステップサイズを得る
 //----------------------------------------------------------------------------
 void tTVPDSMixerVideoOverlay::GetAmpControlStepSize( float *v, int flag )
 {
@@ -553,7 +553,7 @@ void tTVPDSMixerVideoOverlay::GetAmpControlStepSize( float *v, int flag )
 	*v = proc.StepSize;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	抣傪摼傞
+//! @brief	  	値を得る
 //----------------------------------------------------------------------------
 void tTVPDSMixerVideoOverlay::GetAmpControl( float *v, int flag )
 {
@@ -582,7 +582,7 @@ void tTVPDSMixerVideoOverlay::GetAmpControl( float *v, int flag )
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	抣傪愝掕偡傞
+//! @brief	  	値を設定する
 //----------------------------------------------------------------------------
 void tTVPDSMixerVideoOverlay::SetAmpControl( float v, int flag )
 {
@@ -618,168 +618,168 @@ void tTVPDSMixerVideoOverlay::SetAmpControl( float v, int flag )
 }
 
 //----------------------------------------------------------------------------
-//! @brief	  	僐儞僩儔僗僩偺暆偺嵟彫抣傪摼傞
+//! @brief	  	コントラストの幅の最小値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetContrastRangeMin( float *v )
 {
 	GetAmpControlRangeMin( v, ProcAmpControl9_Contrast );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僐儞僩儔僗僩偺暆偺嵟戝抣傪摼傞
+//! @brief	  	コントラストの幅の最大値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetContrastRangeMax( float *v )
 {
 	GetAmpControlRangeMax( v, ProcAmpControl9_Contrast );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僐儞僩儔僗僩偺僨僼僅儖僩抣傪摼傞
+//! @brief	  	コントラストのデフォルト値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetContrastDefaultValue( float *v )
 {
 	GetAmpControlDefaultValue( v, ProcAmpControl9_Contrast );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僐儞僩儔僗僩偺僗僥僢僾僒僀僘傪摼傞
+//! @brief	  	コントラストのステップサイズを得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetContrastStepSize( float *v )
 {
 	GetAmpControlStepSize( v, ProcAmpControl9_Contrast );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僐儞僩儔僗僩傪摼傞
+//! @brief	  	コントラストを得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetContrast( float *v )
 {
 	GetAmpControl( v, ProcAmpControl9_Contrast );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僐儞僩儔僗僩傪愝掕偡傞
+//! @brief	  	コントラストを設定する
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetContrast( float v )
 {
 	SetAmpControl( v, ProcAmpControl9_Contrast );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	婸搙偺暆偺嵟彫抣傪摼傞
+//! @brief	  	輝度の幅の最小値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetBrightnessRangeMin( float *v )
 {
 	GetAmpControlRangeMin( v, ProcAmpControl9_Brightness );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	婸搙偺暆偺嵟戝抣傪摼傞
+//! @brief	  	輝度の幅の最大値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetBrightnessRangeMax( float *v )
 {
 	GetAmpControlRangeMax( v, ProcAmpControl9_Brightness );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	婸搙偺僨僼僅儖僩抣傪摼傞
+//! @brief	  	輝度のデフォルト値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetBrightnessDefaultValue( float *v )
 {
 	GetAmpControlDefaultValue( v, ProcAmpControl9_Brightness );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	婸搙偺僗僥僢僾僒僀僘傪摼傞
+//! @brief	  	輝度のステップサイズを得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetBrightnessStepSize( float *v )
 {
 	GetAmpControlStepSize( v, ProcAmpControl9_Brightness );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	婸搙傪摼傞
+//! @brief	  	輝度を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetBrightness( float *v )
 {
 	GetAmpControl( v, ProcAmpControl9_Brightness );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	婸搙傪愝掕偡傞
+//! @brief	  	輝度を設定する
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetBrightness( float v )
 {
 	SetAmpControl( v, ProcAmpControl9_Brightness );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	怓憡偺暆偺嵟彫抣傪摼傞
+//! @brief	  	色相の幅の最小値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetHueRangeMin( float *v )
 {
 	GetAmpControlRangeMin( v, ProcAmpControl9_Hue );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	怓憡偺暆偺嵟戝抣傪摼傞
+//! @brief	  	色相の幅の最大値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetHueRangeMax( float *v )
 {
 	GetAmpControlRangeMax( v, ProcAmpControl9_Hue );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	怓憡偺僨僼僅儖僩抣傪摼傞
+//! @brief	  	色相のデフォルト値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetHueDefaultValue( float *v )
 {
 	GetAmpControlDefaultValue( v, ProcAmpControl9_Hue );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	怓憡偺僗僥僢僾僒僀僘傪摼傞
+//! @brief	  	色相のステップサイズを得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetHueStepSize( float *v )
 {
 	GetAmpControlStepSize( v, ProcAmpControl9_Hue );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	怓憡傪摼傞
+//! @brief	  	色相を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetHue( float *v )
 {
 	GetAmpControl( v, ProcAmpControl9_Hue );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	怓憡傪愝掕偡傞
+//! @brief	  	色相を設定する
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetHue( float v )
 {
 	SetAmpControl( v, ProcAmpControl9_Hue );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵤搙偺暆偺嵟彫抣傪摼傞
+//! @brief	  	彩度の幅の最小値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetSaturationRangeMin( float *v )
 {
 	GetAmpControlRangeMin( v, ProcAmpControl9_Saturation );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵤搙偺暆偺嵟戝抣傪摼傞
+//! @brief	  	彩度の幅の最大値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetSaturationRangeMax( float *v )
 {
 	GetAmpControlRangeMax( v, ProcAmpControl9_Saturation );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵤搙偺僨僼僅儖僩抣傪摼傞
+//! @brief	  	彩度のデフォルト値を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetSaturationDefaultValue( float *v )
 {
 	GetAmpControlDefaultValue( v, ProcAmpControl9_Saturation );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵤搙偺僗僥僢僾僒僀僘傪摼傞
+//! @brief	  	彩度のステップサイズを得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetSaturationStepSize( float *v )
 {
 	GetAmpControlStepSize( v, ProcAmpControl9_Saturation );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵤搙傪摼傞
+//! @brief	  	彩度を得る
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::GetSaturation( float *v )
 {
 	GetAmpControl( v, ProcAmpControl9_Saturation );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	嵤搙傪愝掕偡傞
+//! @brief	  	彩度を設定する
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSMixerVideoOverlay::SetSaturation( float v )
 {

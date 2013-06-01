@@ -70,7 +70,7 @@ static void DelMenuDispatch( HWND hWnd ) {
 	MENU_LIST.erase(hWnd);
 }
 /**
- * 儊僯儏乕偺拞偐傜婛偵懚嵼偟側偔側偭偨Window偵偮偄偰偄傞儊僯儏乕僆僽僕僃僋僩傪嶍彍偡傞
+ * メニューの中から既に存在しなくなったWindowについているメニューオブジェクトを削除する
  */
 static void UpdateMenuList() {
 	std::map<HWND, iTJSDispatch2*>::iterator i = MENU_LIST.begin();
@@ -78,7 +78,7 @@ static void UpdateMenuList() {
 		HWND hWnd = i->first;
 		BOOL exist = ::IsWindow( hWnd );
 		if( exist == 0 ) {
-			// 婛偵側偔側偭偨Window
+			// 既になくなったWindow
 			std::map<HWND, iTJSDispatch2*>::iterator target = i;
 			i++;
 			iTJSDispatch2* menu = target->second;
@@ -120,12 +120,12 @@ extern "C" __declspec(dllexport) HRESULT _stdcall V2Link(iTVPFunctionExporter *e
 {
 	LoadMessageFromResource();
 
-	// 僗僞僽偺弶婜壔(昁偢婰弎偡傞)
+	// スタブの初期化(必ず記述する)
 	TVPInitImportStub(exporter);
 
 	tTJSVariant val;
 
-	// TJS 偺僌儘乕僶儖僆僽僕僃僋僩傪庢摼偡傞
+	// TJS のグローバルオブジェクトを取得する
 	iTJSDispatch2 * global = TVPGetScriptDispatch();
 
 	{
@@ -147,64 +147,64 @@ extern "C" __declspec(dllexport) HRESULT _stdcall V2Link(iTVPFunctionExporter *e
 		
 	}
 
-	// - global 傪 Release 偡傞
+	// - global を Release する
 	global->Release();
 
-	// val 傪僋儕傾偡傞丅
-	// 偙傟偼昁偢峴偆丅偦偆偟側偄偲 val 偑曐帩偟偰偄傞僆僽僕僃僋僩
-	// 偑 Release 偝傟偢丄師偵巊偆 TVPPluginGlobalRefCount 偑惓妋偵側傜側偄丅
+	// val をクリアする。
+	// これは必ず行う。そうしないと val が保持しているオブジェクト
+	// が Release されず、次に使う TVPPluginGlobalRefCount が正確にならない。
 	val.Clear();
 
 
-	// 偙偺帪揰偱偺 TVPPluginGlobalRefCount 偺抣傪
+	// この時点での TVPPluginGlobalRefCount の値を
 	GlobalRefCountAtInit = TVPPluginGlobalRefCount;
-	// 偲偟偰峊偊偰偍偔丅TVPPluginGlobalRefCount 偼偙偺僾儔僌僀儞撪偱
-	// 娗棟偝傟偰偄傞 tTJSDispatch 攈惗僆僽僕僃僋僩偺嶲徠僇僂儞僞偺憤寁偱丄
-	// 夝曻帪偵偼偙傟偲摨偠偐丄偙傟傛傝傕彮側偔側偭偰側偄偲側傜側偄丅
-	// 偦偆側偭偰側偗傟偽丄偳偙偐暿偺偲偙傠偱娭悢側偳偑嶲徠偝傟偰偄偰丄
-	// 僾儔僌僀儞偼夝曻偱偒側偄偲尵偆偙偲偵側傞丅
+	// として控えておく。TVPPluginGlobalRefCount はこのプラグイン内で
+	// 管理されている tTJSDispatch 派生オブジェクトの参照カウンタの総計で、
+	// 解放時にはこれと同じか、これよりも少なくなってないとならない。
+	// そうなってなければ、どこか別のところで関数などが参照されていて、
+	// プラグインは解放できないと言うことになる。
 
 	return S_OK;
 }
 //---------------------------------------------------------------------------
 extern "C" __declspec(dllexport) HRESULT _stdcall V2Unlink()
 {
-	// 媑棦媑棦懁偐傜丄僾儔僌僀儞傪夝曻偟傛偆偲偡傞偲偒偵屇偽傟傞娭悢丅
+	// 吉里吉里側から、プラグインを解放しようとするときに呼ばれる関数。
 
-	// 傕偟壗傜偐偺忦審偱僾儔僌僀儞傪夝曻偱偒側偄応崌偼
-	// 偙偺帪揰偱 E_FAIL 傪曉偡傛偆偵偡傞丅
-	// 偙偙偱偼丄TVPPluginGlobalRefCount 偑 GlobalRefCountAtInit 傛傝傕
-	// 戝偒偔側偭偰偄傟偽幐攕偲偄偆偙偲偵偡傞丅
+	// もし何らかの条件でプラグインを解放できない場合は
+	// この時点で E_FAIL を返すようにする。
+	// ここでは、TVPPluginGlobalRefCount が GlobalRefCountAtInit よりも
+	// 大きくなっていれば失敗ということにする。
 	if(TVPPluginGlobalRefCount > GlobalRefCountAtInit) return E_FAIL;
-		// E_FAIL 偑婣傞偲丄Plugins.unlink 儊僜僢僪偼婾傪曉偡
+		// E_FAIL が帰ると、Plugins.unlink メソッドは偽を返す
 
 	/*
-		偨偩偟丄僋儔僗偺応崌丄尩枾偵乽僆僽僕僃僋僩偑巊梡拞偱偁傞乿偲偄偆偙偲傪
-		抦傞偡傋偑偁傝傑偣傫丅婎杮揑偵偼丄Plugins.unlink 偵傛傞僾儔僌僀儞偺夝曻偼
-		婋尟偱偁傞偲峫偊偰偔偩偝偄 (偄偭偨傫 Plugins.link 偱儕儞僋偟偨傜丄嵟屻傑
-		偱僾儔僌僀儞傪夝曻偣偢丄僾儘僌儔儉廔椆偲摨帪偵帺摦揑偵夝曻偝偣傞偺偑媑)丅
+		ただし、クラスの場合、厳密に「オブジェクトが使用中である」ということを
+		知るすべがありません。基本的には、Plugins.unlink によるプラグインの解放は
+		危険であると考えてください (いったん Plugins.link でリンクしたら、最後ま
+		でプラグインを解放せず、プログラム終了と同時に自動的に解放させるのが吉)。
 	*/
 
-	// 僾儘僷僥傿奐曻
-	// - 傑偢丄TJS 偺僌儘乕僶儖僆僽僕僃僋僩傪庢摼偡傞
+	// プロパティ開放
+	// - まず、TJS のグローバルオブジェクトを取得する
 	iTJSDispatch2 * global = TVPGetScriptDispatch();
 
-	// 儊僯儏乕偼夝曻偝傟側偄偼偢側偺偱丄柧帵揑偵偼夝曻偟側偄
+	// メニューは解放されないはずなので、明示的には解放しない
 
-	// - global 偺 DeleteMember 儊僜僢僪傪梡偄丄僆僽僕僃僋僩傪嶍彍偡傞
+	// - global の DeleteMember メソッドを用い、オブジェクトを削除する
 	if(global)
 	{
-		// TJS 帺懱偑婛偵夝曻偝傟偰偄偨偲偒側偳偼
-		// global 偼 NULL 偵側傝摼傞偺偱 global 偑 NULL 偱側偄
-		// 偙偲傪僠僃僢僋偡傞
+		// TJS 自体が既に解放されていたときなどは
+		// global は NULL になり得るので global が NULL でない
+		// ことをチェックする
 
 		global->DeleteMember( 0, TJS_W("MenuItem"), NULL, global );
 	}
 
-	// - global 傪 Release 偡傞
+	// - global を Release する
 	if(global) global->Release();
 
-	// 僗僞僽偺巊梡廔椆(昁偢婰弎偡傞)
+	// スタブの使用終了(必ず記述する)
 	TVPUninitImportStub();
 
 	FreeMessage();

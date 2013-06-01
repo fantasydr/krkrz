@@ -54,7 +54,7 @@ tjs_int TVPGetCursor(const ttstr & name)
 
 	TVPCursorCount++;
 	//Screen->Cursors[TVPCursorCount] = handle; // using VCL
-#pragma message ( __LOC__ "TODO カーソル設定関係は要らないかな？" )
+#pragma message ( __LOC__ "TODO ･ｫｩ`･ｽ･�ﾔOｶｨ騅４､ﾏﾒｪ､鬢ﾊ､､､ｫ､ﾊ｣ｿ" )
 
 	TVPCursorTable.Add(place, TVPCursorCount);
 

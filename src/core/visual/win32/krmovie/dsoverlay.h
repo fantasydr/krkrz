@@ -20,7 +20,7 @@
 #include "dsmovie.h"
 
 //----------------------------------------------------------------------------
-//! @brief ƒI[ƒo[ƒŒƒC ƒrƒfƒI•`‰æƒNƒ‰ƒX
+//! @brief ¥ª©`¥Ğ©`¥ì¥¤ ¥Ó¥Ç¥ªÃè»­¥¯¥é¥¹
 //----------------------------------------------------------------------------
 class tTVPDSVideoOverlay : public tTVPDSMovie
 {
@@ -28,8 +28,8 @@ protected:
 	CComPtr<IVideoWindow>	m_VideoWindow;
 
 	//----------------------------------------------------------------------------
-	//! @brief	  	IVideoWindow‚ğæ“¾‚·‚é
-	//! @return		IVideoWindowƒCƒ“ƒ^[ƒtƒFƒCƒX
+	//! @brief	  	IVideoWindow¤òÈ¡µÃ¤¹¤ë
+	//! @return		IVideoWindow¥¤¥ó¥¿©`¥Õ¥§¥¤¥¹
 	//----------------------------------------------------------------------------
 	IVideoWindow *VideoWindow()
 	{

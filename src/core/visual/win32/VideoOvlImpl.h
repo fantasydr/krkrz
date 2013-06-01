@@ -42,21 +42,21 @@ class tTJSNI_VideoOverlay : public tTJSNI_BaseVideoOverlay
 // Start:	Add:	T.Imoto
 	class tTJSNI_BaseLayer	*Layer1;
 	class tTJSNI_BaseLayer	*Layer2;
-	tTVPVideoOverlayMode	Mode;	//!< Mode偺摦揑側曄峏偼弌棃側偄丅open慜偵僙僢僩偟偰偍偔偙偲
+	tTVPVideoOverlayMode	Mode;	//!< Modeの動的な変更は出来ない。open前にセットしておくこと
 	bool	Loop;
 
-	class tTVPBaseBitmap	*Bitmap[2];	//!< Layer昤夋梡僶僢僼傽梡Bitmap
+	class tTVPBaseBitmap	*Bitmap[2];	//!< Layer描画用バッファ用Bitmap
 	BYTE			*BmpBits[2];
 
-	bool	IsPrepare;			//!< 弨旛儌乕僪偐偳偆偐
+	bool	IsPrepare;			//!< 準備モードかどうか
 
-	int		SegLoopStartFrame;	//!< 僙僌儊儞僩儖乕僾奐巒僼儗乕儉
-	int		SegLoopEndFrame;	//!< 僙僌儊儞僩儖乕僾廔椆僼儗乕儉
+	int		SegLoopStartFrame;	//!< セグメントループ開始フレーム
+	int		SegLoopEndFrame;	//!< セグメントループ終了フレーム
 
-	//! 僀儀儞僩偑愝掕偝傟偨帪丄尰嵼僼儗乕儉偺曽偑恑傫偱偄偨偐偳偆偐丅
-	//! 僀儀儞僩偑愝掕偝傟偰偄傞僼儗乕儉傛傝慜偵尰嵼僼儗乕儉偑堏摦偟偨帪丄偙偺僼儔僌偼夝彍偝傟傞丅
+	//! イベントが設定された時、現在フレームの方が進んでいたかどうか。
+	//! イベントが設定されているフレームより前に現在フレームが移動した時、このフラグは解除される。
 	bool	IsEventPast;
-	int		EventFrame;		//!< 僀儀儞僩傪敪惗偝偣傞僼儗乕儉
+	int		EventFrame;		//!< イベントを発生させるフレーム
 // End:		Add:	T.Imoto
 
 public:

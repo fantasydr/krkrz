@@ -879,7 +879,7 @@ void tTJSInterCodeContext::ExecuteAsFunction(iTJSDispatch2 *objthis,
 		catch(...)
 		{
 #ifdef ENABLE_DEBUGGER
-			// Œ³‚É–ß‚·
+			// Ôª¤Ë‘ø¤¹
 			DebuggerScopeKey = oldkey;
 			DebuggerRegisterArea = oldra;
 #endif	// ENABLE_DEBUGGER
@@ -893,7 +893,7 @@ void tTJSInterCodeContext::ExecuteAsFunction(iTJSDispatch2 *objthis,
 		}
 
 #ifdef ENABLE_DEBUGGER
-		// Œ³‚É–ß‚·
+		// Ôª¤Ë‘ø¤¹
 		DebuggerScopeKey = oldkey;
 		DebuggerRegisterArea = oldra;
 #endif	// ENABLE_DEBUGGER

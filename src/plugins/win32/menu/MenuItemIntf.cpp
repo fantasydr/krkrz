@@ -86,16 +86,16 @@ extern const tjs_char* TVPNotChildMenuItem;
 	TVPThrowExceptionMessage(TVPInternalError, __FILE__,  __LINE__)
 
 /**
-	* 儊僢僙乕僕庴怣娭悢杮懱
-	* @param userdata 儐乕僓僨乕僞(偙偺応崌僱僀僥傿僽僆僽僕僃僋僩忣曬)
-	* @param Message 僂僀儞僪僂儊僢僙乕僕忣曬
+	* メッセージ受信関数本体
+	* @param userdata ユーザデータ(この場合ネイティブオブジェクト情報)
+	* @param Message ウインドウメッセージ情報
 	*/
 static bool __stdcall MyReceiver(void *userdata, tTVPWindowMessage *Message) {
 	tTJSNI_MenuItem *obj = (tTJSNI_MenuItem*)userdata;
 	switch (Message->Msg) {
-	case TVP_WM_DETACH: // 僂僀儞僪僂偑愗傝棧偝傟偨
+	case TVP_WM_DETACH: // ウインドウが切り離された
 		break; 
-	case TVP_WM_ATTACH: // 僂僀儞僪僂偑愝掕偝傟偨
+	case TVP_WM_ATTACH: // ウインドウが設定された
 		break;
 	case WM_COMMAND: {
 		WORD wID = Message->WParam & 0xFFFF;
@@ -155,7 +155,7 @@ tjs_error TJS_INTF_METHOD tTJSNI_MenuItem::Construct(tjs_int numparams, tTJSVari
 		MenuItem = new WindowMenuItem(this,HWnd,hMenu);
 		::SetMenu( HWnd, hMenu );
 		iTJSDispatch2 *obj = OwnerWindow;
-		// registerMessageReceiver 傪屇傇
+		// registerMessageReceiver を呼ぶ
 		tTJSVariant mode, proc, userdata;
 		tTJSVariant *p[3] = {&mode, &proc, &userdata};
 		mode = (tTVInteger)(tjs_int)wrmRegister;
@@ -559,7 +559,7 @@ static iTJSNativeInstance * TJS_INTF_METHOD Create_NI_MenuItem() {
 iTJSDispatch2 * TVPCreateNativeClass_MenuItem() {
 	tTJSNativeClassForPlugin * classobj = TJSCreateNativeClassForPlugin(TJS_W("MenuItem"), Create_NI_MenuItem);
 	
-	/// 儊儞僶掕媊
+	/// メンバ定義
 	TJS_BEGIN_NATIVE_MEMBERS(MenuItem) // constructor
 	TJS_DECL_EMPTY_FINALIZE_METHOD
 //----------------------------------------------------------------------

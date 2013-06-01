@@ -9,7 +9,7 @@
 //tstring ParamStr( int index );
 tstring ExePath();
 
-// 屻偱尒捠偟偺傛偆曽朄偵曄峏偡傞
+// 後で見通しのよう方法に変更する
 extern int _argc;
 extern char ** _argv;
 
@@ -18,7 +18,7 @@ enum {
 	mrAbort,
 	mrCancel,
 };
-// 僀儀儞僩僴儞僪儔偵偮偄偰偼梫専摙
+// イベントハンドラについては要検討
 class SystemEvent {
 public:
 	LRESULT Result;
@@ -121,7 +121,7 @@ public:
 		if( hWnd != INVALID_HANDLE_VALUE ) {
 			return 0 != ::IsIconic(hWnd);
 		}
-		return true; // 偦傕偦傕僂傿儞僪僂偑側偄
+		return true; // そもそもウィンドウがない
 	}
 	void Minimize();
 	void Restore();
@@ -193,7 +193,7 @@ public:
 };
 std::vector<std::string>* LoadLinesFromFile( const tstring& path );
 
-// 僗僞僽丄惓偟偔偼摦嶌偟側偄偼偢丅
+// スタブ、正しくは動作しないはず。
 inline HWND AllocateHWnd( LRESULT (CALLBACK *UtilWndProc)(HWND,UINT,WPARAM,LPARAM) ) {
 	
 	const TCHAR* classname = _T("TPUtilWindow");

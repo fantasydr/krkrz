@@ -1,4 +1,4 @@
-// tvpwin32.cpp : 傾僾儕働乕僔儑儞偺僄儞僩儕 億僀儞僩傪掕媊偟傑偡丅
+// tvpwin32.cpp : アプリケーションのエントリ ポイントを定義します。
 //
 #if 0
 #include "stdafx.h"
@@ -6,12 +6,12 @@
 
 #define MAX_LOADSTRING 100
 
-// 僌儘乕僶儖曄悢:
-HINSTANCE hInst;								// 尰嵼偺僀儞僞乕僼僃僀僗
-TCHAR szTitle[MAX_LOADSTRING];					// 僞僀僩儖 僶乕偺僥僉僗僩
-TCHAR szWindowClass[MAX_LOADSTRING];			// 儊僀儞 僂傿儞僪僂 僋儔僗柤
+// グローバル変数:
+HINSTANCE hInst;								// 現在のインターフェイス
+TCHAR szTitle[MAX_LOADSTRING];					// タイトル バーのテキスト
+TCHAR szWindowClass[MAX_LOADSTRING];			// メイン ウィンドウ クラス名
 
-// 偙偺僐乕僪 儌僕儏乕儖偵娷傑傟傞娭悢偺愰尵傪揮憲偟傑偡:
+// このコード モジュールに含まれる関数の宣言を転送します:
 ATOM				MyRegisterClass(HINSTANCE hInstance);
 BOOL				InitInstance(HINSTANCE, int);
 LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
@@ -25,16 +25,16 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 	UNREFERENCED_PARAMETER(hPrevInstance);
 	UNREFERENCED_PARAMETER(lpCmdLine);
 
- 	// TODO: 偙偙偵僐乕僪傪憓擖偟偰偔偩偝偄丅
+ 	// TODO: ここにコードを挿入してください。
 	MSG msg;
 	HACCEL hAccelTable;
 
-	// 僌儘乕僶儖暥帤楍傪弶婜壔偟偰偄傑偡丅
+	// グローバル文字列を初期化しています。
 	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
 	LoadString(hInstance, IDC_TVPWIN32, szWindowClass, MAX_LOADSTRING);
 	MyRegisterClass(hInstance);
 
-	// 傾僾儕働乕僔儑儞偺弶婜壔傪幚峴偟傑偡:
+	// アプリケーションの初期化を実行します:
 	if (!InitInstance (hInstance, nCmdShow))
 	{
 		return FALSE;
@@ -42,7 +42,7 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_TVPWIN32));
 
-	// 儊僀儞 儊僢僙乕僕 儖乕僾:
+	// メイン メッセージ ループ:
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
 		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
@@ -58,9 +58,9 @@ int APIENTRY _tWinMain(_In_ HINSTANCE hInstance,
 
 
 //
-//  娭悢: MyRegisterClass()
+//  関数: MyRegisterClass()
 //
-//  栚揑: 僂傿儞僪僂 僋儔僗傪搊榐偟傑偡丅
+//  目的: ウィンドウ クラスを登録します。
 //
 ATOM MyRegisterClass(HINSTANCE hInstance)
 {
@@ -84,20 +84,20 @@ ATOM MyRegisterClass(HINSTANCE hInstance)
 }
 
 //
-//   娭悢: InitInstance(HINSTANCE, int)
+//   関数: InitInstance(HINSTANCE, int)
 //
-//   栚揑: 僀儞僗僞儞僗 僴儞僪儖傪曐懚偟偰丄儊僀儞 僂傿儞僪僂傪嶌惉偟傑偡丅
+//   目的: インスタンス ハンドルを保存して、メイン ウィンドウを作成します。
 //
-//   僐儊儞僩:
+//   コメント:
 //
-//        偙偺娭悢偱丄僌儘乕僶儖曄悢偱僀儞僗僞儞僗 僴儞僪儖傪曐懚偟丄
-//        儊僀儞 僾儘僌儔儉 僂傿儞僪僂傪嶌惉偍傛傃昞帵偟傑偡丅
+//        この関数で、グローバル変数でインスタンス ハンドルを保存し、
+//        メイン プログラム ウィンドウを作成および表示します。
 //
 BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 {
    HWND hWnd;
 
-   hInst = hInstance; // 僌儘乕僶儖曄悢偵僀儞僗僞儞僗張棟傪奿擺偟傑偡丅
+   hInst = hInstance; // グローバル変数にインスタンス処理を格納します。
 
    hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
       CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
@@ -114,13 +114,13 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 }
 
 //
-//  娭悢: WndProc(HWND, UINT, WPARAM, LPARAM)
+//  関数: WndProc(HWND, UINT, WPARAM, LPARAM)
 //
-//  栚揑:  儊僀儞 僂傿儞僪僂偺儊僢僙乕僕傪張棟偟傑偡丅
+//  目的:  メイン ウィンドウのメッセージを処理します。
 //
-//  WM_COMMAND	- 傾僾儕働乕僔儑儞 儊僯儏乕偺張棟
-//  WM_PAINT	- 儊僀儞 僂傿儞僪僂偺昤夋
-//  WM_DESTROY	- 拞巭儊僢僙乕僕傪昞帵偟偰栠傞
+//  WM_COMMAND	- アプリケーション メニューの処理
+//  WM_PAINT	- メイン ウィンドウの描画
+//  WM_DESTROY	- 中止メッセージを表示して戻る
 //
 //
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
@@ -134,7 +134,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		wmId    = LOWORD(wParam);
 		wmEvent = HIWORD(wParam);
-		// 慖戰偝傟偨儊僯儏乕偺夝愅:
+		// 選択されたメニューの解析:
 		switch (wmId)
 		{
 		case IDM_ABOUT:
@@ -149,7 +149,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 		break;
 	case WM_PAINT:
 		hdc = BeginPaint(hWnd, &ps);
-		// TODO: 昤夋僐乕僪傪偙偙偵捛壛偟偰偔偩偝偄...
+		// TODO: 描画コードをここに追加してください...
 		EndPaint(hWnd, &ps);
 		break;
 	case WM_DESTROY:
@@ -161,7 +161,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-// 僶乕僕儑儞忣曬儃僢僋僗偺儊僢僙乕僕 僴儞僪儔乕偱偡丅
+// バージョン情報ボックスのメッセージ ハンドラーです。
 INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	UNREFERENCED_PARAMETER(lParam);

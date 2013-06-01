@@ -28,9 +28,9 @@
 class CIStreamProxy;
 class CIStreamReader;
 //----------------------------------------------------------------------------
-//! @brief DirectShow僋儔僗
+//! @brief DirectShowクラス
 //!
-//! 儗僀儎乕昤夋丄僆乕僶乕儗僀偺婎掙僋儔僗
+//! レイヤー描画、オーバーレイの基底クラス
 //----------------------------------------------------------------------------
 class tTVPDSMovie : public iTVPVideoOverlay
 {
@@ -41,7 +41,7 @@ protected:
 	bool		Shutdown;
 	RECT		Rect;
 
-	DWORD		m_dwROTReg;	//!< 抣偼偐傇傜側偄傛偆偵揔愗側暔偵偡傞偙偲
+	DWORD		m_dwROTReg;	//!< 値はかぶらないように適切な物にすること
 	bool		m_RegisteredROT;
 
 	CIStreamProxy			*m_Proxy;
@@ -64,8 +64,8 @@ protected:
 	std::vector<StreamInfo>	m_AudioStreamInfo;
 	std::vector<StreamInfo>	m_VideoStreamInfo;
 	//----------------------------------------------------------------------------
-	//! @brief	  	IMediaSeeking傪庢摼偡傞
-	//! @return		IMediaSeeking僀儞僞乕僼僃僀僗
+	//! @brief	  	IMediaSeekingを取得する
+	//! @return		IMediaSeekingインターフェイス
 	//----------------------------------------------------------------------------
 	IMediaSeeking *MediaSeeking()
 	{
@@ -75,8 +75,8 @@ protected:
 		return m_MediaSeeking;
 	}
 	//----------------------------------------------------------------------------
-	//! @brief	  	IMediaPosition傪庢摼偡傞
-	//! @return		IMediaPosition僀儞僞乕僼僃僀僗
+	//! @brief	  	IMediaPositionを取得する
+	//! @return		IMediaPositionインターフェイス
 	//----------------------------------------------------------------------------
 	IMediaPosition *Position()
 	{
@@ -84,8 +84,8 @@ protected:
 		return m_MediaPosition;
 	}
 	//----------------------------------------------------------------------------
-	//! @brief	  	IMediaControl傪庢摼偡傞
-	//! @return		IMediaControl僀儞僞乕僼僃僀僗
+	//! @brief	  	IMediaControlを取得する
+	//! @return		IMediaControlインターフェイス
 	//----------------------------------------------------------------------------
 	IMediaControl *Controller()
 	{ 
@@ -93,8 +93,8 @@ protected:
 		return m_MediaControl;
 	}
 	//----------------------------------------------------------------------------
-	//! @brief	  	IMediaEventEx傪庢摼偡傞
-	//! @return		IMediaEventEx僀儞僞乕僼僃僀僗
+	//! @brief	  	IMediaEventExを取得する
+	//! @return		IMediaEventExインターフェイス
 	//----------------------------------------------------------------------------
 	IMediaEventEx *Event()
 	{
@@ -102,8 +102,8 @@ protected:
 		return m_MediaEventEx;
 	}
 	//----------------------------------------------------------------------------
-	//! @brief	  	IGraphBuilder傪庢摼偡傞
-	//! @return		IGraphBuilder僀儞僞乕僼僃僀僗
+	//! @brief	  	IGraphBuilderを取得する
+	//! @return		IGraphBuilderインターフェイス
 	//----------------------------------------------------------------------------
 	IGraphBuilder *GraphBuilder()
 	{
@@ -111,8 +111,8 @@ protected:
 		return m_GraphBuilder;
 	}
 	//----------------------------------------------------------------------------
-	//! @brief	  	IBasicVideo傪庢摼偡傞
-	//! @return		IBasicVideo僀儞僞乕僼僃僀僗
+	//! @brief	  	IBasicVideoを取得する
+	//! @return		IBasicVideoインターフェイス
 	//----------------------------------------------------------------------------
 	IBasicVideo *Video()
 	{
@@ -120,10 +120,10 @@ protected:
 		return m_BasicVideo;
 	}
 	//----------------------------------------------------------------------------
-	//! @brief	  	IBasicAudio傪庢摼偡傞
+	//! @brief	  	IBasicAudioを取得する
 	//!
-	//! Audio偼懚嵼偟側偄応崌傕偁傞偺偱丄NULL偐偳偆偐妋擣偟偰偐傜巊梡偡傞偙偲
-	//! @return		IBasicAudio僀儞僞乕僼僃僀僗
+	//! Audioは存在しない場合もあるので、NULLかどうか確認してから使用すること
+	//! @return		IBasicAudioインターフェイス
 	//----------------------------------------------------------------------------
 	IBasicAudio *Audio()
 	{
@@ -131,10 +131,10 @@ protected:
 		return m_BasicAudio;
 	}
 	//----------------------------------------------------------------------------
-	//! @brief	  	IAMStreamSelect傪庢摼偡傞
+	//! @brief	  	IAMStreamSelectを取得する
 	//!
-	//! Audio傪娷傓MPEG僼傽僀儖偱偺傒巊梡壜丅NULL偐偳偆偐妋擣偟偰偐傜巊梡偡傞偙偲丅
-	//! @return		IAMStreamSelect僀儞僞乕僼僃僀僗
+	//! Audioを含むMPEGファイルでのみ使用可。NULLかどうか確認してから使用すること。
+	//! @return		IAMStreamSelectインターフェイス
 	//----------------------------------------------------------------------------
 	IAMStreamSelect *StreamSelect()
 	{
@@ -143,16 +143,16 @@ protected:
 
 	//----------------------------------------------------------------------------
 	//! @brief	  	BigEndian <-> LittleEndian
-	//! @param		l : 曄姺慜
-	//! @return		曄姺屻
+	//! @param		l : 変換前
+	//! @return		変換後
 	//----------------------------------------------------------------------------
 	inline unsigned long ChangeEndian32(unsigned long l)
 	{
 #if defined(_MSC_VER) && (_MSC_VER >= 1300)
-		return _byteswap_ulong(l);	// VC7.0埲崀
+		return _byteswap_ulong(l);	// VC7.0以降
 #else
 #	if 1
-		// 儀僞偵彂偔
+		// ベタに書く
 		unsigned long result;
 		unsigned char *ps=(unsigned char *)&l;
 		unsigned char *pd=(unsigned char *)&result;
@@ -162,7 +162,7 @@ protected:
 		pd[3] = ps[0];
 		return result;
 #	else
-		// 僥儞億儔儕巊傢偢偵
+		// テンポラリ使わずに
 		register unsigned char *p=(unsigned char *)&l;
 		p[0]^=p[3];
 		p[3]^=p[0];

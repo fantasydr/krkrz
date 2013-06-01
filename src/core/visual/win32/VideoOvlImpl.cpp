@@ -187,7 +187,7 @@ tTJSNI_VideoOverlay::tTJSNI_VideoOverlay()
 	OwnerWindow = NULL;
 	LocalTempStorageHolder = NULL;
 
-#pragma message( __LOC__ "TODO 儊僢僙乕僕僴儞僪儔傪側傫偲偐偡傞" )
+#pragma message( __LOC__ "TODO メッセージハンドラをなんとかする" )
 	//UtilWindow = AllocateHWnd(WndProc);
 
 	Layer1 = NULL;
@@ -221,7 +221,7 @@ void TJS_INTF_METHOD tTJSNI_VideoOverlay::Invalidate()
 
 	Close();
 
-#pragma message( __LOC__ "TODO 儊僢僙乕僕僴儞僪儔傪側傫偲偐偡傞" )
+#pragma message( __LOC__ "TODO メッセージハンドラをなんとかする" )
 //	if(UtilWindow) DeallocateHWnd(UtilWindow);
 }
 //---------------------------------------------------------------------------
@@ -688,7 +688,7 @@ LRESULT CALLBACK tTJSNI_VideoOverlay::WndProc(HWND hWnd, UINT message, WPARAM wP
 							if( Layer1 == NULL && Layer2 == NULL )	// nothing to do.
 								return 0;
 
-							// 2僼儗乕儉埲忋嵎偑偁傞偲偒偼GetFrame() 傪尰嵼偺僼儗乕儉偲偡傞
+							// 2フレーム以上差があるときはGetFrame() を現在のフレームとする
 							int frame = GetFrame();
 							if( (frame+1) < curFrame || (frame-1) > curFrame )
 								curFrame = frame;
@@ -696,7 +696,7 @@ LRESULT CALLBACK tTJSNI_VideoOverlay::WndProc(HWND hWnd, UINT message, WPARAM wP
 							if( (!IsPrepare) && (SegLoopEndFrame > 0) && (frame >= SegLoopEndFrame) ) {
 								SetFrame( SegLoopStartFrame > 0 ? SegLoopStartFrame : 0 );
 								FirePeriodEvent(perSegLoop); // fire period event by segment loop rewind
-								return 0; // Update傪峴傢側偄
+								return 0; // Updateを行わない
 							}
 
 							// get video image size
@@ -728,7 +728,7 @@ LRESULT CALLBACK tTJSNI_VideoOverlay::WndProc(HWND hWnd, UINT message, WPARAM wP
 								if( l1 ) l1->AssignMainImage( Bitmap[0] );
 								if( l2 ) l2->AssignMainImage( Bitmap[0] );
 							}
-							else	// 0偠傖側偐偭偨傜丄1偲傒側偡丅
+							else	// 0じゃなかったら、1とみなす。
 							{
 								if( l1 ) l1->AssignMainImage( Bitmap[1] );
 								if( l2 ) l2->AssignMainImage( Bitmap[1] );
@@ -890,7 +890,7 @@ void tTJSNI_VideoOverlay::SetLayer2( tTJSNI_BaseLayer *l )
 }
 void tTJSNI_VideoOverlay::SetMode( tTVPVideoOverlayMode m )
 {
-	// 價僨僆僆乕僾儞屻偺儌乕僪曄峏偼嬛巭
+	// ビデオオープン後のモード変更は禁止
 	if( !VideoOverlay )
 	{
 		Mode = m;
@@ -1025,11 +1025,11 @@ void tTJSNI_VideoOverlay::SetMixingLayer( tTJSNI_BaseLayer *l )
 				{
 					HDC hdc;
 					if( (hdc = bmp->GetBitmapDC()) != NULL )
-					{	// 偡偱偵HDC偑偁傞偺偱偦傟傪巊偆
+					{	// すでにHDCがあるのでそれを使う
 						VideoOverlay->SetMixingBitmap( hdc, &dest, alpha );
 					}
 					else
-					{	// 帺慜偱DC傪嶌傞
+					{	// 自前でDCを作る
 						HDC			ref = GetDC(0);
 						HBITMAP		myDIB = CreateDIBitmap( ref, bmp->GetBITMAPINFOHEADER(), CBM_INIT, bmp->GetBits(), bmp->GetBITMAPINFO(), bmp->Is8bit() ? DIB_PAL_COLORS : DIB_RGB_COLORS );
 						hdc = CreateCompatibleDC( NULL );

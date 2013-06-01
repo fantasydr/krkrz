@@ -27,14 +27,14 @@ public:
 		hBmp_ = ::CreateDIBSection( NULL, &bmpinfo, DIB_RGB_COLORS, (void **)(&Bits), NULL, 0 );
 		hOldBmp_ = ::SelectObject( hMemDC_, hBmp_ );
 
-		// デフォルトの LOGFONT 指定した方が良さそう
+		// ･ﾇ･ﾕ･ｩ･�･ﾈ､ﾎ LOGFONT ﾖｸｶｨ､ｷ､ｿｷｽ､ｬﾁｼ､ｵ､ｽ､ｦ
 		HFONT hFont = (HFONT)::GetStockObject( ANSI_FIXED_FONT );
 		LOGFONT logfont={0};
 		::GetObject( hFont_, sizeof(LOGFONT), &logfont );
 		logfont.lfHeight = -12;
 		logfont.lfWidth = 0;
 		logfont.lfCharSet = SHIFTJIS_CHARSET;
-		_tcsncpy_s( logfont.lfFaceName, LF_FACESIZE, _T("ＭＳ Ｐゴシック"), LF_FACESIZE );
+		_tcsncpy_s( logfont.lfFaceName, LF_FACESIZE, _T("｣ﾍ｣ﾓ ｣ﾐ･ｴ･ｷ･ﾃ･ｯ"), LF_FACESIZE );
 		logfont.lfItalic = FALSE;
 		logfont.lfUnderline = FALSE;
 		logfont.lfStrikeOut = FALSE;

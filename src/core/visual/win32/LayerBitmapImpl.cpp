@@ -67,7 +67,7 @@ static void TVPInitChAntialiasMethod()
 	if(TVPGetCommandLine(TJS_W("-aamethod"), &val))
 	{
 		ttstr str(val);
-#if 0 // Ç‹Ç¡ÇΩÇ≠à”ñ°ÇÃÇ»Ç¢ÉRÅ[ÉhÅH
+#if 0 // §ﬁ§√§ø§Ø“‚Œ∂§Œ§ §§•≥©`•…£ø
 		if(str == TJS_W("auto"))
 			; // nothing to do
 #endif
@@ -1426,7 +1426,7 @@ void * tTVPBitmap::GetScanLine(tjs_uint l) const
 //---------------------------------------------------------------------------
 // default LOGFONT retrieve function
 //---------------------------------------------------------------------------
-static const TCHAR * const TVPDefaultFontName = _T("ÇlÇr ÇoÉSÉVÉbÉN"); // TODO: i18n
+static const TCHAR * const TVPDefaultFontName = _T("£Õ£” £–•¥•∑•√•Ø"); // TODO: i18n
 static LOGFONT TVPDefaultLOGFONT;
 static tTVPFont TVPDefaultFont;
 static bool TVPDefaultLOGFONTCreated = false;
@@ -1954,7 +1954,7 @@ bool tTVPNativeBaseBitmap::SelectFont(tjs_uint32 flags, const ttstr &caption,
 {
 	// show font selector dialog and let user select font
 	ApplyFont();
-#if 0 // TODO ÉtÉHÉìÉgëIëÉ_ÉCÉAÉçÉO
+#if 0 // TODO •’•©•Û•»ﬂxík•¿•§•¢•Ì•∞
 	std::string newfont;
 	TTVPFontSelectForm * form = new TTVPFontSelectForm(Application, GetFontCanvas(),
 		flags, caption.AsStdString(), prompt.AsStdString(),

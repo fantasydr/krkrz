@@ -23,10 +23,10 @@ namespace TJS
 
 #ifdef ENABLE_DEBUGGER
 struct ScopeKey {
-	int ClassIndex;	//!< 僋儔僗柤僀儞僨僢僋僗
-	int FuncIndex;	//!< 娭悢柤僀儞僨僢僋僗
-	int FileIndex;	//!< 僼傽僀儖柤僀儞僨僢僋僗
-	int CodeOffset;	//!< VM 僐乕僪僆僼僙僢僩
+	int ClassIndex;	//!< クラス名インデックス
+	int FuncIndex;	//!< 関数名インデックス
+	int FileIndex;	//!< ファイル名インデックス
+	int CodeOffset;	//!< VM コードオフセット
 
 	ScopeKey()
 	: ClassIndex(-1), FuncIndex(-1), FileIndex(-1), CodeOffset(-1)
@@ -48,7 +48,7 @@ struct ScopeKey {
 		return( ClassIndex != rhs.ClassIndex || FuncIndex != rhs.FuncIndex || FileIndex != rhs.FileIndex || CodeOffset != rhs.CodeOffset );
 	}
 	bool operator < ( const ScopeKey& rhs ) const {
-		// 僋儔僗丄娭悢柤
+		// クラス、関数名
 		if( ClassIndex == rhs.ClassIndex ) {
 			if( FuncIndex == rhs.FuncIndex ) {
 				if( FileIndex == rhs.FileIndex ) {

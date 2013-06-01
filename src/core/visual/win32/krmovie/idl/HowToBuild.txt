@@ -1,6 +1,6 @@
-VC偺僐儅儞僪僾儘儞僾僩傪婲摦偟丄師偺僐儅儞僪傪幚峴偡傞丅
+VCのコマンドプロンプトを起動し、次のコマンドを実行する。
 MIDL IRendererBufferAccess.idl
 MIDL IRendererBufferVideo.idl
 
-偄偔偮偐僼傽僀儖偑惗惉偝傟傞偺偱丄_i.c偲.h 僼傽僀儖傪1偮忋偺僼僅儖僟傊僐僺乕偡傞丅
-杮棃偼丄vc偺僾儘僕僃僋僩傪曇廤偟丄僇僗僞儉價儖僪偱MDIL僐儅儞僪傪幚峴偝偣傞傛偆偵偟偨曽偑椙偄丅
+いくつかファイルが生成されるので、_i.cと.h ファイルを1つ上のフォルダへコピーする。
+本来は、vcのプロジェクトを編集し、カスタムビルドでMDILコマンドを実行させるようにした方が良い。

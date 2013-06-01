@@ -1140,7 +1140,7 @@ void TTVPWindowForm::SetMouseCursor( tjs_int handle ) {
 	CurrentMouseCursor.SetCursorIndex(handle);
 }
 /**
- * ƒNƒ‰ƒCƒAƒ“ƒg—ÌˆæÀ•W‚©‚çƒEƒBƒ“ƒhƒE—ÌˆæÀ•W‚Ö•ÏŠ·‚·‚é
+ * ¥¯¥é¥¤¥¢¥ó¥ÈîIÓò×ù˜Ë¤«¤é¥¦¥£¥ó¥É¥¦îIÓò×ù˜Ë¤Ø‰ä“Q¤¹¤ë
  */
 void TTVPWindowForm::OffsetClientPoint( int &x, int &y ) {
 	POINT origin = {0,0};

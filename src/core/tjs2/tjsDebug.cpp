@@ -757,12 +757,12 @@ public:
 
 class Debugger {
 public:
-	//! 1MB傪捠怣椞堟偲偟偰妋曐偡傞丄偁傫傑傝旤偟偔側偄偗偳
-	//! 杮棃偱偁傟偽丄僔儞儃儖僥乕僽儖摍偐傜椞堟傪堷偭挘偭偰偒偨偄偲偙傠
+	//! 1MBを通信領域として確保する、あんまり美しくないけど
+	//! 本来であれば、シンボルテーブル等から領域を引っ張ってきたいところ
 	static const int DEBUGGER_COMM_AREA_MAX = 1024 * 1024;
 
 private:
-	HWND			DebuggerHwnd;	//!< 僨僶僢僈僂傿儞僪僂僴儞僪儖
+	HWND			DebuggerHwnd;	//!< デバッガウィンドウハンドル
 	std::wstring	LastScriptFileName;
 	tjs_int			LastLineNo;
 
@@ -774,26 +774,26 @@ private:
 	int				StepNest;
 
 	int		TypeOfExec;
-	bool	IsInitialConnect;	//!< 弶婜壔愙懕嵪傒偐偳偆偐
-	bool	IsHandleException;	//!< 椺奜敪惗帪偵掆巭偟偰丄僨僶僢僈偐傜偺嵞幚峴梫媮傪懸偮偐偳偆偐
+	bool	IsInitialConnect;	//!< 初期化接続済みかどうか
+	bool	IsHandleException;	//!< 例外発生時に停止して、デバッガからの再実行要求を待つかどうか
 	int		StackTraceDepth;
 
-	// 尰嵼偺幚峴忬懺
+	// 現在の実行状態
 	enum {
-		EXEC_STOP,	//!< 幚峴偝傟偰偄側偄(braek)
-		EXEC_STEP,	//!< 僗僥僢僾幚峴
-		EXEC_TRACE,	//!< 僩儗乕僗幚峴
-		EXEC_RETURN,//!< 儕僞乕儞幚峴
-		EXEC_RUN,	//!< 捠忢幚峴
+		EXEC_STOP,	//!< 実行されていない(braek)
+		EXEC_STEP,	//!< ステップ実行
+		EXEC_TRACE,	//!< トレース実行
+		EXEC_RETURN,//!< リターン実行
+		EXEC_RUN,	//!< 通常実行
 	};
 
 	char DubuggerCommArea[DEBUGGER_COMM_AREA_MAX];
-	// 埲壓偺傛偆側峔憿偱丄僽儗乕僋偐傜暅婣屻偵僨僶僢僈偐傜忋偺椞堟偵彂偒崬傑傟傞丅
-	// 椞堟傪挻偊側偄傛偆偵偡傞偺偼僨僶僢僈偺愑擟
+	// 以下のような構造で、ブレークから復帰後にデバッガから上の領域に書き込まれる。
+	// 領域を超えないようにするのはデバッガの責任
 	struct DebuggerCommand {
 		int		Command;
-		int		NextOffset;	//!< 偙偺僐儅儞僪偺愭摢偐傜師偺僨乕僞傑偱偺僆僼僙僢僩(傾儔僀儊儞僩偟偰偍偔偙偲)
-		int		Size;			//!< data 偺僒僀僘
+		int		NextOffset;	//!< このコマンドの先頭から次のデータまでのオフセット(アライメントしておくこと)
+		int		Size;			//!< data のサイズ
 		char	Data[1];
 	};
 	struct DebuggerHeader {
@@ -808,7 +808,7 @@ public:
 		Initialize();
 	}
 	void Initialize() {
-		DebuggerHwnd = ::FindWindow(_T("TScriptDebuggerForm"),NULL);	//!< 柤慜寛傔懪偪
+		DebuggerHwnd = ::FindWindow(_T("TScriptDebuggerForm"),NULL);	//!< 名前決め打ち
 		if( DebuggerHwnd == 0 ) {
 			DebuggerHwnd = INVALID_HANDLE_VALUE;
 		}
@@ -823,13 +823,13 @@ public:
 	void DebugHook( tjs_int evtype, const tjs_char *filename, tjs_int lineno, tTJSInterCodeContext* ctx ) {
 		if( evtype == DBGHOOK_PREV_EXCEPT ) {
 			StepNest = 0;
-			return;	// 偲傝偁偊偢椺奜偼柍帇偟偰偍偔
+			return;	// とりあえず例外は無視しておく
 		}
 
 		if( filename == NULL ) return;
 		if( CheckDebuggerInit() == false ) return;
 
-		HandleBreakCommand();	// 僽儗乕僋梫媮偑憲傜傟偰偒偰偄傞偐挷傋傞
+		HandleBreakCommand();	// ブレーク要求が送られてきているか調べる
 
 		BreakScriptFileName = std::wstring(filename);
 		BreakLineNo = lineno;
@@ -838,30 +838,30 @@ public:
 		if( LastLineNo != lineno ) {
 			is_change_line = true;
 		} else if( LastScriptFileName != BreakScriptFileName ) {
-			// 僗僋儕僾僩僼傽僀儖柤偑曄傢偭偨
+			// スクリプトファイル名が変わった
 			is_change_line = true;
 		}
 		LastScriptFileName = BreakScriptFileName;
 		LastLineNo = BreakLineNo;
 
 		if( evtype == DBGHOOK_PREV_BREAK ) {
-			WaitExec(ctx);	// 僽儗僀僋偱巭傔傞
+			WaitExec(ctx);	// ブレイクで止める
 		} else {
 			switch( TypeOfExec ) {
 				case EXEC_RUN:
 					if( is_change_line && IsBreakPoint( filename, lineno ) ) {
-						WaitExec(ctx);	// 僽儗僀僋偱巭傔傞
+						WaitExec(ctx);	// ブレイクで止める
 					}
-					// 僽儗僀僋億僀儞僩偱側偄帪偼柍帇
+					// ブレイクポイントでない時は無視
 					break;
 				case EXEC_TRACE:
 					if( is_change_line ) {;
-						WaitExec(ctx);	// 僽儗僀僋偱巭傔傞
+						WaitExec(ctx);	// ブレイクで止める
 					}
 					break;
 				case EXEC_RETURN:
 					if( evtype == DBGHOOK_PREV_RETURN ) {
-						// 師偺僗僥僢僾偱巭傔傞
+						// 次のステップで止める
 						TypeOfExec = EXEC_STEP;
 						StepNest = 0;
 					}
@@ -871,12 +871,12 @@ public:
 					else if( evtype == DBGHOOK_PREV_RETURN ) StepNest--;
 					else if( evtype == DBGHOOK_PREV_EXE_LINE ) {
 						if( StepNest <= 0 ) {;
-							WaitExec(ctx);	// 僽儗僀僋偱巭傔傞
+							WaitExec(ctx);	// ブレイクで止める
 						}
 					}
 					break;
 				case EXEC_STOP:
-					WaitExec(ctx);	// 僽儗僀僋偱巭傔傞
+					WaitExec(ctx);	// ブレイクで止める
 					break;
 			}
 		}
@@ -884,13 +884,13 @@ public:
 
 	bool CheckDebuggerInit() {
 		if( IsInitialConnect == false ) {
-			// 僨僶僢僈偵儊僢僙乕僕憲偭偰椺奜捠抦桳柍丄僽儗乕僋億僀儞僩忣曬側偳傪庢摼偡傞
+			// デバッガにメッセージ送って例外通知有無、ブレークポイント情報などを取得する
 			InitializeConnection();
 		}
 		return IsInitialConnect;
 	}
 private:
-	//! 僾儗乕僋億僀儞僩偲偲偟偰愝掕偝傟偰偄傞偐偳偆偐敾掕
+	//! プレークポイントととして設定されているかどうか判定
 	bool IsBreakPoint( const tjs_char *filename, tjs_int lineno ) {
 		return BreakPoints.IsBreakPoint( filename, lineno );
 	}
@@ -953,14 +953,14 @@ private:
 	HWND GetSelfWindowHandle() {
 		return Application->GetHandle();
 	}
-	//! 僽儗乕僋敪惗
+	//! ブレーク発生
 	void BreakOccur( tTJSInterCodeContext* ctx ) {
 		SendBreak();
 		SendStackTrace();
 		SendLocalValue( ctx );
 		SendClassValue( ctx );
 	}
-	// 弶婜忣曬傪憲偭偰偔傟傞傛偆偵梫媮偡傞偲摨帪偵彂偒崬傒懳徾傾僪儗僗傪捠抦偡傞
+	// 初期情報を送ってくれるように要求すると同時に書き込み対象アドレスを通知する
 	void RequestSetting() {
 		if( DebuggerHwnd != INVALID_HANDLE_VALUE ) {
 			HWND hwnd = TVPGetApplicationWindowHandle();
@@ -989,22 +989,22 @@ private:
 		if( DebuggerHwnd == INVALID_HANDLE_VALUE ) return;
 		if( !::IsDebuggerPresent() ) return;
 
-		BreakOccur( ctx );	// 僽儗乕僋埵抲偲僗僞僢僋僩儗乕僗傪憲傞丅屻偱儘乕僇儖曄悢傕
+		BreakOccur( ctx );	// ブレーク位置とスタックトレースを送る。後でローカル変数も
 		while(true) {
 			ClearCommand();
 			::DebugBreak();	// Break!
 			if( HandleDebuggerMessage() ) {
-				// 婎杮揑偵偼丄1夞偺僽儗乕僋偱慡僨乕僞傪傕傜偊傞偺偑偄偄偗偳丄
-				// 1MB偵偍偝傑傜側偄偲偒偼巇曽側偄丅
+				// 基本的には、1回のブレークで全データをもらえるのがいいけど、
+				// 1MBにおさまらないときは仕方ない。
 				break;
 			}
 		}
 		ClearCommand();
 		StepNest = 0;
 	}
-	//! @return 幚峴奐巒偡傞偐偳偆偐
-	//! @retval true : 僐儅儞僪撉傒庢傝姰椆
-	//! @retval false : 懕偒偺僐儅儞僪偑偁傞偼偢側偺偱丄嵞搙僽儗乕僋偟偰僐儅儞僪傪摼傞
+	//! @return 実行開始するかどうか
+	//! @retval true : コマンド読み取り完了
+	//! @retval false : 続きのコマンドがあるはずなので、再度ブレークしてコマンドを得る
 	bool HandleDebuggerMessage() {
 		int count = GetNumOfCommands();
 		const DebuggerCommand* cmd = GetFirstCommand();
@@ -1029,20 +1029,20 @@ private:
 					break;
 				default:
 					assert(0);
-					// 偙偙偵偼棃側偄偼偢
+					// ここには来ないはず
 					return true;
 			}
 			cmd = GetNextCommand(cmd);
 		}
 		return false;
 	}
-	// 掆巭梫媮偑棃偰偄傞偐偳偆偐挷傋傞
+	// 停止要求が来ているかどうか調べる
 	void HandleBreakCommand() {
 		int count = GetNumOfCommands();
 		if( count ) {
 			const DebuggerCommand* cmd = GetFirstCommand();
 			if( GetCommand(cmd) == DBGEV_GER_BREAK ) {
-				// 僽儗乕僋梫媮
+				// ブレーク要求
 				TypeOfExec = EXEC_STOP;
 				ClearCommand();
 			}
@@ -1104,13 +1104,13 @@ private:
 	}
 
 };
-// 柤慜僐儗僋僔儑儞
-// 僼傽僀儖柤偲偐僋儔僗柤偲偐娭悢柤偲偐曄悢柤傪擖傟偰丄僀儞僨僢僋僗偵曄姺偟偰娗棟偡傞
+// 名前コレクション
+// ファイル名とかクラス名とか関数名とか変数名を入れて、インデックスに変換して管理する
 class NameIndexCollection
 {
 protected:
-	std::map<std::wstring,int> NameWithID;	//!< 柤慜偲ID偺儁傾
-	std::vector<const std::wstring*> Names;	//!< 巜掕僀儞僨僢僋僗偺柤慜
+	std::map<std::wstring,int> NameWithID;	//!< 名前とIDのペア
+	std::vector<const std::wstring*> Names;	//!< 指定インデックスの名前
 
 public:
 	int GetID( const std::wstring& name ) {
@@ -1118,13 +1118,13 @@ public:
 		if( i != NameWithID.end() ) {
 			return i->second;
 		}
-		// 尒晅偐傜側偄偺偱捛壛偡傞
-		int index = Names.size();	// 攝楍偺嵟屻偺梫慺斣崋傪摼傞
+		// 見付からないので追加する
+		int index = Names.size();	// 配列の最後の要素番号を得る
 		typedef std::pair<std::map<std::wstring,int>::iterator, bool> name_result_t;
-		name_result_t ret = NameWithID.insert( std::make_pair( name, index ) );	// 梫慺斣崋偱憓擖
+		name_result_t ret = NameWithID.insert( std::make_pair( name, index ) );	// 要素番号で挿入
 		assert( ret.second );
-		const std::wstring* name_ref = &((*(ret.first)).first);	// 憓擖偟偨柤慜偺億僀儞僩傪摼傞
-		Names.push_back( name_ref );	// 偦偺億僀儞僞傪攝楍偵曐懚偡傞
+		const std::wstring* name_ref = &((*(ret.first)).first);	// 挿入した名前のポイントを得る
+		Names.push_back( name_ref );	// そのポインタを配列に保存する
 		return index;
 	}
 	const std::wstring* GetName( int id ) const {
@@ -1153,8 +1153,8 @@ void TJSDebuggerGetScopeKey( ScopeKey& scope, const tjs_char* classname, const t
 
 
 struct LocalVariableKey {
-	int VarIndex;	//!< 曄悢柤僀儞僨僢僋僗
-	int RegAddr;	//!< 儗僕僗僞傾僪儗僗
+	int VarIndex;	//!< 変数名インデックス
+	int RegAddr;	//!< レジスタアドレス
 
 	LocalVariableKey( int var, int reg )
 	: VarIndex(var), RegAddr(reg)
@@ -1203,13 +1203,13 @@ public:
 			i->second.push_back( ClassVariableKey( varindex, regaddr ) );
 			return;
 		}
-		// 尒晅偐傜側偄偺偱捛壛偡傞
+		// 見付からないので追加する
 		typedef std::pair<iterator, bool> result_t;
 		result_t ret = Variables.insert( std::make_pair( classindex, std::list<ClassVariableKey>() ) );
 		assert( ret.second );
 		ret.first->second.push_back( LocalVariableKey( varindex, regaddr ) );
 	}
-	// 曄悢柤偲抣偺儕僗僩傪摼傞
+	// 変数名と値のリストを得る
 	void GetVars( const tjs_char* classname, tTJSVariant* ra, tTJSVariant* da, std::list<std::wstring>& values ) {
 		values.clear();
 		if( ra == NULL || da == NULL ) return;
@@ -1268,11 +1268,11 @@ public:
 
 		iterator i = Variables.find( scope );
 		if( i != Variables.end() ) {
-			// 婛偵僉乕偑懚嵼偡傞偺偱丄偦偙偵捛壛偡傞
+			// 既にキーが存在するので、そこに追加する
 			i->second.push_back( LocalVariableKey(varindex,regaddr) );
 			return;
 		}
-		// 尒晅偐傜側偄偺偱捛壛偡傞
+		// 見付からないので追加する
 		typedef std::pair<iterator, bool> result_t;
 		result_t ret = Variables.insert( std::make_pair( scope, std::list<LocalVariableKey>() ) );
 		assert( ret.second );
@@ -1296,7 +1296,7 @@ public:
 		ClearVar( scope );
 	}
 
-	// 曄悢柤偲抣偺儕僗僩傪摼傞
+	// 変数名と値のリストを得る
 	void GetVars( const ScopeKey& scope, tTJSVariant* ra, std::list<std::wstring>& values ) {
 		values.clear();
 		if( ra == NULL ) return;
@@ -1318,7 +1318,7 @@ public:
 			}
 		}
 	}
-	// 曄悢柤偲抣偺儕僗僩傪摼傞
+	// 変数名と値のリストを得る
 	void GetVars( const tjs_char* classname, const tjs_char* funcname, const tjs_char* filename, int codeoffset, tTJSVariant* ra, std::list<std::wstring>& values ) {
 		ScopeKey scope;
 		TJSDebuggerGetScopeKey( scope, classname, funcname, filename, codeoffset );
@@ -1328,7 +1328,7 @@ public:
 static LocalVariableCollection LocalVariableCollectionData;
 static ClassVariableCollection ClassVariableCollectionData;
 
-// codeoffset 娭悢僐乕儖慜偺僐乕僪偺僆僼僙僢僩
+// codeoffset 関数コール前のコードのオフセット
 void TJSDebuggerAddLocalVariable( const tjs_char* classname, const tjs_char* funcname, const tjs_char* filename, int codeoffset, const tjs_char* varname, int regaddr ) {
 	LocalVariableCollectionData.SetVar( classname, funcname, filename, codeoffset, varname, regaddr );
 }
@@ -1349,7 +1349,7 @@ void TJSDebuggerClearLocalVariable( const tjs_char* classname, const tjs_char* f
 	LocalVariableCollectionData.ClearVar( classname, funcname, filename, codeoffset );
 }
 
-// 僋儔僗儊儞僶曄悢偺弶婜壔
+// クラスメンバ変数の初期化
 void TJSDebuggerAddClassVariable( const tjs_char* classname, const tjs_char* varname, int regaddr ) {
 	ClassVariableCollectionData.SetVar( classname, varname, regaddr );
 }
@@ -1360,7 +1360,7 @@ void TJSDebuggerClearLocalVariable( const tjs_char* classname ) {
 	ClassVariableCollectionData.ClearVar( classname );
 }
 
-static Debugger DebuggerData;	//!< 僗僞僥傿僢僋偵偟偰偄傞偗偳丄僨僶僢僈桳岠側偲偒偵摦揑偵妋曐偟偨曽偑偄偄丅
+static Debugger DebuggerData;	//!< スタティックにしているけど、デバッガ有効なときに動的に確保した方がいい。
 
 //---------------------------------------------------------------------------
 void TJSDebuggerHook( tjs_int evtype, const tjs_char *filename, tjs_int lineno, tTJSInterCodeContext* ctx )

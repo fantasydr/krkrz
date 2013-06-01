@@ -68,11 +68,11 @@ void __stdcall GetAPIVersion(DWORD *ver)
 //---------------------------------------------------------------------------
 HRESULT __stdcall V2Link(iTVPFunctionExporter *exporter)
 {
-// 儊儌儕妋曐埵抲偱僽儗乕僋傪揬傞偵偼埲壓偺儊僜僢僪偱妋曐斣崋傪巜掕偡傞丅
-// 僽儗乕僋偑偐偐偭偨屻偼丄屇傃弌偟棜楌(僐乕儖僗僞僢僋)傪尒偰丄偳偙偱妋曐偝傟偨儊儌儕偑儕乕僋偟偰偄傞偐扵傞丅
-// _CrtDumpMemoryLeaks 偱僨僶僢僌弌椡偵儕乕僋偟偨儊儌儕偺妋曐斣崋偑弌傞偺偱丄偦傟傪擖傟傟偽OK
-// 妋曐弴偑晄妋掕側応崌偼恏偄偑丄僗僋儕僾僩傪屌掕偡傟偽傎傏摨偠弴偱妋曐偝傟傞偼偢丅
-//	_CrtSetBreakAlloc(53);	// 巜掕偝傟偨夞悢栚偺儊儌儕妋曐帪偵僽儗乕僋傪揬傞
+// メモリ確保位置でブレークを貼るには以下のメソッドで確保番号を指定する。
+// ブレークがかかった後は、呼び出し履歴(コールスタック)を見て、どこで確保されたメモリがリークしているか探る。
+// _CrtDumpMemoryLeaks でデバッグ出力にリークしたメモリの確保番号が出るので、それを入れればOK
+// 確保順が不確定な場合は辛いが、スクリプトを固定すればほぼ同じ順で確保されるはず。
+//	_CrtSetBreakAlloc(53);	// 指定された回数目のメモリ確保時にブレークを貼る
 
 	TVPInitImportStub(exporter);
 

@@ -6,7 +6,7 @@
 	See details of license at "license.txt"
 */
 //---------------------------------------------------------------------------
-//!@file "PassThrough" 昤夋僨僶僀僗娗棟
+//!@file "PassThrough" 描画デバイス管理
 //---------------------------------------------------------------------------
 #ifndef PASSTHROUGHDRAWDEVICE_H
 #define PASSTHROUGHDRAWDEVICE_H
@@ -15,37 +15,37 @@
 
 class tTVPDrawer;
 //---------------------------------------------------------------------------
-//! @brief		乽Pass Through乿僨僶僀僗(傕偭偲傕婎杮揑側昤夋傪峴偆偺傒偺僨僶僀僗)
+//! @brief		「Pass Through」デバイス(もっとも基本的な描画を行うのみのデバイス)
 //---------------------------------------------------------------------------
 class tTVPPassThroughDrawDevice : public tTVPDrawDevice
 {
 	typedef tTVPDrawDevice inherited;
 	HWND TargetWindow;
 	bool IsMainWindow;
-	tTVPDrawer * Drawer; //!< 昤夋傪峴偆傕偺
+	tTVPDrawer * Drawer; //!< 描画を行うもの
 
 public:
-	//! @brief	drawer偺僞僀僾
+	//! @brief	drawerのタイプ
 	enum tDrawerType
 	{
-		dtNone, //!< drawer 側偟
-		dtDrawDib, //!< 傕偭偲傕扨弮側drawer
-		dtDBGDI, // GDI 偵傛傞僟僽儖僶僢僼傽儕儞僌傪峴偆drawer
-		dtDBDD, // DirectDraw 偵傛傞僟僽儖僶僢僼傽儕儞僌傪峴偆drawer
-		dtDBD3D // Direct3D 偵傛傞僟僽儖僶僢僼傽儕儞僌傪峴偆drawer
+		dtNone, //!< drawer なし
+		dtDrawDib, //!< もっとも単純なdrawer
+		dtDBGDI, // GDI によるダブルバッファリングを行うdrawer
+		dtDBDD, // DirectDraw によるダブルバッファリングを行うdrawer
+		dtDBD3D // Direct3D によるダブルバッファリングを行うdrawer
 	};
 
 private:
-	tDrawerType DrawerType; //!< drawer 偺僞僀僾
-	tDrawerType PreferredDrawerType; //!< 巊偭偰梸偟偄 drawer 偺僞僀僾
+	tDrawerType DrawerType; //!< drawer のタイプ
+	tDrawerType PreferredDrawerType; //!< 使って欲しい drawer のタイプ
 
-	bool DestSizeChanged; //!< DestRect 偺僒僀僘偵曄峏偑偁偭偨偐
-	bool SrcSizeChanged; //!< SrcSize 偵曄峏偑偁偭偨偐
+	bool DestSizeChanged; //!< DestRect のサイズに変更があったか
+	bool SrcSizeChanged; //!< SrcSize に変更があったか
 
 public:
-	tTVPPassThroughDrawDevice(); //!< 僐儞僗僩儔僋僞
+	tTVPPassThroughDrawDevice(); //!< コンストラクタ
 private:
-	~tTVPPassThroughDrawDevice(); //!< 僨僗僩儔僋僞
+	~tTVPPassThroughDrawDevice(); //!< デストラクタ
 
 public:
 	void SetToRecreateDrawer() { DestroyDrawer(); }
@@ -61,25 +61,25 @@ public:
 	void SetPreferredDrawerType(tDrawerType type) { PreferredDrawerType = type; }
 	tDrawerType GetPreferredDrawerType() const { return PreferredDrawerType; }
 
-//---- LayerManager 偺娗棟娭楢
+//---- LayerManager の管理関連
 	virtual void TJS_INTF_METHOD AddLayerManager(iTVPLayerManager * manager);
 
-//---- 昤夋埵抲丒僒僀僘娭楢
+//---- 描画位置．サイズ関連
 	virtual void TJS_INTF_METHOD SetTargetWindow(HWND wnd, bool is_main);
 	virtual void TJS_INTF_METHOD SetDestRectangle(const tTVPRect & rect);
 	virtual void TJS_INTF_METHOD NotifyLayerResize(iTVPLayerManager * manager);
 
-//---- 嵞昤夋娭楢
+//---- 再描画関連
 	virtual void TJS_INTF_METHOD Show();
 
-//---- LayerManager 偐傜偺夋憸庴偗搉偟娭楢
+//---- LayerManager からの画像受け渡し関連
 	virtual void TJS_INTF_METHOD StartBitmapCompletion(iTVPLayerManager * manager);
 	virtual void TJS_INTF_METHOD NotifyBitmapCompleted(iTVPLayerManager * manager,
 		tjs_int x, tjs_int y, const void * bits, const BITMAPINFO * bitmapinfo,
 		const tTVPRect &cliprect, tTVPLayerType type, tjs_int opacity);
 	virtual void TJS_INTF_METHOD EndBitmapCompletion(iTVPLayerManager * manager);
 
-//---- 僨僶僢僌巟墖
+//---- デバッグ支援
 	virtual void TJS_INTF_METHOD SetShowUpdateRect(bool b);
 
 };

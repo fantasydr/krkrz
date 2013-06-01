@@ -2,8 +2,8 @@
 /*! @file
 @brief IMediaSeeking Proxy
 
-IMediaSeeking偺屇傃弌偟傪戙棟偡傞丅
-僺儞偑僜乕僗僼傿儖僞偺IMediaSeeking傪巊梡偟偨偄応崌側偳偵巊偆
+IMediaSeekingの呼び出しを代理する。
+ピンがソースフィルタのIMediaSeekingを使用したい場合などに使う
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
@@ -20,18 +20,18 @@ IMediaSeeking偺屇傃弌偟傪戙棟偡傞丅
 #include <assert.h>
 #include <atlcomcli.h>
 
-//! IMediaSeeking傊偺憖嶌傪扨偵傾僢僾僗僩儕乕儉傊搉偟偰張棟偡傞応崌偼丄CPosPassThru傪巊梡偡傞偑丄
-//! 僜乕僗僼傿儖僞偺僺儞偱IMediaSeeking傪幚憰偡傞昁梫偑偁傞応崌丄僜乕僗僼傿儖僞偺IMediaSeeking
-//! 僀儞僞乕僼僃僀僗傪屇傃弌偡帠偵側傞偙偲偑懡偄偲巚傢傟傞丅
-//! CMediaSeekingProxy偼偙偺傛偆側梡搑偵巊偆偨傔偺僋儔僗丅
+//! IMediaSeekingへの操作を単にアップストリームへ渡して処理する場合は、CPosPassThruを使用するが、
+//! ソースフィルタのピンでIMediaSeekingを実装する必要がある場合、ソースフィルタのIMediaSeeking
+//! インターフェイスを呼び出す事になることが多いと思われる。
+//! CMediaSeekingProxyはこのような用途に使うためのクラス。
 class CMediaSeekingProxy : public IMediaSeeking
 {
 private:
 //	CComPtr<IMediaSeeking>	m_Delegate;
-	IMediaSeeking*			m_Delegate;	// CComPtr 偱帩偮偲帺恎傪帩偮偙偲偵側偭偰奐曻偱偒側偔側傞偙偲偑偁傞
+	IMediaSeeking*			m_Delegate;	// CComPtr で持つと自身を持つことになって開放できなくなることがある
 	//----------------------------------------------------------------------------
-	//! @brief	  	IMediaSeeking傪庢摼偡傞
-	//! @return		IMediaSeeking僀儞僞乕僼僃僀僗
+	//! @brief	  	IMediaSeekingを取得する
+	//! @return		IMediaSeekingインターフェイス
 	//----------------------------------------------------------------------------
 	IMediaSeeking *MediaSeeking()
 	{
@@ -39,7 +39,7 @@ private:
 		return m_Delegate;
 	}
 
-	// delegate傪愝掕偟側偄惗惉傗僐僺乕傪嬛巭偡傞
+	// delegateを設定しない生成やコピーを禁止する
 	CMediaSeekingProxy();
 	CMediaSeekingProxy(const CMediaSeekingProxy& copy);
 	void operator =(const CMediaSeekingProxy& lhs);

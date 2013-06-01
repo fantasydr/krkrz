@@ -2,7 +2,7 @@
 ; this is a part of TVP (KIRIKIRI) software source.
 ; see other sources for license.
 ; (C)2001-2009 W.Dee <dee@kikyou.info> and contributors
-; c—Š‚Ş‚©‚çƒeƒLƒXƒgƒGƒfƒBƒ^‚³‚ñA­‚È‚­‚Æ‚àUTF-7‚Æ‚µ‚ÄŒë”F‚µ‚È‚¢‚Å‚­‚¾‚³‚¢‚¨Šè‚¢‚µ‚Ü‚·
+; ¡­îm¤à¤«¤é¥Æ¥­¥¹¥È¥¨¥Ç¥£¥¿¤µ¤ó¡¢ÉÙ¤Ê¤¯¤È¤âUTF-7¤È¤·¤ÆÕ`ÕJ¤·¤Ê¤¤¤Ç¤¯¤À¤µ¤¤¤ªîŠ¤¤¤·¤Ş¤¹
 
 ; TLG5 lossless graphic decompressor
 

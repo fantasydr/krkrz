@@ -1,6 +1,6 @@
 /****************************************************************************/
 /*! @file
-@brief 僽儗乕僋億僀儞僩偺偁傞僼傽僀儖偲峴斣崋傪曐帩偡傞
+@brief ブレークポイントのあるファイルと行番号を保持する
 
 -----------------------------------------------------------------------------
 	Copyright (C) T.Imoto <http://www.kaede-software.com>
@@ -18,31 +18,31 @@
 #include <assert.h>
 
 enum tTJSDBGHOOKType {
-	DBGHOOK_PREV_EXE_LINE,	//!< 儔僀儞幚峴帪
-	DBGHOOK_PREV_CALL,		//!< 娭悢僐乕儖
-	DBGHOOK_PREV_RETURN,	//!< 儕僞乕儞帪
-	DBGHOOK_PREV_EXCEPT,	//!< 椺奜幩弌帪
-	DBGHOOK_PREV_BREAK,		//!< 僗僋儕僾僩拞偺僽儗乕僋
+	DBGHOOK_PREV_EXE_LINE,	//!< ライン実行時
+	DBGHOOK_PREV_CALL,		//!< 関数コール
+	DBGHOOK_PREV_RETURN,	//!< リターン時
+	DBGHOOK_PREV_EXCEPT,	//!< 例外射出時
+	DBGHOOK_PREV_BREAK,		//!< スクリプト中のブレーク
 };
 // gee = debuggee
 // ger = debugger
 enum tTJSDBGEvent {
-	DBGEV_GEE_LOG = 0x8000,		//!< gee -> ger 儘僌傪弌椡 (悢抣偵摿偵堄枴偼側偄)
-	DBGEV_GEE_BREAK,			//!< gee -> ger 掆巭捠抦
-	DBGEV_GEE_STACK_TRACE,		//!< gee -> ger 僗僞僢僋僩儗乕僗忣曬捠抦
-	DBGEV_GEE_LOCAL_VALUE,		//!< gee -> ger 儘乕僇儖曄悢忣曬
-	DBGEV_GEE_REQUEST_SETTINGS,	//!< gee -> ger 椺奜捠抦桳柍丄僽儗乕僋億僀儞僩忣曬摍傪梫媮
-	DBGEV_GEE_CLASS_VALUE,		//!< gee -> ger 僋儔僗曄悢忣曬
+	DBGEV_GEE_LOG = 0x8000,		//!< gee -> ger ログを出力 (数値に特に意味はない)
+	DBGEV_GEE_BREAK,			//!< gee -> ger 停止通知
+	DBGEV_GEE_STACK_TRACE,		//!< gee -> ger スタックトレース情報通知
+	DBGEV_GEE_LOCAL_VALUE,		//!< gee -> ger ローカル変数情報
+	DBGEV_GEE_REQUEST_SETTINGS,	//!< gee -> ger 例外通知有無、ブレークポイント情報等を要求
+	DBGEV_GEE_CLASS_VALUE,		//!< gee -> ger クラス変数情報
 
-	DBGEV_GER_EXEC = 0x9000,	//!< ger -> gee 幚峴
-	DBGEV_GER_BREAK,			//!< ger -> gee 堦帪掆巭
-	DBGEV_GER_STEP,				//!< ger -> gee 僗僥僢僾
-	DBGEV_GER_TRACE,			//!< ger -> gee 僩儗乕僗
-	DBGEV_GER_RETURN,			//!< ger -> gee 儕僞乕儞
-	DBGEV_GER_BREAKPOINT_START,	//!< ger -> gee 僽儗乕僋億僀儞僩忣曬憲怣奐巒
-	DBGEV_GER_BREAKPOINT,		//!< ger -> gee 僽儗乕僋億僀儞僩忣曬
-	DBGEV_GER_BREAKPOINT_END,	//!< ger -> gee 僽儗乕僋億僀儞僩忣曬憲怣廔椆
-	DBGEV_GER_EXCEPTION_FLG,	//!< ger -> gee 椺奜敪惗帪偵掆巭偡傞偐偳偆偐
+	DBGEV_GER_EXEC = 0x9000,	//!< ger -> gee 実行
+	DBGEV_GER_BREAK,			//!< ger -> gee 一時停止
+	DBGEV_GER_STEP,				//!< ger -> gee ステップ
+	DBGEV_GER_TRACE,			//!< ger -> gee トレース
+	DBGEV_GER_RETURN,			//!< ger -> gee リターン
+	DBGEV_GER_BREAKPOINT_START,	//!< ger -> gee ブレークポイント情報送信開始
+	DBGEV_GER_BREAKPOINT,		//!< ger -> gee ブレークポイント情報
+	DBGEV_GER_BREAKPOINT_END,	//!< ger -> gee ブレークポイント情報送信終了
+	DBGEV_GER_EXCEPTION_FLG,	//!< ger -> gee 例外発生時に停止するかどうか
 };
 
 struct BreakpointLine {

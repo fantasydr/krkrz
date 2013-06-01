@@ -17,12 +17,12 @@ static inline const wchar_t * GetOptionInfoString()
 	if(GetACP() == 932) // 932 = Japan
 	{
 		return
-L"僨僶僢僌:ROT僥乕僽儖傊偺搊榐;儉乕價乕嵞惗帪偵"
-L"ROT(Running Object Table)傊搊榐偡傞偐偳偆偐偺愝掕偱偡丅"
-L"乽偡傞乿傪慖戰偡傞偲丄DirectX SDK晅懏偺GraphEdit傪梡偄偰"
-L"儉乕價乕嵞惗僩儔僽儖偺夝愅傪峴偆偙偲偑偱偒傑偡丅乽億乕僘乿傪慖戰偡傞偲丄偝傜偵"
-L"僌儔僼偺峔抸捈屻偵儊僢僙乕僕儃僢僋僗傪昞帵偟偰堦帪掆巭偡傞傛偆偵側傝傑偡丅|"
-L"movie_reg_rot|select,*no;偄偄偊,yes;偼偄,pause;億乕僘\n";
+L"デバッグ:ROTテーブルへの登録;ムービー再生時に"
+L"ROT(Running Object Table)へ登録するかどうかの設定です。"
+L"「する」を選択すると、DirectX SDK付属のGraphEditを用いて"
+L"ムービー再生トラブルの解析を行うことができます。「ポーズ」を選択すると、さらに"
+L"グラフの構築直後にメッセージボックスを表示して一時停止するようになります。|"
+L"movie_reg_rot|select,*no;いいえ,yes;はい,pause;ポーズ\n";
 	}
 	else
 	{

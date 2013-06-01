@@ -189,7 +189,7 @@ void TJS_INTF_METHOD tTJSNI_PhaseVocoder::Invalidate()
 //---------------------------------------------------------------------------
 void tTJSNI_PhaseVocoder::SetWindow(int window)
 {
-	// 抣傪僠僃僢僋
+	// 値をチェック
 	switch(window)
 	{
 	case 64: case 128: case 256: case 512: case 1024: case 2048: case 4096: case 8192:
@@ -203,7 +203,7 @@ void tTJSNI_PhaseVocoder::SetWindow(int window)
 //---------------------------------------------------------------------------
 void tTJSNI_PhaseVocoder::SetOverlap(int overlap)
 {
-	// 抣傪僠僃僢僋
+	// 値をチェック
 	switch(overlap)
 	{
 	case 0:
@@ -225,8 +225,8 @@ tTVPSampleAndLabelSource * tTJSNI_PhaseVocoder::Recreate(tTVPSampleAndLabelSourc
 	Source = source;
 	InputFormat = Source->GetFormat();
 	OutputFormat = InputFormat;
-	OutputFormat.IsFloat = true; // 弌椡偼 float
-	OutputFormat.BitsPerSample = 32; // 價僢僩偼 32 價僢僩
+	OutputFormat.IsFloat = true; // 出力は float
+	OutputFormat.BitsPerSample = 32; // ビットは 32 ビット
 	OutputFormat.BytesPerSample = 4;
 
 	return this;
@@ -269,30 +269,30 @@ void tTJSNI_PhaseVocoder::Fill(float * dest, tjs_uint samples, tjs_uint &written
 {
 	if(InputFormat.IsFloat && InputFormat.BitsPerSample == 32 && InputFormat.BytesPerSample == 4)
 	{
-		// 擖椡傕32bit僼儘乕僩側偺偱曄姺偺昁梫偼側偄
+		// 入力も32bitフロートなので変換の必要はない
 		Source->Decode(dest, samples, written, segments);
 	}
 	else
 	{
-		// 擖椡偑32bit僼儘乕僩偱偼側偄偺偱曄姺偺昁梫偑偁傞
-		// 偄偭偨傫曄姺僶僢僼傽偵偨傔傞
+		// 入力が32bitフロートではないので変換の必要がある
+		// いったん変換バッファにためる
 		tjs_uint buf_size = samples * InputFormat.BytesPerSample * InputFormat.Channels;
 		if(FormatConvertBufferSize < buf_size)
 		{
-			// 僶僢僼傽傪嵞妋曐
+			// バッファを再確保
 			if(FormatConvertBuffer) delete [] FormatConvertBuffer, FormatConvertBuffer = NULL;
 			FormatConvertBuffer = new char[buf_size];
 			FormatConvertBufferSize = buf_size;
 		}
-		// 僶僢僼傽偵僨僐乕僪傪峴偆
+		// バッファにデコードを行う
 		Source->Decode(FormatConvertBuffer, samples, written, segments);
-		// 曄姺傪峴偆
+		// 変換を行う
 		TVPConvertPCMToFloat(dest, FormatConvertBuffer, InputFormat, written);
 	}
 	if(written < samples)
 	{
-		// 僨僐乕僪偝傟偨僒儞僾儖悢偑梫媮偝傟偨僒儞僾儖悢偵枮偨側偄応崌
-		// 巆傝傪 0 偱杽傔傞
+		// デコードされたサンプル数が要求されたサンプル数に満たない場合
+		// 残りを 0 で埋める
 		memset(dest + written * InputFormat.Channels, 0,
 			(samples - written) * sizeof(float) * InputFormat.Channels);
 	}
@@ -303,7 +303,7 @@ void tTJSNI_PhaseVocoder::Decode(void *dest, tjs_uint samples, tjs_uint &written
 {
 	if(!PhaseVocoder)
 	{
-		// PhaseVocoder 傪嶌惉
+		// PhaseVocoder を作成
 		tRisaPhaseVocoderDSP * pv = new tRisaPhaseVocoderDSP(Window,
 					InputFormat.SamplesPerSec, InputFormat.Channels);
 		pv->SetFrequencyScale(Pitch);
@@ -326,7 +326,7 @@ void tTJSNI_PhaseVocoder::Decode(void *dest, tjs_uint samples, tjs_uint &written
 			size_t inputfree = PhaseVocoder->GetInputFreeSize();
 			if(inputfree >= inputhopsize)
 			{
-				// 擖椡偵僨乕僞傪棳偟崬傓
+				// 入力にデータを流し込む
 				float *p1, *p2;
 				size_t p1len, p2len;
 				PhaseVocoder->GetInputBuffer(inputhopsize, p1, p1len, p2, p2len);
@@ -334,29 +334,29 @@ void tTJSNI_PhaseVocoder::Decode(void *dest, tjs_uint samples, tjs_uint &written
 				tjs_uint total = 0;
 				Fill       (p1, p1len, filled, InputSegments), total += filled;
 				if(p2) Fill(p2, p2len, filled, InputSegments), total += filled;
-				if(total == 0) { break ; } // 傕偆僨乕僞偑側偄
+				if(total == 0) { break ; } // もうデータがない
 			}
 
-			// PhaseVocoder偺張棟傪峴偆
-			// 堦夞偺張棟偱偼丄擖椡傪inputhopsize暘徚旓偟丄弌椡傪
-			// outputhopsize暘弌椡偡傞丅
+			// PhaseVocoderの処理を行う
+			// 一回の処理では、入力をinputhopsize分消費し、出力を
+			// outputhopsize分出力する。
 			status = PhaseVocoder->Process();
 			if(status == tRisaPhaseVocoderDSP::psNoError)
 			{
-				// 張棟偵惉岟丅inputhopsize 暘偺僉儏乕傪 InputSegments 偐傜撉傒弌偟丄
-				// outputhopsize 暘偵僗働乕儖偟捈偟偨屻丄OutputSegments 偵彂偒崬傓丅
+				// 処理に成功。inputhopsize 分のキューを InputSegments から読み出し、
+				// outputhopsize 分にスケールし直した後、OutputSegments に書き込む。
 				InputSegments.Dequeue(queue, inputhopsize);
 				queue.Scale(outputhopsize);
 				OutputSegments.Enqueue(queue);
 			}
 		} while(status == tRisaPhaseVocoderDSP::psInputNotEnough);
 
-		// 擖椡偵僨乕僞傪棳偟崬傫偱偍偄偰弌椡偑柍偄偙偲偼側偄偑
-		// 梫媮偟偨僒僀僘傛傝傕彫偝偄応崌偼偁傞
+		// 入力にデータを流し込んでおいて出力が無いことはないが
+		// 要求したサイズよりも小さい場合はある
 		size_t output_ready = PhaseVocoder->GetOutputReadySize();
 		if(output_ready >= outputhopsize)
 		{
-			// PhaseVocoder 偺弌椡偐傜 dest 偵僐僺乕偡傞
+			// PhaseVocoder の出力から dest にコピーする
 			size_t copy_size = outputhopsize > samples ? samples : outputhopsize;
 			const float *p1, *p2;
 			size_t p1len, p2len;
@@ -369,13 +369,13 @@ void tTJSNI_PhaseVocoder::Decode(void *dest, tjs_uint samples, tjs_uint &written
 			written  += copy_size;
 			dest_buf += copy_size * OutputFormat.Channels;
 
-			// segment queue 偺彂偒弌偟
+			// segment queue の書き出し
 			OutputSegments.Dequeue(queue, copy_size);
 			segments.Enqueue(queue);
 		}
 		else
 		{
-			return; // 傕偆擖椡僨乕僞傕柍偗傟偽弌椡僨乕僞傕側偄
+			return; // もう入力データも無ければ出力データもない
 		}
 	}
 }

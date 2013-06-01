@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 /*
-	Risa [傝偝]      alias 媑棦媑棦3 [kirikiri-3]
+	Risa [りさ]      alias 吉里吉里3 [kirikiri-3]
 	 stands for "Risa Is a Stagecraft Architecture"
 	Copyright (C) 2000 W.Dee <dee@kikyou.info> and contributors
 
@@ -8,7 +8,7 @@
 */
 //---------------------------------------------------------------------------
 //! @file
-//! @brief Wave僙僌儊儞僩/儔儀儖僉儏乕娗棟
+//! @brief Waveセグメント/ラベルキュー管理
 //---------------------------------------------------------------------------
 #ifndef WAVESEGMENTH
 #define WAVESEGMENTH
@@ -18,32 +18,32 @@
 
 
 //---------------------------------------------------------------------------
-//! @brief 嵞惗僙僌儊儞僩忣曬
+//! @brief 再生セグメント情報
 //---------------------------------------------------------------------------
 struct tTVPWaveSegment
 {
-	//! @brief 僐儞僗僩儔僋僞
+	//! @brief コンストラクタ
 	tTVPWaveSegment(tjs_int64 start, tjs_int64 length)
 		{ Start = start; Length = FilteredLength = length; }
 	tTVPWaveSegment(tjs_int64 start, tjs_int64 length, tjs_int64 filteredlength)
 		{ Start = start; Length = length; FilteredLength = filteredlength; }
-	tjs_int64 Start; //!< 僆儕僕僫儖僨僐乕僟忋偱偺僙僌儊儞僩偺僗僞乕僩埵抲 (PCM 僒儞僾儖僌儔僯儏乕儖悢扨埵)
-	tjs_int64 Length; //!< 僆儕僕僫儖僨僐乕僟忋偱偺僙僌儊儞僩偺挿偝 (PCM 僒儞僾儖僌儔僯儏乕儖悢扨埵)
-	tjs_int64 FilteredLength; //!< 僼傿儖僞屻偺挿偝 (PCM 僒儞僾儖僌儔僯儏乕儖悢扨埵)
+	tjs_int64 Start; //!< オリジナルデコーダ上でのセグメントのスタート位置 (PCM サンプルグラニュール数単位)
+	tjs_int64 Length; //!< オリジナルデコーダ上でのセグメントの長さ (PCM サンプルグラニュール数単位)
+	tjs_int64 FilteredLength; //!< フィルタ後の長さ (PCM サンプルグラニュール数単位)
 };
 //---------------------------------------------------------------------------
 
 
 //---------------------------------------------------------------------------
-//! @brief 嵞惗儔儀儖忣曬
+//! @brief 再生ラベル情報
 //---------------------------------------------------------------------------
 struct tTVPWaveLabel
 {
-	//! @brief 僐儞僗僩儔僋僞
-	tjs_int64 Position; //!< 僆儕僕僫儖僨僐乕僟忋偱偺儔儀儖埵抲 (PCM 僒儞僾儖僌儔僯儏乕儖悢扨埵)
-	ttstr Name; //!< 儔儀儖柤
+	//! @brief コンストラクタ
+	tjs_int64 Position; //!< オリジナルデコーダ上でのラベル位置 (PCM サンプルグラニュール数単位)
+	ttstr Name; //!< ラベル名
 	tjs_int Offset;
-		/*!< 僆僼僙僢僩
+		/*!< オフセット
 			@note
 			This member will be set in tTVPWaveLoopManager::Render,
 			and will contain the sample granule offset from first decoding
@@ -88,7 +88,7 @@ struct tTVPWaveLabel
 	};
 #endif
 
-	//! @brief 僐儞僗僩儔僋僞
+	//! @brief コンストラクタ
 	tTVPWaveLabel()
 	{
 		Position = 0;
@@ -99,7 +99,7 @@ struct tTVPWaveLabel
 #endif
 	}
 
-	//! @brief 僐儞僗僩儔僋僞
+	//! @brief コンストラクタ
 	tTVPWaveLabel(tjs_int64 position, const ttstr & name, tjs_int offset)
 		: Position(position), Name(name), Offset(offset)
 	{
@@ -120,66 +120,66 @@ bool inline operator < (const tTVPWaveLabel & lhs, const tTVPWaveLabel & rhs)
 
 
 //---------------------------------------------------------------------------
-//! @brief Wave偺僙僌儊儞僩丒儔儀儖偺僉儏乕傪娗棟偡傞僋儔僗
+//! @brief Waveのセグメント．ラベルのキューを管理するクラス
 //---------------------------------------------------------------------------
 class tTVPWaveSegmentQueue
 {
-	// deque 偵傛傞 Segments 偲 Labels 偺攝楍丅
-	// 幚梡忋偼丄偙傟傜偺攝楍偵戝検偺僨乕僞偑擖傞偙偲偼傑偢側偄偺偱
-	// vector 偱廫暘側偺偐傕偟傟側偄偑 ...
-	std::deque<tTVPWaveSegment> Segments; //!< 僙僌儊儞僩偺攝楍
-	std::deque<tTVPWaveLabel> Labels; //!< 儔儀儖偺攝楍
+	// deque による Segments と Labels の配列。
+	// 実用上は、これらの配列に大量のデータが入ることはまずないので
+	// vector で十分なのかもしれないが ...
+	std::deque<tTVPWaveSegment> Segments; //!< セグメントの配列
+	std::deque<tTVPWaveLabel> Labels; //!< ラベルの配列
 
 public:
-	//! @brief		撪梕傪僋儕傾偡傞
+	//! @brief		内容をクリアする
 	void Clear();
 
-	//! @brief		僙僌儊儞僩偺攝楍傪摼傞
-	//! @return		僙僌儊儞僩偺攝楍
+	//! @brief		セグメントの配列を得る
+	//! @return		セグメントの配列
 	const std::deque<tTVPWaveSegment> & GetSegments() const { return Segments; }
 
-	//! @brief		儔儀儖偺攝楍傪摼傞
-	//! @return		儔儀儖偺攝楍
+	//! @brief		ラベルの配列を得る
+	//! @return		ラベルの配列
 	const std::deque<tTVPWaveLabel> & GetLabels() const { return Labels; }
 
-	//! @brief		tTVPWaveSegmentQueue傪僄儞僉儏乕偡傞
-	//! @param		queue		僄儞僉儏乕偟偨偄tTVPWaveSegmentQueue僆僽僕僃僋僩
+	//! @brief		tTVPWaveSegmentQueueをエンキューする
+	//! @param		queue		エンキューしたいtTVPWaveSegmentQueueオブジェクト
 	void Enqueue(const tTVPWaveSegmentQueue & queue);
 
-	//! @brief		tTVPWaveSegment傪僄儞僉儏乕偡傞
-	//! @param		queue		僄儞僉儏乕偟偨偄tTVPWaveSegment僆僽僕僃僋僩
+	//! @brief		tTVPWaveSegmentをエンキューする
+	//! @param		queue		エンキューしたいtTVPWaveSegmentオブジェクト
 	void Enqueue(const tTVPWaveSegment & segment);
 
-	//! @brief		tTVPWaveLabel傪僄儞僉儏乕偡傞
-	//! @param		queue		僄儞僉儏乕偟偨偄tTVPWaveLabel僆僽僕僃僋僩
-	//! @note		Offset 偼廋惓偝傟側偄偺偱拲堄
+	//! @brief		tTVPWaveLabelをエンキューする
+	//! @param		queue		エンキューしたいtTVPWaveLabelオブジェクト
+	//! @note		Offset は修正されないので注意
 	void Enqueue(const tTVPWaveLabel & Label);
 
-	//! @brief		tTVPWaveSegment偺攝楍傪僄儞僉儏乕偡傞
-	//! @param		queue		僄儞僉儏乕偟偨偄 std::dequeue<tTVPWaveSegment>僆僽僕僃僋僩
+	//! @brief		tTVPWaveSegmentの配列をエンキューする
+	//! @param		queue		エンキューしたい std::dequeue<tTVPWaveSegment>オブジェクト
 	void Enqueue(const std::deque<tTVPWaveSegment> & segments);
 
-	//! @brief		tTVPWaveLabel偺攝楍傪僄儞僉儏乕偡傞
-	//! @param		queue		僄儞僉儏乕偟偨偄 std::dequeue<tTVPWaveLabel>僆僽僕僃僋僩
+	//! @brief		tTVPWaveLabelの配列をエンキューする
+	//! @param		queue		エンキューしたい std::dequeue<tTVPWaveLabel>オブジェクト
 	void Enqueue(const std::deque<tTVPWaveLabel> & Labels);
 
-	//! @brief		愭摢偐傜巜掕挿偝暘傪僨僉儏乕偡傞
-	//! @param		dest		奿擺愭僉儏乕(撪梕偼僋儕傾偝傟傞)
-	//! @param		length		愗傝弌偡挿偝(僒儞僾儖僌儔僯儏乕儖扨埵)
+	//! @brief		先頭から指定長さ分をデキューする
+	//! @param		dest		格納先キュー(内容はクリアされる)
+	//! @param		length		切り出す長さ(サンプルグラニュール単位)
 	void Dequeue(tTVPWaveSegmentQueue & dest, tjs_int64 length);
 
-	//! @brief		偙偺僉儏乕偺慡懱偺挿偝傪摼傞
-	//! @return		偙偺僉儏乕偺挿偝 (僒儞僾儖僌儔僯儏乕儖扨埵)
+	//! @brief		このキューの全体の長さを得る
+	//! @return		このキューの長さ (サンプルグラニュール単位)
 	tjs_int64 GetFilteredLength() const;
 
-	//! @brief		偙偺僉儏乕偺挿偝傪曄壔偝偣傞
-	//! @param		new_total_filtered_length 怴偟偄僉儏乕偺挿偝 (僒儞僾儖僌儔僯儏乕儖扨埵)
-	//! @note		僉儏乕拞偺Segments 側偳偺挿偝傗 Labels偺埵抲偼慄宍曗娫偝傟傞
+	//! @brief		このキューの長さを変化させる
+	//! @param		new_total_filtered_length 新しいキューの長さ (サンプルグラニュール単位)
+	//! @note		キュー中のSegments などの長さや Labelsの位置は線形補間される
 	void Scale(tjs_int64 new_total_length);
 
-	//! @brief		僼傿儖僞偝傟偨埵抲偐傜僨僐乕僪埵抲傊曄姺傪峴偆
-	//! @param		pos 僼傿儖僞偝傟偨埵抲
-	//! @note		僨僐乕僪埵抲
+	//! @brief		フィルタされた位置からデコード位置へ変換を行う
+	//! @param		pos フィルタされた位置
+	//! @note		デコード位置
 	tjs_int64 FilteredPositionToDecodePosition(tjs_int64 pos) const;
 };
 //---------------------------------------------------------------------------

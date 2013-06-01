@@ -1,63 +1,63 @@
-僔僗僥儉慡斒:僨乕僞曐懚応強;媑棦媑棦偑條乆側僨乕僞傪曐懚偡傞応強傪巜掕偟傑偡丅[cr][cr]巜掕偡傞暥帤楍拞偵偼埲壓偺摿庩側暥帤楍傪杽傔崬傓帠偑偱偒傑偡丅[cr][cr]$(exepath)  偙偺暥帤楍偼System.exePath偵抲偒姺偊傜傟傑偡丅[cr][cr]$(appdatapath)  偙偺暥帤楍偼System.appDataPath偵抲偒姺偊傜傟傑偡丅[cr][cr]$(personalpath)  偙偺暥帤楍偼System.personalPath偵抲偒姺偊傟傑偡丅[cr][cr]$(vistapath)  偙偺暥帤楍偼丄OS偑Vista埲崀偺応崌偵偼$(appdatapath)偺撪梕偵丄Vista枹枮偺応崌偼$(exepath)偺撪梕偵抲偒姺偊傜傟傑偡丅[cr][cr]偙偺僆僾僔儑儞偺抣偼丄System.dataPath 僾儘僷僥傿偱庢摼偡傞偙偲偑偱偒傑偡丅|datapath|string(255),*$(exepath)\savedata
-僔僗僥儉慡斒:張棟僂僃僀僩;僩儔儞僕僔儑儞(夋柺愗傝懼偊)帪側偳偵丄奺張棟傪僂僃僀僩傪偐偗側偑傜摿掕偺帪娫娫妘偱屇傃弌偡偙偲偵傛傝偵CPU偺巊梡傪惂尷偟丄CPU巊梡棪傪掅尭偝偣傞偐偳偆偐偺愝掕偱偡丅[cr][cr]乽僂僃僀僩傪偐偗側偄乿傪巜掕偡傞偲僂僃僀僩傪偐偗偢偵幚峴偡傞偨傔丄僩儔儞僕僔儑儞(夋柺愗傝懼偊)帪偵CPU傪100%巊偄愗傞帠偵側傝傑偡丅[cr][cr]12乣120(Hz)偺奺悢抣傪愝掕偡傞偲丄偦偺廃婜偱張棟傪峴偄傑偡丅悢抣偑彫偝偗傟偽彫偝偄傎偳CPU傊偺晧扴偼彫偝偔側傝傑偡偑丄摦嶌偑側傔傜偐偱柍偔側傞壜擻惈偑偁傝傑偡丅娐嫬偵傛偭偰偼偁傑傝岠壥偑側偄偙偲傕偁傝偊傑偡丅[cr][cr]偙偺愝掕偼丄僌儔僼傿僢僋-悅捈摨婜懸偪偑乽巊梡偡傞乿偺愝掕偺応崌偼柍帇偝傟傑偡丅|contfreq|select,*0;僂僃僀僩傪偐偗側偄,12;12Hz,15;15Hz,25;25Hz,30;30Hz,45;45Hz,50;50Hz,60;60Hz,70;70Hz,75;75Hz,80;80Hz,83;83Hz,90;90Hz,93;93Hz,100;100Hz,107;107Hz,120;120Hz
-僔僗僥儉慡斒:儊儌儕巊梡検;巊梡偡傞儊儌儕偺巊梡検偺愝掕偱偡丅[cr][cr]乽掅偄乿傪慖戰偡傞偲乽捠忢乿傪慖戰偟偨偲偒傛傝傕儊儌儕傪愡栺偟偰巊梡偡傞傛偆偵側傝傑偡偑丄僷僼僅乕儅儞僗偼掅壓偟傑偡丅乽掅偄乿傪慖戰偡傞偲丄乽僌儔僼傿僢僋-夋憸僉儍僢僔儏惂尷乿偼嫮惂揑偵乽僉儍僢僔儏傪峴傢側偄乿偺愝掕偱偁傞偲尒側偝傟傑偡丅|memusage|select,*normal;捠忢,low;掅偄
-僔僗僥儉慡斒:僞僀儅偺惛搙;僞僀儅偺惛搙偺愝掕偱偡丅[cr][cr]乽崅偄乿傪巜掕偡傞偲摦嶌偺傕偨偮偒偑夵慞偝傟傞応崌偑偁傝傑偡偑丄僷僼僅乕儅儞僗偑掅壓偡傞応崌傕偁傝傑偡丅偙偺僆僾僔儑儞偼丄NT 宯 OS (NT/2000/XP/Vista埲崀) 偵偍偄偰偺傒堄枴傪帩偪傑偡丅|timerprec|select,*normal;捠忢,higher;傗傗崅偄,high;崅偄
-僔僗僥儉慡斒:僞僀儅僀儀儞僩嫋梕検惂尷;僞僀儅僀儀儞僩偺嫋梕検傪惂尷偡傞偐偳偆偐偺愝掕偱偡丅[cr][cr]乽偡傞乿傪巜掕偡傞偲丄張棟偺抶偄僐儞僺儏乕僞忋偱僔僗僥儉偺張棟偑捛偄偮偐偢丄儐乕僓偺憖嶌偑偟偯傜偔側傞忬嫷傪夞旔偱偒傞応崌偑偁傝傑偡丅|laxtimer|select,*no;偟側偄,yes;偡傞
-僔僗僥儉慡斒:掅桪愭搙;僩儔儞僕僔儑儞(夋柺愗傝懼偊)帪側偳偵幚峴偺桪愭搙傪掅偔偡傞偐偳偆偐偺愝掕偱偡丅[cr][cr]乽偡傞乿傪巜掕偡傞偲僩儔儞僕僔儑儞帪偺壒旘傃側偳偑夵慞偝傟傞応崌偑偁傝傑偡丅|lowpri|select,*no;偟側偄,yes;偡傞
-擖椡:儅僂僗儂僀乕儖夞揮専弌曽朄;儅僂僗儂僀乕儖偺夞揮傪偳偺傛偆偵専弌偡傞偐偺愝掕偱偡丅[cr][cr]乽巊傢側偄乿傪慖戰偡傞偲儅僂僗儂僀乕儖偼巊梡晄壜擻偵側傝傑偡丅[cr][cr]乽DirectInput乿傪慖戰偡傞偲DirectInput傪巊梡偡傞傛偆偵側傝傑偡丅[cr][cr]乽僂傿儞僪僂儊僢僙乕僕乿傪慖戰偡傞偲DirectInput傪巊梡偣偢偵儅僂僗儂僀乕儖偺夞揮傪専弌偡傞傛偆偵側傝傑偡丅[cr][cr]愝掕傪曄偊傞偲儅僂僗儂僀乕儖娭楢偺晄嬶崌偑夵慞偝傟傞壜擻惈偑偁傝傑偡丅|wheel|select,no;巊傢側偄,*dinput;DirectInput,message;僂傿儞僪僂儊僢僙乕僕
-擖椡:僷僢僪巊梡壜斲;僷僢僪(僕儑僀僗僥傿僢僋)傪巊梡偡傞偐偳偆偐偺愝掕偱偡丅[cr][cr]乽巊傢側偄乿傪慖戰偡傞偲僷僢僪偼巊梡晄壜擻偵側傝傑偡丅僷僢僪傪惓忢偵専弌偱偒側偄応崌丄偁傞偄偼僷僢僪傪惓忢偵巊梡偱偒側偄応崌偵乽巊傢側偄乿偺愝掕偵偟偰偔偩偝偄丅|joypad|select,no;巊傢側偄,*dinput;巊偆
-擖椡:僷僢僪僉乕儕僺乕僩僨傿儗僀;僷僢僪(僕儑僀僗僥傿僢僋)偺僉乕儕僺乕僩傑偱偺帪娫傪儈儕昩扨埵偱巜掕偟傑偡丅|paddelay|select,100;100儈儕昩,200;200儈儕昩,300;300儈儕昩,400;400儈儕昩,*500;500儈儕昩,600;600儈儕昩,700;700儈儕昩,800;800儈儕昩,900;900儈儕昩,1000;1000儈儕昩,-1;僉乕儕僺乕僩偟側偄
-擖椡:僷僢僪僉乕儕僺乕僩娫妘;僷僢僪(僕儑僀僗僥傿僢僋)偺僉乕儕僺乕僩偺娫妘傪儈儕昩扨埵偱巜掕偟傑偡丅抣偑彫偝偄傎偳儕僺乕僩偑崅懍偵側傝傑偡丅|padinterval|select,10;10儈儕昩,20;20儈儕昩,*30;30儈儕昩,40;40儈儕昩,50;50儈儕昩,60;60儈儕昩,70;70儈儕昩,80;80儈儕昩,90;90儈儕昩,100;100儈儕昩,200;200儈儕昩,300;300儈儕昩,400;400儈儕昩,500;500儈儕昩,700;700儈儕昩,1000;1000儈儕昩
-擖椡:IME忬懺惂屼;IME(擔杮岅側偳偺曄姺擖椡僜僼僩)偺忬懺惂屼傪峴偆偐偳偆偐偺愝掕偱偡丅[cr][cr]乽峴傢側偄乿傪慖戰偡傞偲丄擔杮岅側偳偺擖椡偑偱偒側偄晄嬶崌傪夞旔偱偒傞壜擻惈偑偁傝傑偡丅|controlime|select,*yes;峴偆,no;峴傢側偄
-僒僂儞僪:CD-DA 壒検惂屼曽朄;CD-DA 壒検惂屼曽幃偺愝掕偱偡丅[cr][cr]僼僃乕僪傾僂僩側偳丄CD 偺壒検惂屼偑偆傑偔偄偐側偄応崌偼暿偺愝掕偵偟偰傒偰偔偩偝偄丅|cdvol|select,*mixer;僒僂儞僪僇乕僪儈僉僒,direct;CD-ROM僪儔僀僽捈愙惂屼
-僒僂儞僪:PCM 僨僐乕僪僗儗僢僪桪愭弴埵;PCM偺僨僐乕僪傪峴偆僗儗僢僪偺幚峴桪愭弴埵偱偡丅[cr][cr]嵞惗拞偵壒旘傃傪偡傞応崌偵桪愭弴埵傪崅偔偟偰傒偰偔偩偝偄丅|wsdecpri|select,0;傾僀僪儖(嵟掅),*1;掅偄,2;捠忢埲壓,3;捠忢,4;捠忢埲忋,5;崅偄
-僒僂儞僪:DirectSound 僜僼僩僂僃傾儈僉僔儞僌;DirectSound偱僜僼僩僂僃傾傪巊偭偰儈僉僔儞僌傪峴偆偐偳偆偐偺愝掕偱偡丅[cr][cr]愝掕傪曄峏偡傞偲 壒愗傟傗壒旘傃偑夵慞偝傟傞応崌偑偁傝傑偡丅|wssoft|select,*yes;僜僼僩僂僃傾偺傒,no;僴乕僪僂僃傾桪愭
-僒僂儞僪:DirectSound 僙僇儞僟儕僶僢僼傽嵞惗惉;DirectSound偱僙僇儞僟儕僶僢僼傽傪忢偵嵞惗惉偡傞偐偳偆偐偺愝掕偱偡丅[cr][cr]愝掕傪曄峏偡傞偲 嵞惗奐巒帪偺壒愗傟傗壒旘傃偑夵慞偝傟傞応崌偑偁傝傑偡丅|wsrecreate|select,yes;忢偵嵞惗惉,*no;昁梫偵墳偠偰嵞惗惉
-僒僂儞僪:DirectSound 僙僇儞僟儕僶僢僼傽挿偝;DirectSound僙僇儞僟儕僶僢僼傽偺挿偝傪巜掕偟傑偡丅[cr][cr]堦斒偵挿偔偲傞偲嵞惗偑埨掕偟傑偡偑丄儊儌儕傪徚旓偟傑偡丅|wsl1len|select,250;250ms,375;375ms,500;500ms,625;625ms,750;750ms,875;875ms,*1000;1000ms,1125;1125ms,1250;1250ms,1375;1375ms,1500;1500ms,1625;1625ms,1750;1750ms,1875;1875ms,2000;2000ms,2125;2125ms,2250;2250ms,2375;2375ms,2500;2500ms,2625;2625ms,2750;2750ms,2875;2875ms,3000;3000ms,3125;3125ms,3250;3250ms,3375;3375ms,3500;3500ms,3625;3625ms,3750;3750ms,3875;3875ms,4000;4000ms,4500;4500ms,5000;5000ms,5500;5500ms,6000;6000ms,6500;6500ms,7000;7000ms,7500;7500ms,8000;8000ms,8500;8500ms,9000;9000ms,9500;9500ms,10000;10000ms
-僒僂儞僪:DirectSound 僙僇儞僟儕曗彆僶僢僼傽挿偝;DirectSound僙僇儞僟儕僶僢僼傽梡偺曗彆僶僢僼傽偺挿偝傪巜掕偟傑偡丅[cr][cr]堦斒偵挿偔偲傞偲嵞惗偑埨掕偟傑偡偑丄儊儌儕傪徚旓偟傑偡丅|wsl2len|select,250;250ms,375;375ms,500;500ms,625;625ms,750;750ms,875;875ms,*1000;1000ms,1125;1125ms,1250;1250ms,1375;1375ms,1500;1500ms,1625;1625ms,1750;1750ms,1875;1875ms,2000;2000ms,2125;2125ms,2250;2250ms,2375;2375ms,2500;2500ms,2625;2625ms,2750;2750ms,2875;2875ms,3000;3000ms,3125;3125ms,3250;3250ms,3375;3375ms,3500;3500ms,3625;3625ms,3750;3750ms,3875;3875ms,4000;4000ms,4500;4500ms,5000;5000ms,5500;5500ms,6000;6000ms,6500;6500ms,7000;7000ms,7500;7500ms,8000;8000ms,8500;8500ms,9000;9000ms,9500;9500ms,10000;10000ms
-僒僂儞僪:DirectSound 儈儏乕僩;DirectSound 偱傾僾儕働乕僔儑儞偑旕傾僋僥傿僽偁傞偄偼嵟彫壔偟偨嵺偵儈儏乕僩偡傞偐(壒検傪壓偘傞偐)偳偆偐偺愝掕偱偡丅[cr][cr]乽儈儏乕僩偟側偄乿傪慖戰偡傞偲儈儏乕僩偼峴傢傟傑偣傫丅[cr][cr]乽嵟彫壔帪乿傗乽旕傾僋僥傿僽乿偱偼丄偦傟偧傟傾僾儕働乕僔儑儞偑嵟彫壔偟偨偲偒丄旕傾僋僥傿僽偵側偭偨偲偒偵儈儏乕僩偝傟傑偡丅|wsmute|select,*never;儈儏乕僩偟側偄,minimize;嵟彫壔帪,deactive;旕傾僋僥傿僽帪
-僒僂儞僪:DirectSound 儈儏乕僩壒検;乽DirectSound 儈儏乕僩乿偱偺儈儏乕僩帪偺壒検偺愝掕偱偡丅[cr][cr]乽0%乿傪巜掕偡傞偲姰慡偵柍壒偲側傝丄乽50%乿傪巜掕偡傞偲敿暘偺壒検(栺-6dB)偲側傝傑偡丅|wsmutevol|select,*0;0%(-亣dB),5;5%(-26.0dB),10;10%(-20.0dB),15;15%(-16.5dB),20;20%(-14.0dB),25;25%(-12.0dB),30;30%(-10.5dB),35;35%(-9.1dB),40;40%(-8.0dB),45;45%(-6.9dB),50;50%(-6.0dB),55;55%(-5.2dB),60;60%(-4.4dB),65;65%(-3.7dB),70;70%(-3.1dB),75;75%(-2.5dB),80;80%(-1.9dB),85;85%(-1.4dB),90;90%(-0.9dB),95;95%(-0.4dB)
-僒僂儞僪:DirectSound 嫮惂僼僅乕儅僢僩曄姺;DirectSound偵嵞惗偝偣傞PCM僨乕僞傪丄巜掕偺宍幃偵嫮惂揑偵曄姺偡傞偐偳偆偐偺愝掕偱偡丅[cr][cr]愝掕傪曄峏偡傞偲嵞惗帪偺忈奞偑夵慞偡傞応崌偑偁傝傑偡丅[cr][cr]乽16bit惍悢儌僲儔儖偵曄姺乿傪慖戰偡傞偲乽DirectSound 嫮惂4ch嵞惗乿偺愝掕偼柍帇偝傟傑偡丅|wsforcecnv|select,*none;曄姺偟側偄,i16;16bit惍悢偵曄姺,i16m;16bit惍悢儌僲儔儖偵曄姺
-僒僂儞僪:DirectSound 3D惂屼;DirectSound偱3D惂屼傪峴偆偐偳偆偐偺愝掕偱偡丅[cr][cr]乽偡傞乿傪慖戰偡傞偲丄僒僂儞僪偺3D惂屼偑桳岠偵側傝傑偡(傾僾儕働乕僔儑儞偵傛偭偰偼岠壥偑偁傝傑偣傫)丅傑偨丄懡偔偺娐嫬偱偼丄僗僥儗僆傗儌僲儔儖偺僒僂儞僪偑丄僒儔僂儞僪僗僺乕僇乕傪巊梡偡傞傛偆偵奼挘偝傟偰嵞惗偝傟傑偡丅乽偡傞乿傪慖戰偡傞偲乽DirectSound 嫮惂4ch嵞惗乿偺愝掕偼柍帇偝傟傑偡丅|wsuse3d|select,*no;偟側偄,yes;偡傞
-僒僂儞僪:DirectSound 嫮惂4ch嵞惗;DirectSound偱僗僥儗僆傗儌僲儔儖偺僒僂儞僪傪嵞惗偡傞応崌偵丄嫮惂揑偵儕傾僗僺乕僇乕傪娷傓4ch偱嵞惗偝偣傞偐偳偆偐偺愝掕偱偡丅[cr][cr]乽偡傞乿傪愝掕偡傞偲丄僗僥儗僆傗儌僲儔儖偺僒僂儞僪偑僼儘儞僩僗僺乕僇乕偱偟偐嵞惗偝傟側偄娐嫬偱傕丄僼儘儞僩僗僺乕僇乕偲儕傾僗僺乕僇乕偺椉曽偱僒僂儞僪傪嵞惗偝偣傞偙偲偑偱偒傑偡丅|wsexpandquad|select,*no;偟側偄,yes;偡傞
-僒僂儞僪:DirectSound 僾儔僀儅儕僶僢僼傽廃攇悢;DirectSound偺僾儔僀儅儕僶僢僼傽偺嵞惗廃攇悢偺愝掕偱偡丅[cr][cr]愝掕傪曄峏偟偰傕嵞惗忬懺偵曄壔偑側偄応崌傕偁傝傑偡丅|wsfreq|select,8000;8kHz,11025;11kHz,12000;12kHz,16000;16kHz,22050;22kHz,24000;24kHz,32000;32kHz,*44100;44.1kHz,48000;48kHz,64000;64kHz,88200;88.2kHz,96000;96kHz
-僒僂儞僪:DirectSound 僾儔僀儅儕僶僢僼傽價僢僩悢;DirectSound偺僾儔僀儅儕僶僢僼傽偺嵞惗價僢僩悢偺愝掕偱偡丅[cr][cr]愝掕傪曄峏偟偰傕嵞惗忬懺偵曄壔偑側偄応崌傕偁傝傑偡丅|wsbits|select,i8;8bit惍悢,*i16;16bit惍悢,i24;24bit惍悢,i32;32bit惍悢,f32;32bit晜摦彫悢揰悢
-僒僂儞僪:DirectSound 僾儔僀儅儕僶僢僼傽嵞惗惂屼;DirectSound偺僾儔僀儅儕僶僢僼傽偵懳偟偰嵞惗/掆巭偺惂屼傪峴偆偐偳偆偐偺愝掕偱偡丅[cr][cr]愝掕傪曄峏偡傞偲 壒愗傟傗壒旘傃偑夵慞偝傟傞応崌偑偁傝傑偡丅|wscontrolpri|select,*yes;惂屼傪峴偆,no;惂屼傪峴傢側偄
-僒僂儞僪:DirectSound 僾儔僀儅儕僶僢僼傽愝掕帋峴儗儀儖;DirectSound僾儔僀儅儕僶僢僼傽偺僼僅乕儅僢僩傪巜掕偡傞嵺偵偳傟傎偳懡偔偺愝掕傪帋偡偐偺愝掕偱偡丅[cr][cr]儗儀儖 0 傪巜掕偡傞偲丄僗僥儗僆 16bit惍悢偺僼僅乕儅僢僩偺愝掕傪帋峴偟傑偡丅[cr][cr]儗儀儖 1 傪巜掕偡傞偲 儗儀儖 0 傪帋峴偡傞慜偵丄僔僗僥儉偺僗僺乕僇乕愝掕偵廬偭偨僠儍儞僱儖悢丄16bit惍悢偱偺僼僅乕儅僢僩偺愝掕傪帋峴偟傑偡丅[cr][cr]儗儀儖 2 傪巜掕偡傞偲 儗儀儖 1 傪帋峴偡傞慜偵丄乽DirectSound 僾儔僀儅儕僶僢僼傽價僢僩悢乿偱巜掕偝傟偨價僢僩悢丄僔僗僥儉偺僗僺乕僇乕愝掕偵廬偭偨僠儍儞僱儖悢丄WAVEFORMATEX 峔憿懱偵傛傞僼僅乕儅僢僩偺愝掕傪帋峴偟傑偡丅[cr][cr]乽偡傋偰乿傪巜掕偡傞偲 儗儀儖 2 傪帋峴偡傞慜偵丄儗儀儖 2 偲摨條偺愝掕偱 WAVEFORMATEXTENSIBLE 峔憿懱偵傛傞僼僅乕儅僢僩偺巜掕傪帋峴偟傑偡丅|wspritry|select,0;儗儀儖0,1;儗儀儖1,2;儗儀儖2,*all;偡傋偰
-僌儔僼傿僢僋:夋憸僉儍僢僔儏惂尷;夋憸僉儍僢僔儏偵巊梡偡傞儊儌儕偺嵟戝抣偺愝掕偱偡丅[cr][cr]幚峴拞偵昿斏偵僗儚僢僾偑婲偙傞応崌偼乽僉儍僢僔儏傪峴傢側偄乿偵愝掕偡傞偲夵慞偝傟傞応崌偑偁傝傑偡丅|gclim|select,*auto;帺摦(悇彠),0;僉儍僢僔儏傪峴傢側偄,4;4MB,8;8MB,12;12MB,16;16MB,20;20MB,24;24MB,28;28MB,32;32MB,36;36MB,40;40MB,44;44MB,48;48MB,52;52MB,56;56MB,60;60MB,64;64MB,68;68MB,72;72MB,76;76MB,80;80MB,84;84MB,88;88MB,92;92MB,96;96MB,100;100MB,104;104MB,108;108MB,112;112MB,116;116MB,120;120MB,124;124MB,128;128MB,132;132MB,136;136MB,140;140MB,144;144MB,148;148MB,152;152MB,156;156MB,160;160MB,164;164MB,168;168MB,172;172MB,176;176MB,180;180MB,184;184MB,188;188MB,192;192MB,196;196MB,200;200MB,204;204MB,208;208MB,212;212MB,216;216MB,220;220MB,224;224MB,228;228MB,232;232MB,236;236MB,240;240MB,244;244MB,248;248MB,252;252MB,256;256MB
-僌儔僼傿僢僋:僼儖僗僋儕乕儞愗傝懼偊曽朄;僼儖僗僋儕乕儞愗傝懼偊偵梡偄傞曽朄偺愝掕偱偡丅[cr][cr]愝掕傪曄偊傞偲僼儖僗僋儕乕儞愗傝懼偊偵娭偡傞栤戣偑夵慞偝傟傞応崌偑偁傝傑偡丅|fsmethod|select,*ddraw;DirectDraw,cds;ChangeDisplaySettings API
-僌儔僼傿僢僋:僼儖僗僋儕乕儞帪偺僇儔乕儌乕僪;僼儖僗僋儕乕儞帪偺僇儔乕儌乕僪偺愝掕偱偡丅[cr][cr]乽曄偊側偄乿傪慖戰偡傞偲旕僼儖僗僋儕乕儞帪偺僇儔乕儌乕僪偲摨偠偵側傝傑偡丅|fsbpp|select,*nochange;曄偊側偄,16;16bit僇儔乕,24;24bit僇儔乕,32;32bit僇儔乕
-僌儔僼傿僢僋:僼儖僗僋儕乕儞帪偺夋柺夝憸搙;僼儖僗僋儕乕儞帪偺夋柺夝憸搙偺愝掕偱偡丅[cr][cr]乽帺摦乿傪慖戰偡傞偲丄嵟傕揔偟偰偄傞夋柺夝憸搙傪帺摦揑偵慖戰偟偰巊梡偟傑偡丅偙偺応崌偼丄廲墶斾偑摨偠夝憸搙偺偆偪丄僾儘僌儔儉撪偱巜掕偝傟偰偄傞夝憸搙偵僼傿僢僩偡傞夝憸搙偑偁傟偽偦傟傪慖戰偟傑偡偑丄偦偺傛偆側夝憸搙偑側偄応崌偼夝憸搙傪曄偊偢偵僄儞僕儞懁偱奼戝昞帵傪偟傑偡丅偙偺愝掕偺応崌偼丄乽僼儖僗僋儕乕儞帪偺僄儞僕儞偵傛傞奼戝昞帵乿偵乽偟側偄乿偑巜掕偝傟偰偄偰傕丄忢偵乽儌僯僞撪偵僼傿僢僩偝偣傞乿偱偁傞偲傒側偝傟傑偡丅[cr][cr]乽廲墶斾偑摨偠夝憸搙乿傪慖戰偡傞偲丄夋柺偺廲墶斾偑旕僼儖僗僋儕乕儞帪偲摨偠夝憸搙偺偆偪丄傕偭偲傕嬤偄夝憸搙偑慖戰偝傟傑偡丅[cr][cr]乽嵟傕嬤偄夝憸搙乿傪慖戰偡傞偲丄僾儘僌儔儉撪偱巜掕偝傟偰偄傞夝憸搙偵嵟傕嬤偄夝憸搙偑慖戰偝傟傑偡偑丄旕僼儖僗僋儕乕儞帪偲摨偠廲墶斾偺夝憸搙偑慖戰偝傟傞曐徹偼偁傝傑偣傫丅僽儔僂儞娗儌僯僞傗丄夋柺偺傾僗儁僋僩斾傪曐偭偨傑傑偱偺奼戝昞帵偵懳墳偟偰偄傞塼徎儌僯僞側偳偱偼丄偙偺愝掕偑揔偟偰偄傞応崌偑偁傝傑偡丅[cr][cr]乽夝憸搙傪曄偊側偄乿傪慖戰偡傞偲丄旕僼儖僗僋儕乕儞帪偺夝憸搙偺傑傑丄夝憸搙傪曄峏偟側偔側傝傑偡丅|fsres|select,*auto;帺摦,proportional;廲墶斾偑摨偠夝憸搙,nearest;嵟傕嬤偄夝憸搙,nochange;夝憸搙傪曄偊側偄
-僌儔僼傿僢僋:僼儖僗僋儕乕儞帪偺僄儞僕儞偵傛傞奼戝昞帵;僼儖僗僋儕乕儞帪偵丄僄儞僕儞懁偵傛傞夋柺偺奼戝傪偳偺傛偆偵峴偆偐偳偆偐傪巜掕偟傑偡丅[cr][cr]乽儌僯僞撪偵僼傿僢僩偝偣傞乿傪慖戰偡傞偲昁梫偵墳偠偰僄儞僕儞偵傛傞夋柺偺奼戝傪峴偄傑偡丅偙偺嵺丄夋柺偼儌僯僞撪偵偦偺偡傋偰偑廂傑傞傛偆偵奼戝偝傟傑偡丅夋柺偺偆偪丄傕偟忋壓傗嵍塃偵寗娫偑偱偒傞応崌偼偦偙偼恀偭崟偵側傝傑偡丅[cr][cr]乽儌僯僞偄偭傁偄偵奼戝偡傞乿傪慖戰偡傞偲僄儞僕儞偵傛傞夋柺偺奼戝傪峴偄傑偡偑丄寗娫偑偱偒側偄傛偆偵傔偄偄偭傁偄傑偱奼戝偑峴傢傟傑偡丅偙偺偨傔丄儌僯僞奜偵偼傒弌傞椞堟偑敪惗偡傞壜擻惈偑偁傝傑偡丅[cr][cr]乽偟側偄乿傪慖戰偡傞偲僄儞僕儞偵傛傞夋柺偺奼戝偼忢偵峴傢傟傑偣傫丅[cr][cr]乽僼儖僗僋儕乕儞帪偺夋柺夝憸搙乿偑乽帺摦乿偺応崌偼丄偙偺愝掕傪乽偟側偄乿偵偟偰傕忢偵乽儌僯僞撪偵僼傿僢僩偝偣傞乿偱偁傞偲尒側偝傟傑偡丅|fszoom|select,*inner;儌僯僞撪偵僼傿僢僩偝偣傞,outer;儌僯僞偄偭傁偄偵奼戝偡傞,no;偟側偄
-僌儔僼傿僢僋:夋憸墘嶼偺暘妱張棟;夋憸墘嶼傪嵶偐偔暘妱偟偰峴偆偐偳偆偐偺愝掕偱偡丅[cr][cr]愝掕傪曄偊傞偲丄夋柺偺偪傜偮偒傪梷偊傜傟傞応崌偑偁傝傑偡偑丄昤夋偺僷僼僅乕儅儞僗偑掅壓偡傞応崌傕偁傝傑偡丅[cr][cr]乽僟僽儖僶僢僼傽儕儞僌乿傪巊梡偡傞愝掕偵偟偨応崌偼丄偙偺愝掕偼乽偟側偄乿埲奜偵愝掕偡傞偙偲傪偍姪傔偟傑偡丅|gsplit|select,*yes;偡傞,int;僀儞僞乕儗乕僗暘妱,bidi;憃曽岦暘妱,no;偟側偄
-僌儔僼傿僢僋:僟僽儖僶僢僼傽儕儞僌;僟僽儖僶僢僼傽儕儞僌傪峴偆偐偳偆偐偺愝掕偱偡丅[cr][cr]乽峴偆乿傪巜掕偡傞偲丄夋柺偺偪傜偮偒傪梷偊傜傟傞応崌偑偁傝傑偡偑丄昤夋偺僷僼僅乕儅儞僗偼掅壓偟傑偡丅|usedb|select,*no;巊梡偟側偄,yes;峴偆
-僌儔僼傿僢僋:僟僽儖僶僢僼傽儕儞僌曽幃;僟僽儖僶僢僼傽儕儞僌傪峴偆偐偳偆偐偺愝掕偱偡丅[cr][cr]乽帺摦乿傪慖戰偡傞偲丄DirectDraw偁傞偄偼Direct3D偺偳偪傜偐僷僼僅乕儅儞僗偺椙偄曽傪帺摦揑偵慖戰偟傑偡丅[cr][cr]乽GDI傪巊梡乿傗乽DirectDraw傪巊梡乿傗乽Direct3D傪巊梡乿偼丄懠偺愝掕偱偼栤戣偑敪惗偡傞応崌偵慖戰偟偰偔偩偝偄丅|dbstyle|select,*auto;帺摦,gdi;GDI傪巊梡,ddraw;DirectDraw傪巊梡,d3d;Direct3D傪巊梡
-僌儔僼傿僢僋:奼戝昞帵帪偺僗儉乕僕儞僌;奼戝昞帵帪偺僗儉乕僕儞僌傪峴偆偐偳偆偐偺愝掕偱偡丅[cr][cr]偙偙偱尵偆僗儉乕僕儞僌偲偼丄乽僼儖僗僋儕乕儞帪偺夋柺夝憸搙乿偺愝掕偵傛偭偰偼僄儞僕儞偑夋柺傪奼戝偟傑偡偑丄偙偺嵺偵乽側傔傜偐偵乿奼戝傪峴偆偐偳偆偐傪昞偟傑偡丅僗儉乕僕儞僌傪峴傢側偄応崌偼乽僟僽儖僶僢僼傽儕儞僌乿偵乽GDI巊梡乿偑慖戰偝傟偨暔偲尒側偝傟傑偡丅|smoothzoom|select,*yes;偡傞,no;偟側偄
-僌儔僼傿僢僋:悅捈摨婜懸偪;僩儔儞僕僔儑儞(夋柺愗傝懼偊)側偳偱僨傿僗僾儗僀偺悅捈摨婜傪懸偭偰偐傜昤夋偡傞偐偳偆偐偺愝掕偱偡丅[cr][cr]愝掕傪曄偊傞偲丄夋柺偺偪傜偮偒傪梷偊傜傟傞応崌偑偁傝傑偡偑丄昤夋偺僷僼僅乕儅儞僗偑掅壓偡傞応崌傕偁傝傑偡丅|waitvsync|select,yes;巊梡偡傞,*no;巊梡偟側偄
-僌儔僼傿僢僋:傾儞僠僄僀儕傾僗暥帤昤夋曽幃;傾儞僠僄僀儕傾僗暥帤昤夋曽朄偺愝掕偱偡丅[cr][cr]愝掕傪曄偊傞偲丄暥帤偑昞帵偝傟側偄丄暥帤偑曵傟傞側偳偺栤戣偑夵慞偝傟傞応崌偑偁傝傑偡丅[cr][cr]儕僒儞僾儕儞僌(4亊4) 偼 儕僒儞僾儕儞僌(8亊8) 傛傝傕崅懍偱偡偑丄惛搙偼掅偔側傝傑偡丅|aamethod|select,*auto;帺摦,res8;儕僒儞僾儕儞僌(8亊8),res4;儕僒儞僾儕儞僌(4亊4),api;Windows API
-僌儔僼傿僢僋:JPEG夋憸僨僐乕僪惛搙;JPEG夋憸偺僨僐乕僪(揥奐)偺惛搙偺愝掕偱偡丅[cr][cr]乽崅偄乿傪慖戰偡傞偲惛搙偼崅偔側傝傑偡偑丄僨僐乕僪偼掅懍偵側傝傑偡丅[cr][cr]乽掅偄乿傪慖戰偡傞偲惛搙偼掅偔側傝傑偡偑丄僨僐乕僪偼崅懍偵側傝傑偡丅|jpegdec|select,high;崅偄,*normal;昗弨,low;掅偄
-僌儔僼傿僢僋:昤夋僗儗僢僪悢;昤夋張棟帪偵丄巊梡偡傞僗儗僢僪偺悢偺愝掕偱偡丅[cr][cr]昤夋僗儗僢僪傪暋悢愝掕偡傞偙偲偱丄儅儖僠僐傾娐嫬偱偺昤夋僷僼僅乕儅儞僗傪岦忋偝偣傜傟傞壜擻惈偑偁傝傑偡偑丄媡偵僷僼僅乕儅儞僗偑掅壓偡傞応崌傕偁傝傑偡丅|drawthread|select,auto;帺摦(僾儘僙僢僒悢偵摍偟偄僗儗僢僪),*1;1僗儗僢僪,2;2僗儗僢僪,4;4僗儗僢僪,8;8僗儗僢僪
-CPU 婡擻:MMX;CPU 擣幆僩儔僽儖偑婲偙偭偨偲偒偵挷惍偟偰偔偩偝偄丅|cpummx|select,*yes;巊梡壜擻偱偁傟偽巊梡偡傞,no;巊梡壜擻偱偁偭偰傕巊梡偟側偄,force;嫮惂揑偵巊梡偡傞
-CPU 婡擻:3DNow!;CPU 擣幆僩儔僽儖偑婲偙偭偨偲偒偵挷惍偟偰偔偩偝偄丅|cpu3dn|select,*yes;巊梡壜擻偱偁傟偽巊梡偡傞,no;巊梡壜擻偱偁偭偰傕巊梡偟側偄,force;嫮惂揑偵巊梡偡傞
-CPU 婡擻:SSE;CPU 擣幆僩儔僽儖偑婲偙偭偨偲偒偵挷惍偟偰偔偩偝偄丅|cpusse|select,*yes;巊梡壜擻偱偁傟偽巊梡偡傞,no;巊梡壜擻偱偁偭偰傕巊梡偟側偄,force;嫮惂揑偵巊梡偡傞
-CPU 婡擻:CMOVcc;CPU 擣幆僩儔僽儖偑婲偙偭偨偲偒偵挷惍偟偰偔偩偝偄丅|cpucmov|select,*yes;巊梡壜擻偱偁傟偽巊梡偡傞,no;巊梡壜擻偱偁偭偰傕巊梡偟側偄,force;嫮惂揑偵巊梡偡傞
-CPU 婡擻:Enhanced 3DNow!;CPU 擣幆僩儔僽儖偑婲偙偭偨偲偒偵挷惍偟偰偔偩偝偄丅|cpue3dn|select,*yes;巊梡壜擻偱偁傟偽巊梡偡傞,no;巊梡壜擻偱偁偭偰傕巊梡偟側偄,force;嫮惂揑偵巊梡偡傞
-CPU 婡擻:EMMX (MMX2);CPU 擣幆僩儔僽儖偑婲偙偭偨偲偒偵挷惍偟偰偔偩偝偄丅|cpuemmx|select,*yes;巊梡壜擻偱偁傟偽巊梡偡傞,no;巊梡壜擻偱偁偭偰傕巊梡偟側偄,force;嫮惂揑偵巊梡偡傞
-CPU 婡擻:SSE2;CPU 擣幆僩儔僽儖偑婲偙偭偨偲偒偵挷惍偟偰偔偩偝偄丅|cpusse2|select,*yes;巊梡壜擻偱偁傟偽巊梡偡傞,no;巊梡壜擻偱偁偭偰傕巊梡偟側偄,force;嫮惂揑偵巊梡偡傞
-僨僶僢僌:僨僶僢僌儌乕僪;僨僶僢僌儌乕僪傪桳岠偵偡傞偐偳偆偐偺愝掕偱偡丅[cr][cr]乽桳岠乿傪慖戰偡傞偲媑棦媑棦偼僨僶僢僌儌乕僪偱摦嶌偟丄偄偔偮偐偺僨僶僢僌巟墖婡擻偑桳岠偵側傝傑偡偑丄幚峴懍搙偼掅壓偟傑偡丅|debug|select,*no;柍岠,yes;桳岠
-僨僶僢僌:僼傽僀儖傊偺儘僌;僐儞僜乕儖偺儘僌傪僼傽僀儖偵弌椡偡傞偐偳偆偐偺愝掕偱偡丅[cr][cr]乽弌椡偡傞乿傪慖戰偡傞偲僼傽僀儖偵捛壛偟側偑傜儘僌傪弌椡偟傑偡丅[cr][cr]乽僋儕傾乿傪慖戰偡傞偲僼傽僀儖偺撪梕傪僋儕傾偟偰偐傜儘僌傪奐巒偟傑偡丅|forcelog|select,*no;弌椡偟側偄,yes;弌椡偡傞,clear;僋儕傾
-僨僶僢僌:僄儔乕帪偺僼傽僀儖傊偺儘僌;僄儔乕偑敪惗偟偨偲偒偵丄帺摦揑偵僐儞僜乕儖偺儘僌傪僼傽僀儖傊弌椡偡傞偐偳偆偐偺愝掕偱偡丅[cr][cr]乽弌椡偡傞乿傪慖戰偡傞偲僼傽僀儖偵捛壛偟側偑傜儘僌傪弌椡偟傑偡丅[cr][cr]乽僋儕傾乿傪慖戰偡傞偲僼傽僀儖偺撪梕傪僋儕傾偟偰偐傜儘僌傪奐巒偟傑偡丅|logerror|select,no;弌椡偟側偄,*yes;弌椡偡傞,clear;僋儕傾
-僨僶僢僌:僨僶僢僌巟墖僂傿儞僪僂;僨僶僢僌巟墖僂傿儞僪僂(僐儞僜乕儖丄娔帇幃側偳)傪桳岠偵偡傞偐偳偆偐偺愝掕偱偡丅|debugwin|select,*yes;桳岠,no;柍岠
-儂僢僩僉乕:僐儞僩儘乕儔;乽僐儞僩儘乕儔乿傪昞帵偡傞偨傔偺儂僢僩僉乕傪巜掕偟偰偔偩偝偄丅|hkcontroller|string(30),*Shift+F1
-儂僢僩僉乕:僗僋儕僾僩僄僨傿僞;乽僗僋儕僾僩僄僨傿僞乿傪昞帵偡傞偨傔偺儂僢僩僉乕傪巜掕偟偰偔偩偝偄丅|hkeditor|string(30),*Shift+F2
-儂僢僩僉乕:娔帇幃;乽娔帇幃乿傪昞帵偡傞偨傔偺儂僢僩僉乕傪巜掕偟偰偔偩偝偄丅|hkwatch|string(30),*Shift+F3
-儂僢僩僉乕:僐儞僜乕儖;乽僐儞僜乕儖乿傪昞帵偡傞偨傔偺儂僢僩僉乕傪巜掕偟偰偔偩偝偄丅|hkconsole|string(30),*Shift+F4
-儂僢僩僉乕:娐嫬忣曬偺僐僺乕;娐嫬忣曬傪僋儕僢僾儃乕僪偵僐僺乕偡傞偨傔偺儂僢僩僉乕傪巜掕偟偰偔偩偝偄丅|hkclipenvinfo|string(30),*Ctrl+F11
-儂僢僩僉乕:挊嶌尃忣曬偺昞帵;挊嶌尃忣曬傪昞帵偡傞偨傔偺儂僢僩僉乕傪巜掕偟偰偔偩偝偄丅|hkabout|string(30),*Ctrl+F12
-儂僢僩僉乕:峏怴嬮宍偺昞帵;儗僀儎偺峏怴嬮宍傪昞帵偡傞偨傔偺儂僢僩僉乕傪巜掕偟偰偔偩偝偄丅|hkupdaterect|string(30),*Shift+F11
-儂僢僩僉乕:儗僀儎峔憿偺僟儞僾;儗僀儎峔憿傪僐儞僜乕儖偵僟儞僾偡傞偨傔偺儂僢僩僉乕傪巜掕偟偰偔偩偝偄丅|hkdumplayer|string(30),*Shift+F12
-僔僗僥儉屳姺惈:傾乕僇僀僽僨儕儈僞;傾乕僇僀僽柤偲傾乕僇僀僽撪僗僩儗乕僕柤傪嬫愗傞暥帤偺愝掕偱偡丅[cr][cr]2.19 beta 14 傛傝丄僨僼僅儖僩偑 '#' 偐傜 '>' 偵曄峏偵側傝傑偟偨丅2.19 beta 14 枹枮傪憐掕偟偰偄傞傾僾儕働乕僔儑儞偱偼丄偙偺愝掕傪 '#' 偵偟側偄偲摦嶌偟側偄壜擻惈偑偁傝傑偡丅|arcdelim|select,*>;'>'傪巊偆,#;'#'傪巊偆
-僔僗僥儉屳姺惈:屻抲'!'墘嶼巕偺摦嶌;屻抲'!'墘嶼巕(eval)偺摦嶌偺愝掕偱偡丅[cr][cr]TJS2偺屻抲'!'墘嶼巕偼幃傪global僐儞僥僉僗僩忋偱幚峴偟偰偄傑偟偨偑丄2.21 beta 9 傛傝丄this 僐儞僥僉僗僩忋偱幚峴偡傞傛偆偵側傝傑偟偨丅2.21 beta 9 枹枮傪憐掕偟偰偄傞傾僾儕働乕僔儑儞偱偼丄偙偺愝掕傪乽global忋偱幃傪昡壙乿偵偟側偄偲摦嶌偟側偄壜擻惈偑偁傝傑偡丅|evalcontext|select,*this;this忋偱幃傪昡壙,global;global忋偱幃傪昡壙
-僔僗僥儉屳姺惈:Layer.holdAlpha偺僨僼僅儖僩;Layer.holdAlpha 僾儘僷僥傿(傾儖僼傽僠儍儞僱儖傪曐岇偡傞偐)偺僨僼僅儖僩偺抣偱偡丅[cr][cr]2.23 beta 5 枹枮傪憐掕偟偰偄傞傾僾儕働乕僔儑儞偱偼丄偙偺愝掕傪乽恀乿偵偟側偄偲惓忢偵摦嶌偟側偄壜擻惈偑偁傝傑偡丅|holdalpha|select,*false;婾,true;恀
-僔僗僥儉屳姺惈:慜抲'*'墘嶼巕偺摦嶌;慜抲'*'墘嶼巕(僾儘僷僥傿傾僋僙僗塈夞)偺愝掕偱偡丅[cr][cr]TJS2偺慜抲'*'墘嶼巕偼丄僾儘僷僥傿僆僽僕僃僋僩偦偺傕偺傪丄僾儘僷僥傿僴儞僪儔傪夘偝偢偵庢傝弌偡墘嶼巕偱偟偨偑丄2.25 beta 1 傛傝丄偙偺婡擻傪帩偮墘嶼巕偼慜抲偺'&'偲側傝丄慜抲'*'墘嶼巕偼僾儘僷僥傿僆僽僕僃僋僩偺僾儘僷僥傿僴儞僪儔傪摦嶌偝偣傞偨傔偺墘嶼巕偲側傝傑偟偨丅2.25 beta 1 枹枮傪憐掕偟偰偄傞傾僾儕働乕僔儑儞偱偼丄偙偺愝掕傪乽2.25枹枮偲屳姺乿偵偟側偄偲惓忢偵摦嶌偟側偄壜擻惈偑偁傝傑偡丅|unaryaster|select,*default;2.25埲崀偺摦嶌,compat;2.25枹枮偲屳姺
-僔僗僥儉屳姺惈:DirectSound儃儕儏乕儉僇乕僽;DirectSound偺儃儕儏乕儉僇乕僽偱偡丅[cr][cr]DirectSound偺儃儕儏乕儉僇乕僽偼丄2.31 2011/6/14 傛傝丄傛傝捈姶揑側僇乕僽偵側傝傑偟偨丅|dsvolfactor|select,*3322;2.31 埲崀偺摦嶌,5000;2.31 枹枮偲屳姺
+システム全般:データ保存場所;吉里吉里が様々なデータを保存する場所を指定します。[cr][cr]指定する文字列中には以下の特殊な文字列を埋め込む事ができます。[cr][cr]$(exepath)  この文字列はSystem.exePathに置き換えられます。[cr][cr]$(appdatapath)  この文字列はSystem.appDataPathに置き換えられます。[cr][cr]$(personalpath)  この文字列はSystem.personalPathに置き換えれます。[cr][cr]$(vistapath)  この文字列は、OSがVista以降の場合には$(appdatapath)の内容に、Vista未満の場合は$(exepath)の内容に置き換えられます。[cr][cr]このオプションの値は、System.dataPath プロパティで取得することができます。|datapath|string(255),*$(exepath)\savedata
+システム全般:処理ウェイト;トランジション(画面切り替え)時などに、各処理をウェイトをかけながら特定の時間間隔で呼び出すことによりにCPUの使用を制限し、CPU使用率を低減させるかどうかの設定です。[cr][cr]「ウェイトをかけない」を指定するとウェイトをかけずに実行するため、トランジション(画面切り替え)時にCPUを100%使い切る事になります。[cr][cr]12～120(Hz)の各数値を設定すると、その周期で処理を行います。数値が小さければ小さいほどCPUへの負担は小さくなりますが、動作がなめらかで無くなる可能性があります。環境によってはあまり効果がないこともありえます。[cr][cr]この設定は、グラフィック-垂直同期待ちが「使用する」の設定の場合は無視されます。|contfreq|select,*0;ウェイトをかけない,12;12Hz,15;15Hz,25;25Hz,30;30Hz,45;45Hz,50;50Hz,60;60Hz,70;70Hz,75;75Hz,80;80Hz,83;83Hz,90;90Hz,93;93Hz,100;100Hz,107;107Hz,120;120Hz
+システム全般:メモリ使用量;使用するメモリの使用量の設定です。[cr][cr]「低い」を選択すると「通常」を選択したときよりもメモリを節約して使用するようになりますが、パフォーマンスは低下します。「低い」を選択すると、「グラフィック-画像キャッシュ制限」は強制的に「キャッシュを行わない」の設定であると見なされます。|memusage|select,*normal;通常,low;低い
+システム全般:タイマの精度;タイマの精度の設定です。[cr][cr]「高い」を指定すると動作のもたつきが改善される場合がありますが、パフォーマンスが低下する場合もあります。このオプションは、NT 系 OS (NT/2000/XP/Vista以降) においてのみ意味を持ちます。|timerprec|select,*normal;通常,higher;やや高い,high;高い
+システム全般:タイマイベント許容量制限;タイマイベントの許容量を制限するかどうかの設定です。[cr][cr]「する」を指定すると、処理の遅いコンピュータ上でシステムの処理が追いつかず、ユーザの操作がしづらくなる状況を回避できる場合があります。|laxtimer|select,*no;しない,yes;する
+システム全般:低優先度;トランジション(画面切り替え)時などに実行の優先度を低くするかどうかの設定です。[cr][cr]「する」を指定するとトランジション時の音飛びなどが改善される場合があります。|lowpri|select,*no;しない,yes;する
+入力:マウスホイール回転検出方法;マウスホイールの回転をどのように検出するかの設定です。[cr][cr]「使わない」を選択するとマウスホイールは使用不可能になります。[cr][cr]「DirectInput」を選択するとDirectInputを使用するようになります。[cr][cr]「ウィンドウメッセージ」を選択するとDirectInputを使用せずにマウスホイールの回転を検出するようになります。[cr][cr]設定を変えるとマウスホイール関連の不具合が改善される可能性があります。|wheel|select,no;使わない,*dinput;DirectInput,message;ウィンドウメッセージ
+入力:パッド使用可否;パッド(ジョイスティック)を使用するかどうかの設定です。[cr][cr]「使わない」を選択するとパッドは使用不可能になります。パッドを正常に検出できない場合、あるいはパッドを正常に使用できない場合に「使わない」の設定にしてください。|joypad|select,no;使わない,*dinput;使う
+入力:パッドキーリピートディレイ;パッド(ジョイスティック)のキーリピートまでの時間をミリ秒単位で指定します。|paddelay|select,100;100ミリ秒,200;200ミリ秒,300;300ミリ秒,400;400ミリ秒,*500;500ミリ秒,600;600ミリ秒,700;700ミリ秒,800;800ミリ秒,900;900ミリ秒,1000;1000ミリ秒,-1;キーリピートしない
+入力:パッドキーリピート間隔;パッド(ジョイスティック)のキーリピートの間隔をミリ秒単位で指定します。値が小さいほどリピートが高速になります。|padinterval|select,10;10ミリ秒,20;20ミリ秒,*30;30ミリ秒,40;40ミリ秒,50;50ミリ秒,60;60ミリ秒,70;70ミリ秒,80;80ミリ秒,90;90ミリ秒,100;100ミリ秒,200;200ミリ秒,300;300ミリ秒,400;400ミリ秒,500;500ミリ秒,700;700ミリ秒,1000;1000ミリ秒
+入力:IME状態制御;IME(日本語などの変換入力ソフト)の状態制御を行うかどうかの設定です。[cr][cr]「行わない」を選択すると、日本語などの入力ができない不具合を回避できる可能性があります。|controlime|select,*yes;行う,no;行わない
+サウンド:CD-DA 音量制御方法;CD-DA 音量制御方式の設定です。[cr][cr]フェードアウトなど、CD の音量制御がうまくいかない場合は別の設定にしてみてください。|cdvol|select,*mixer;サウンドカードミキサ,direct;CD-ROMドライブ直接制御
+サウンド:PCM デコードスレッド優先順位;PCMのデコードを行うスレッドの実行優先順位です。[cr][cr]再生中に音飛びをする場合に優先順位を高くしてみてください。|wsdecpri|select,0;アイドル(最低),*1;低い,2;通常以下,3;通常,4;通常以上,5;高い
+サウンド:DirectSound ソフトウェアミキシング;DirectSoundでソフトウェアを使ってミキシングを行うかどうかの設定です。[cr][cr]設定を変更すると 音切れや音飛びが改善される場合があります。|wssoft|select,*yes;ソフトウェアのみ,no;ハードウェア優先
+サウンド:DirectSound セカンダリバッファ再生成;DirectSoundでセカンダリバッファを常に再生成するかどうかの設定です。[cr][cr]設定を変更すると 再生開始時の音切れや音飛びが改善される場合があります。|wsrecreate|select,yes;常に再生成,*no;必要に応じて再生成
+サウンド:DirectSound セカンダリバッファ長さ;DirectSoundセカンダリバッファの長さを指定します。[cr][cr]一般に長くとると再生が安定しますが、メモリを消費します。|wsl1len|select,250;250ms,375;375ms,500;500ms,625;625ms,750;750ms,875;875ms,*1000;1000ms,1125;1125ms,1250;1250ms,1375;1375ms,1500;1500ms,1625;1625ms,1750;1750ms,1875;1875ms,2000;2000ms,2125;2125ms,2250;2250ms,2375;2375ms,2500;2500ms,2625;2625ms,2750;2750ms,2875;2875ms,3000;3000ms,3125;3125ms,3250;3250ms,3375;3375ms,3500;3500ms,3625;3625ms,3750;3750ms,3875;3875ms,4000;4000ms,4500;4500ms,5000;5000ms,5500;5500ms,6000;6000ms,6500;6500ms,7000;7000ms,7500;7500ms,8000;8000ms,8500;8500ms,9000;9000ms,9500;9500ms,10000;10000ms
+サウンド:DirectSound セカンダリ補助バッファ長さ;DirectSoundセカンダリバッファ用の補助バッファの長さを指定します。[cr][cr]一般に長くとると再生が安定しますが、メモリを消費します。|wsl2len|select,250;250ms,375;375ms,500;500ms,625;625ms,750;750ms,875;875ms,*1000;1000ms,1125;1125ms,1250;1250ms,1375;1375ms,1500;1500ms,1625;1625ms,1750;1750ms,1875;1875ms,2000;2000ms,2125;2125ms,2250;2250ms,2375;2375ms,2500;2500ms,2625;2625ms,2750;2750ms,2875;2875ms,3000;3000ms,3125;3125ms,3250;3250ms,3375;3375ms,3500;3500ms,3625;3625ms,3750;3750ms,3875;3875ms,4000;4000ms,4500;4500ms,5000;5000ms,5500;5500ms,6000;6000ms,6500;6500ms,7000;7000ms,7500;7500ms,8000;8000ms,8500;8500ms,9000;9000ms,9500;9500ms,10000;10000ms
+サウンド:DirectSound ミュート;DirectSound でアプリケーションが非アクティブあるいは最小化した際にミュートするか(音量を下げるか)どうかの設定です。[cr][cr]「ミュートしない」を選択するとミュートは行われません。[cr][cr]「最小化時」や「非アクティブ」では、それぞれアプリケーションが最小化したとき、非アクティブになったときにミュートされます。|wsmute|select,*never;ミュートしない,minimize;最小化時,deactive;非アクティブ時
+サウンド:DirectSound ミュート音量;「DirectSound ミュート」でのミュート時の音量の設定です。[cr][cr]「0%」を指定すると完全に無音となり、「50%」を指定すると半分の音量(約-6dB)となります。|wsmutevol|select,*0;0%(-∞dB),5;5%(-26.0dB),10;10%(-20.0dB),15;15%(-16.5dB),20;20%(-14.0dB),25;25%(-12.0dB),30;30%(-10.5dB),35;35%(-9.1dB),40;40%(-8.0dB),45;45%(-6.9dB),50;50%(-6.0dB),55;55%(-5.2dB),60;60%(-4.4dB),65;65%(-3.7dB),70;70%(-3.1dB),75;75%(-2.5dB),80;80%(-1.9dB),85;85%(-1.4dB),90;90%(-0.9dB),95;95%(-0.4dB)
+サウンド:DirectSound 強制フォーマット変換;DirectSoundに再生させるPCMデータを、指定の形式に強制的に変換するかどうかの設定です。[cr][cr]設定を変更すると再生時の障害が改善する場合があります。[cr][cr]「16bit整数モノラルに変換」を選択すると「DirectSound 強制4ch再生」の設定は無視されます。|wsforcecnv|select,*none;変換しない,i16;16bit整数に変換,i16m;16bit整数モノラルに変換
+サウンド:DirectSound 3D制御;DirectSoundで3D制御を行うかどうかの設定です。[cr][cr]「する」を選択すると、サウンドの3D制御が有効になります(アプリケーションによっては効果がありません)。また、多くの環境では、ステレオやモノラルのサウンドが、サラウンドスピーカーを使用するように拡張されて再生されます。「する」を選択すると「DirectSound 強制4ch再生」の設定は無視されます。|wsuse3d|select,*no;しない,yes;する
+サウンド:DirectSound 強制4ch再生;DirectSoundでステレオやモノラルのサウンドを再生する場合に、強制的にリアスピーカーを含む4chで再生させるかどうかの設定です。[cr][cr]「する」を設定すると、ステレオやモノラルのサウンドがフロントスピーカーでしか再生されない環境でも、フロントスピーカーとリアスピーカーの両方でサウンドを再生させることができます。|wsexpandquad|select,*no;しない,yes;する
+サウンド:DirectSound プライマリバッファ周波数;DirectSoundのプライマリバッファの再生周波数の設定です。[cr][cr]設定を変更しても再生状態に変化がない場合もあります。|wsfreq|select,8000;8kHz,11025;11kHz,12000;12kHz,16000;16kHz,22050;22kHz,24000;24kHz,32000;32kHz,*44100;44.1kHz,48000;48kHz,64000;64kHz,88200;88.2kHz,96000;96kHz
+サウンド:DirectSound プライマリバッファビット数;DirectSoundのプライマリバッファの再生ビット数の設定です。[cr][cr]設定を変更しても再生状態に変化がない場合もあります。|wsbits|select,i8;8bit整数,*i16;16bit整数,i24;24bit整数,i32;32bit整数,f32;32bit浮動小数点数
+サウンド:DirectSound プライマリバッファ再生制御;DirectSoundのプライマリバッファに対して再生/停止の制御を行うかどうかの設定です。[cr][cr]設定を変更すると 音切れや音飛びが改善される場合があります。|wscontrolpri|select,*yes;制御を行う,no;制御を行わない
+サウンド:DirectSound プライマリバッファ設定試行レベル;DirectSoundプライマリバッファのフォーマットを指定する際にどれほど多くの設定を試すかの設定です。[cr][cr]レベル 0 を指定すると、ステレオ 16bit整数のフォーマットの設定を試行します。[cr][cr]レベル 1 を指定すると レベル 0 を試行する前に、システムのスピーカー設定に従ったチャンネル数、16bit整数でのフォーマットの設定を試行します。[cr][cr]レベル 2 を指定すると レベル 1 を試行する前に、「DirectSound プライマリバッファビット数」で指定されたビット数、システムのスピーカー設定に従ったチャンネル数、WAVEFORMATEX 構造体によるフォーマットの設定を試行します。[cr][cr]「すべて」を指定すると レベル 2 を試行する前に、レベル 2 と同様の設定で WAVEFORMATEXTENSIBLE 構造体によるフォーマットの指定を試行します。|wspritry|select,0;レベル0,1;レベル1,2;レベル2,*all;すべて
+グラフィック:画像キャッシュ制限;画像キャッシュに使用するメモリの最大値の設定です。[cr][cr]実行中に頻繁にスワップが起こる場合は「キャッシュを行わない」に設定すると改善される場合があります。|gclim|select,*auto;自動(推奨),0;キャッシュを行わない,4;4MB,8;8MB,12;12MB,16;16MB,20;20MB,24;24MB,28;28MB,32;32MB,36;36MB,40;40MB,44;44MB,48;48MB,52;52MB,56;56MB,60;60MB,64;64MB,68;68MB,72;72MB,76;76MB,80;80MB,84;84MB,88;88MB,92;92MB,96;96MB,100;100MB,104;104MB,108;108MB,112;112MB,116;116MB,120;120MB,124;124MB,128;128MB,132;132MB,136;136MB,140;140MB,144;144MB,148;148MB,152;152MB,156;156MB,160;160MB,164;164MB,168;168MB,172;172MB,176;176MB,180;180MB,184;184MB,188;188MB,192;192MB,196;196MB,200;200MB,204;204MB,208;208MB,212;212MB,216;216MB,220;220MB,224;224MB,228;228MB,232;232MB,236;236MB,240;240MB,244;244MB,248;248MB,252;252MB,256;256MB
+グラフィック:フルスクリーン切り替え方法;フルスクリーン切り替えに用いる方法の設定です。[cr][cr]設定を変えるとフルスクリーン切り替えに関する問題が改善される場合があります。|fsmethod|select,*ddraw;DirectDraw,cds;ChangeDisplaySettings API
+グラフィック:フルスクリーン時のカラーモード;フルスクリーン時のカラーモードの設定です。[cr][cr]「変えない」を選択すると非フルスクリーン時のカラーモードと同じになります。|fsbpp|select,*nochange;変えない,16;16bitカラー,24;24bitカラー,32;32bitカラー
+グラフィック:フルスクリーン時の画面解像度;フルスクリーン時の画面解像度の設定です。[cr][cr]「自動」を選択すると、最も適している画面解像度を自動的に選択して使用します。この場合は、縦横比が同じ解像度のうち、プログラム内で指定されている解像度にフィットする解像度があればそれを選択しますが、そのような解像度がない場合は解像度を変えずにエンジン側で拡大表示をします。この設定の場合は、「フルスクリーン時のエンジンによる拡大表示」に「しない」が指定されていても、常に「モニタ内にフィットさせる」であるとみなされます。[cr][cr]「縦横比が同じ解像度」を選択すると、画面の縦横比が非フルスクリーン時と同じ解像度のうち、もっとも近い解像度が選択されます。[cr][cr]「最も近い解像度」を選択すると、プログラム内で指定されている解像度に最も近い解像度が選択されますが、非フルスクリーン時と同じ縦横比の解像度が選択される保証はありません。ブラウン管モニタや、画面のアスペクト比を保ったままでの拡大表示に対応している液晶モニタなどでは、この設定が適している場合があります。[cr][cr]「解像度を変えない」を選択すると、非フルスクリーン時の解像度のまま、解像度を変更しなくなります。|fsres|select,*auto;自動,proportional;縦横比が同じ解像度,nearest;最も近い解像度,nochange;解像度を変えない
+グラフィック:フルスクリーン時のエンジンによる拡大表示;フルスクリーン時に、エンジン側による画面の拡大をどのように行うかどうかを指定します。[cr][cr]「モニタ内にフィットさせる」を選択すると必要に応じてエンジンによる画面の拡大を行います。この際、画面はモニタ内にそのすべてが収まるように拡大されます。画面のうち、もし上下や左右に隙間ができる場合はそこは真っ黒になります。[cr][cr]「モニタいっぱいに拡大する」を選択するとエンジンによる画面の拡大を行いますが、隙間ができないようにめいいっぱいまで拡大が行われます。このため、モニタ外にはみ出る領域が発生する可能性があります。[cr][cr]「しない」を選択するとエンジンによる画面の拡大は常に行われません。[cr][cr]「フルスクリーン時の画面解像度」が「自動」の場合は、この設定を「しない」にしても常に「モニタ内にフィットさせる」であると見なされます。|fszoom|select,*inner;モニタ内にフィットさせる,outer;モニタいっぱいに拡大する,no;しない
+グラフィック:画像演算の分割処理;画像演算を細かく分割して行うかどうかの設定です。[cr][cr]設定を変えると、画面のちらつきを抑えられる場合がありますが、描画のパフォーマンスが低下する場合もあります。[cr][cr]「ダブルバッファリング」を使用する設定にした場合は、この設定は「しない」以外に設定することをお勧めします。|gsplit|select,*yes;する,int;インターレース分割,bidi;双方向分割,no;しない
+グラフィック:ダブルバッファリング;ダブルバッファリングを行うかどうかの設定です。[cr][cr]「行う」を指定すると、画面のちらつきを抑えられる場合がありますが、描画のパフォーマンスは低下します。|usedb|select,*no;使用しない,yes;行う
+グラフィック:ダブルバッファリング方式;ダブルバッファリングを行うかどうかの設定です。[cr][cr]「自動」を選択すると、DirectDrawあるいはDirect3Dのどちらかパフォーマンスの良い方を自動的に選択します。[cr][cr]「GDIを使用」や「DirectDrawを使用」や「Direct3Dを使用」は、他の設定では問題が発生する場合に選択してください。|dbstyle|select,*auto;自動,gdi;GDIを使用,ddraw;DirectDrawを使用,d3d;Direct3Dを使用
+グラフィック:拡大表示時のスムージング;拡大表示時のスムージングを行うかどうかの設定です。[cr][cr]ここで言うスムージングとは、「フルスクリーン時の画面解像度」の設定によってはエンジンが画面を拡大しますが、この際に「なめらかに」拡大を行うかどうかを表します。スムージングを行わない場合は「ダブルバッファリング」に「GDI使用」が選択された物と見なされます。|smoothzoom|select,*yes;する,no;しない
+グラフィック:垂直同期待ち;トランジション(画面切り替え)などでディスプレイの垂直同期を待ってから描画するかどうかの設定です。[cr][cr]設定を変えると、画面のちらつきを抑えられる場合がありますが、描画のパフォーマンスが低下する場合もあります。|waitvsync|select,yes;使用する,*no;使用しない
+グラフィック:アンチエイリアス文字描画方式;アンチエイリアス文字描画方法の設定です。[cr][cr]設定を変えると、文字が表示されない、文字が崩れるなどの問題が改善される場合があります。[cr][cr]リサンプリング(4×4) は リサンプリング(8×8) よりも高速ですが、精度は低くなります。|aamethod|select,*auto;自動,res8;リサンプリング(8×8),res4;リサンプリング(4×4),api;Windows API
+グラフィック:JPEG画像デコード精度;JPEG画像のデコード(展開)の精度の設定です。[cr][cr]「高い」を選択すると精度は高くなりますが、デコードは低速になります。[cr][cr]「低い」を選択すると精度は低くなりますが、デコードは高速になります。|jpegdec|select,high;高い,*normal;標準,low;低い
+グラフィック:描画スレッド数;描画処理時に、使用するスレッドの数の設定です。[cr][cr]描画スレッドを複数設定することで、マルチコア環境での描画パフォーマンスを向上させられる可能性がありますが、逆にパフォーマンスが低下する場合もあります。|drawthread|select,auto;自動(プロセッサ数に等しいスレッド),*1;1スレッド,2;2スレッド,4;4スレッド,8;8スレッド
+CPU 機能:MMX;CPU 認識トラブルが起こったときに調整してください。|cpummx|select,*yes;使用可能であれば使用する,no;使用可能であっても使用しない,force;強制的に使用する
+CPU 機能:3DNow!;CPU 認識トラブルが起こったときに調整してください。|cpu3dn|select,*yes;使用可能であれば使用する,no;使用可能であっても使用しない,force;強制的に使用する
+CPU 機能:SSE;CPU 認識トラブルが起こったときに調整してください。|cpusse|select,*yes;使用可能であれば使用する,no;使用可能であっても使用しない,force;強制的に使用する
+CPU 機能:CMOVcc;CPU 認識トラブルが起こったときに調整してください。|cpucmov|select,*yes;使用可能であれば使用する,no;使用可能であっても使用しない,force;強制的に使用する
+CPU 機能:Enhanced 3DNow!;CPU 認識トラブルが起こったときに調整してください。|cpue3dn|select,*yes;使用可能であれば使用する,no;使用可能であっても使用しない,force;強制的に使用する
+CPU 機能:EMMX (MMX2);CPU 認識トラブルが起こったときに調整してください。|cpuemmx|select,*yes;使用可能であれば使用する,no;使用可能であっても使用しない,force;強制的に使用する
+CPU 機能:SSE2;CPU 認識トラブルが起こったときに調整してください。|cpusse2|select,*yes;使用可能であれば使用する,no;使用可能であっても使用しない,force;強制的に使用する
+デバッグ:デバッグモード;デバッグモードを有効にするかどうかの設定です。[cr][cr]「有効」を選択すると吉里吉里はデバッグモードで動作し、いくつかのデバッグ支援機能が有効になりますが、実行速度は低下します。|debug|select,*no;無効,yes;有効
+デバッグ:ファイルへのログ;コンソールのログをファイルに出力するかどうかの設定です。[cr][cr]「出力する」を選択するとファイルに追加しながらログを出力します。[cr][cr]「クリア」を選択するとファイルの内容をクリアしてからログを開始します。|forcelog|select,*no;出力しない,yes;出力する,clear;クリア
+デバッグ:エラー時のファイルへのログ;エラーが発生したときに、自動的にコンソールのログをファイルへ出力するかどうかの設定です。[cr][cr]「出力する」を選択するとファイルに追加しながらログを出力します。[cr][cr]「クリア」を選択するとファイルの内容をクリアしてからログを開始します。|logerror|select,no;出力しない,*yes;出力する,clear;クリア
+デバッグ:デバッグ支援ウィンドウ;デバッグ支援ウィンドウ(コンソール、監視式など)を有効にするかどうかの設定です。|debugwin|select,*yes;有効,no;無効
+ホットキー:コントローラ;「コントローラ」を表示するためのホットキーを指定してください。|hkcontroller|string(30),*Shift+F1
+ホットキー:スクリプトエディタ;「スクリプトエディタ」を表示するためのホットキーを指定してください。|hkeditor|string(30),*Shift+F2
+ホットキー:監視式;「監視式」を表示するためのホットキーを指定してください。|hkwatch|string(30),*Shift+F3
+ホットキー:コンソール;「コンソール」を表示するためのホットキーを指定してください。|hkconsole|string(30),*Shift+F4
+ホットキー:環境情報のコピー;環境情報をクリップボードにコピーするためのホットキーを指定してください。|hkclipenvinfo|string(30),*Ctrl+F11
+ホットキー:著作権情報の表示;著作権情報を表示するためのホットキーを指定してください。|hkabout|string(30),*Ctrl+F12
+ホットキー:更新矩形の表示;レイヤの更新矩形を表示するためのホットキーを指定してください。|hkupdaterect|string(30),*Shift+F11
+ホットキー:レイヤ構造のダンプ;レイヤ構造をコンソールにダンプするためのホットキーを指定してください。|hkdumplayer|string(30),*Shift+F12
+システム互換性:アーカイブデリミタ;アーカイブ名とアーカイブ内ストレージ名を区切る文字の設定です。[cr][cr]2.19 beta 14 より、デフォルトが '#' から '>' に変更になりました。2.19 beta 14 未満を想定しているアプリケーションでは、この設定を '#' にしないと動作しない可能性があります。|arcdelim|select,*>;'>'を使う,#;'#'を使う
+システム互換性:後置'!'演算子の動作;後置'!'演算子(eval)の動作の設定です。[cr][cr]TJS2の後置'!'演算子は式をglobalコンテキスト上で実行していましたが、2.21 beta 9 より、this コンテキスト上で実行するようになりました。2.21 beta 9 未満を想定しているアプリケーションでは、この設定を「global上で式を評価」にしないと動作しない可能性があります。|evalcontext|select,*this;this上で式を評価,global;global上で式を評価
+システム互換性:Layer.holdAlphaのデフォルト;Layer.holdAlpha プロパティ(アルファチャンネルを保護するか)のデフォルトの値です。[cr][cr]2.23 beta 5 未満を想定しているアプリケーションでは、この設定を「真」にしないと正常に動作しない可能性があります。|holdalpha|select,*false;偽,true;真
+システム互換性:前置'*'演算子の動作;前置'*'演算子(プロパティアクセス迂回)の設定です。[cr][cr]TJS2の前置'*'演算子は、プロパティオブジェクトそのものを、プロパティハンドラを介さずに取り出す演算子でしたが、2.25 beta 1 より、この機能を持つ演算子は前置の'&'となり、前置'*'演算子はプロパティオブジェクトのプロパティハンドラを動作させるための演算子となりました。2.25 beta 1 未満を想定しているアプリケーションでは、この設定を「2.25未満と互換」にしないと正常に動作しない可能性があります。|unaryaster|select,*default;2.25以降の動作,compat;2.25未満と互換
+システム互換性:DirectSoundボリュームカーブ;DirectSoundのボリュームカーブです。[cr][cr]DirectSoundのボリュームカーブは、2.31 2011/6/14 より、より直感的なカーブになりました。|dsvolfactor|select,*3322;2.31 以降の動作,5000;2.31 未満と互換

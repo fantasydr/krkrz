@@ -23,14 +23,14 @@
 
 
 //----------------------------------------------------------------------------
-//! @brief	  	VideoOverlay Object (儗僀儎嵞惗梡) 傪庢摼偡傞
+//! @brief	  	VideoOverlay Object (レイヤ再生用) を取得する
 //! @param		callbackwin : 
 //! @param		stream : 
 //! @param		streamname : 
 //! @param		type : 
 //! @param		size : 
 //! @param		out : VideoOverlay Object
-//! @return		僄儔乕暥帤楍
+//! @return		エラー文字列
 //----------------------------------------------------------------------------
 void __stdcall GetVideoLayerObject(
 	HWND callbackwin, IStream *stream, const wchar_t * streamname,

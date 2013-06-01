@@ -2,7 +2,7 @@
 /*! @file
 @brief Demux output pin
 
-僨儅儖僠僾儗僋僒偺弌椡僺儞傪幚憰偡傞
+デマルチプレクサの出力ピンを実装する
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
@@ -15,13 +15,13 @@
 #include "CDemuxSource.h"
 //----------------------------------------------------------------------------
 //! @brief	  	CDemuxOutputPin constructor
-//! @param		szName : 僨僶僢僌偺偨傔偵巊梡偝傟傞婰弎傊偺億僀儞僞丅
-//! @param		pFilter : 偙偺僺儞傪嶌惉偟偨僼傿儖僞
-//! @param		pHr : HRESULT 抣傊偺億僀儞僞丅
-//! @param		pszName : 偙偺僺儞偺柤慜
-//! @param		pSeek : 僜乕僗僼傿儖僞偺IMediaSeeking
-//! @param		outstream : 偙偺僺儞偺弌椡僗僩儕乕儉
-//! @param		lock : 儘僢僋僆僽僕僃僋僩
+//! @param		szName : デバッグのために使用される記述へのポインタ。
+//! @param		pFilter : このピンを作成したフィルタ
+//! @param		pHr : HRESULT 値へのポインタ。
+//! @param		pszName : このピンの名前
+//! @param		pSeek : ソースフィルタのIMediaSeeking
+//! @param		outstream : このピンの出力ストリーム
+//! @param		lock : ロックオブジェクト
 //----------------------------------------------------------------------------
 CDemuxOutputPin::CDemuxOutputPin( TCHAR *szName, CSource *pFilter, HRESULT *pHr, LPCWSTR pszName, IMediaSeeking *pSeek, IOutputStream *outstream, CCritSec *lock )
  : CSourceStream( szName, pHr, pFilter, pszName ), m_SeekProxy(pSeek), m_Stream(outstream), m_Lock(lock)
@@ -32,10 +32,10 @@ CDemuxOutputPin::CDemuxOutputPin( TCHAR *szName, CSource *pFilter, HRESULT *pHr,
 CDemuxOutputPin::~CDemuxOutputPin()
 {}
 //----------------------------------------------------------------------------
-//! @brief	  	梫媮偝傟偨僀儞僞乕僼僃僀僗傪曉偡
-//! @param		riid : 僀儞僞乕僼僃僀僗偺IID
-//! @param		ppv : 僀儞僞乕僼僃僀僗傪曉偡億僀儞僞乕傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	要求されたインターフェイスを返す
+//! @param		riid : インターフェイスのIID
+//! @param		ppv : インターフェイスを返すポインターへのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CDemuxOutputPin::NonDelegatingQueryInterface( REFIID riid, void ** ppv )
 {
@@ -46,10 +46,10 @@ STDMETHODIMP CDemuxOutputPin::NonDelegatingQueryInterface( REFIID riid, void ** 
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	弌椡壜擻側儊僨傿傾僞僀僾傪曉偡
-//! @param		iPosition : 儊僨傿傾僞僀僾偺彉悢
-//! @param		pmt : 儊僨傿傾僞僀僾傪奿擺偡傞曄悢
-//! @return		僄儔乕僐乕僪
+//! @brief	  	出力可能なメディアタイプを返す
+//! @param		iPosition : メディアタイプの序数
+//! @param		pmt : メディアタイプを格納する変数
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxOutputPin::GetMediaType( int iPosition, CMediaType *pmt )
 {
@@ -57,10 +57,10 @@ HRESULT CDemuxOutputPin::GetMediaType( int iPosition, CMediaType *pmt )
 	return m_Stream->GetMediaType( iPosition, pmt );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巜掕偝傟偨儊僨傿傾僞僀僾偑棙梡偱偒傞偐偳偆偐妋擣偡傞
-//! @param		pmt : 弌椡弌棃傞偐偳偆偐妋擣傪偡傞儊僨傿傾僞僀僾
-//! @return		僄儔乕僐乕僪
-//! @note		尰嵼丄DirectX VA傪忢偵偼偠偔傛偆偵偟偰偄傞
+//! @brief	  	指定されたメディアタイプが利用できるかどうか確認する
+//! @param		pmt : 出力出来るかどうか確認をするメディアタイプ
+//! @return		エラーコード
+//! @note		現在、DirectX VAを常にはじくようにしている
 //----------------------------------------------------------------------------
 HRESULT CDemuxOutputPin::CheckMediaType( const CMediaType *pmt )
 {
@@ -79,10 +79,10 @@ HRESULT CDemuxOutputPin::CheckMediaType( const CMediaType *pmt )
 	return VFW_E_TYPE_NOT_ACCEPTED;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巜掕偝傟偨儊僨傿傾僞僀僾偑棙梡偱偒傞偐偳偆偐妋擣偡傞
-//! @param		pmt : 弌椡弌棃傞偐偳偆偐妋擣傪偡傞儊僨傿傾僞僀僾
-//! @return		僄儔乕僐乕僪
-//! @note		尰嵼丄DirectX VA傪忢偵偼偠偔傛偆偵偟偰偄傞
+//! @brief	  	指定されたメディアタイプが利用できるかどうか確認する
+//! @param		pmt : 出力出来るかどうか確認をするメディアタイプ
+//! @return		エラーコード
+//! @note		現在、DirectX VAを常にはじくようにしている
 //----------------------------------------------------------------------------
 HRESULT CDemuxOutputPin::SetMediaType( const CMediaType *pmt )
 {
@@ -94,10 +94,10 @@ HRESULT CDemuxOutputPin::SetMediaType( const CMediaType *pmt )
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僶僢僼傽偺僒僀僘傪寛掕偡傞
-//! @param		pIMemAllocator : 傾儘働乕僞乕傊偺億僀儞僞
-//! @param		pProp : 梫媮僒僀僘
-//! @return		僄儔乕僐乕僪
+//! @brief	  	バッファのサイズを決定する
+//! @param		pIMemAllocator : アロケーターへのポインタ
+//! @param		pProp : 要求サイズ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxOutputPin::DecideBufferSize( IMemAllocator *pIMemAllocator, ALLOCATOR_PROPERTIES *pProp )
 {
@@ -157,7 +157,7 @@ HRESULT CDemuxOutputPin::DecideBufferSize( IMemAllocator *pIMemAllocator, ALLOCA
 				break;
 		}
 	}
-	// 惉岟偟偨応崌傕丄幚嵺偺寢壥傪妋擣偡傞丅
+	// 成功した場合も、実際の結果を確認する。
 	if( pProp->cbBuffer > actualAlloc.cbBuffer )
 	{
 		return E_FAIL;
@@ -167,7 +167,7 @@ HRESULT CDemuxOutputPin::DecideBufferSize( IMemAllocator *pIMemAllocator, ALLOCA
 		return hr;
 
 //	hr = pIMemAllocator->Commit();
-// 弌椡僺儞偑傾僋僥傿僽偵側傞傑偱Commit偼抶傜偣傞
+// 出力ピンがアクティブになるまでCommitは遅らせる
 
 #ifdef _DEBUG
 	switch( hr ) {
@@ -195,8 +195,8 @@ HRESULT CDemuxOutputPin::DecideBufferSize( IMemAllocator *pIMemAllocator, ALLOCA
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僒儞僾儖傪僟僂儞僗僩儕乕儉傊憲傝懕偗傞張棟
-//! @return		僄儔乕僐乕僪
+//! @brief	  	サンプルをダウンストリームへ送り続ける処理
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxOutputPin::DoBufferProcessingLoop(void)
 {
@@ -239,9 +239,9 @@ HRESULT CDemuxOutputPin::DoBufferProcessingLoop(void)
 	return S_FALSE;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僒儞僾儖傪僗僩儕乕儉偐傜庢摼偡傞
-//! @param		pSample : 僒儞僾儖傊偺億僀儞僞偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	サンプルをストリームから取得する
+//! @param		pSample : サンプルへのポインタのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxOutputPin::RetrieveBuffer( IMediaSample **pSample )
 {
@@ -250,19 +250,19 @@ HRESULT CDemuxOutputPin::RetrieveBuffer( IMediaSample **pSample )
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	愙懕張棟
-//! @param		pReceivePin : 愙懕傪梫媮偝傟偰偄傞僺儞
-//! @param		pmt : 愙懕偱巊梡偡傞偙偲傪梫媮偝傟偰偄傞儊僨傿傾僞僀僾
-//! @return		僄儔乕僐乕僪
+//! @brief	  	接続処理
+//! @param		pReceivePin : 接続を要求されているピン
+//! @param		pmt : 接続で使用することを要求されているメディアタイプ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CDemuxOutputPin::Connect( IPin *pReceivePin, const AM_MEDIA_TYPE *pmt )
 {
 	return CSourceStream::Connect( pReceivePin, pmt );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	愙懕姰椆張棟
-//! @param		pReceivePin : 愙懕偵巊傢傟偨僺儞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	接続完了処理
+//! @param		pReceivePin : 接続に使われたピン
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxOutputPin::CompleteConnect( IPin *pReceivePin )
 {
@@ -270,10 +270,10 @@ HRESULT CDemuxOutputPin::CompleteConnect( IPin *pReceivePin )
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	傾儘働乕僞乕傪寛掕偡傞張棟
-//! @param		pPin : 擖椡僺儞
-//! @param		pAlloc : 傾儘働乕僞乕
-//! @return		僄儔乕僐乕僪
+//! @brief	  	アロケーターを決定する処理
+//! @param		pPin : 入力ピン
+//! @param		pAlloc : アロケーター
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CDemuxOutputPin::DecideAllocator( IMemInputPin *pPin, IMemAllocator **pAlloc )
 {

@@ -1,6 +1,6 @@
 /****************************************************************************/
 /*! @file
-@brief DirectShow傪棙梡偟偨儉乕價乕偺儗僀儎乕昤夋嵞惗
+@brief DirectShowを利用したムービーのレイヤー描画再生
 
 -----------------------------------------------------------------------------
 	Copyright (C) 2004 T.Imoto <http://www.kaede-software.com>
@@ -20,7 +20,7 @@
 #include "OptionInfo.h"
 
 //----------------------------------------------------------------------------
-//! @brief	  	m_BmpBits偵NULL傪愝掕偡傞
+//! @brief	  	m_BmpBitsにNULLを設定する
 //----------------------------------------------------------------------------
 tTVPDSLayerVideo::tTVPDSLayerVideo()
 {
@@ -28,7 +28,7 @@ tTVPDSLayerVideo::tTVPDSLayerVideo()
 	m_BmpBits[1] = NULL;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	m_BmpBits偵NULL傪愝掕偡傞
+//! @brief	  	m_BmpBitsにNULLを設定する
 //----------------------------------------------------------------------------
 tTVPDSLayerVideo::~tTVPDSLayerVideo()
 {
@@ -39,12 +39,12 @@ tTVPDSLayerVideo::~tTVPDSLayerVideo()
 	ReleaseAll();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僼傿儖僞僌儔僼偺峔抸
-//! @param 		callbackwin : 儊僢僙乕僕傪憲怣偡傞僂傿儞僪僂
-//! @param 		stream : 撉傒崬傒尦僗僩儕乕儉
-//! @param 		streamname : 僗僩儕乕儉偺柤慜
-//! @param 		type : 儊僨傿傾僞僀僾(奼挘巕)
-//! @param 		size : 儊僨傿傾僒僀僘
+//! @brief	  	フィルタグラフの構築
+//! @param 		callbackwin : メッセージを送信するウィンドウ
+//! @param 		stream : 読み込み元ストリーム
+//! @param 		streamname : ストリームの名前
+//! @param 		type : メディアタイプ(拡張子)
+//! @param 		size : メディアサイズ
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSLayerVideo::BuildGraph( HWND callbackwin, IStream *stream,
 	const wchar_t * streamname, const wchar_t *type, unsigned __int64 size )
@@ -59,7 +59,7 @@ void __stdcall tTVPDSLayerVideo::BuildGraph( HWND callbackwin, IStream *stream,
 		if( FAILED(hr = m_GraphBuilder.CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC)) )
 			ThrowDShowException(L"Failed to create FilterGraph.", hr);
 
-// 儘僌傪彂偒弌偡帪偵桳岠偵偡傞丅偱傕丄偁傫傑傝栶偵棫偨側偄傛偆側丅丅丅
+// ログを書き出す時に有効にする。でも、あんまり役に立たないような。。。
 #if	0
 		{
 			HANDLE	hFile = CreateFile( "C:\\krdslog.txt", GENERIC_WRITE|GENERIC_READ, FILE_SHARE_WRITE|FILE_SHARE_READ, NULL, CREATE_ALWAYS,
@@ -110,13 +110,13 @@ void __stdcall tTVPDSLayerVideo::BuildGraph( HWND callbackwin, IStream *stream,
 			if( FAILED(hr = GraphBuilder()->AddFilter( m_Reader, L"Stream Reader")) )
 				ThrowDShowException(L"Failed to call GraphBuilder()->AddFilter( m_Reader, L\"Stream Reader\").", hr);
 
-			// AddFilter 偟偨偺偱儕儕乕僗偡傞丅
+			// AddFilter したのでリリースする。
 			m_Reader->Release();
 	
 			if( mt.subtype == MEDIASUBTYPE_Avi || mt.subtype == MEDIASUBTYPE_QTMovie )
 			{
-// GraphBuilder偵帺摦揑偵僌儔僼傪峔抸偝偣偨屻丄Video Renderer傪偡偘懼偊傞
-// 帺傜僌儔僼傪峔抸偟偰偄偔傛傝傕丄AVI僼傽僀儖傊偺懳墳忬嫷偑椙偔側傞偼偢
+// GraphBuilderに自動的にグラフを構築させた後、Video Rendererをすげ替える
+// 自らグラフを構築していくよりも、AVIファイルへの対応状況が良くなるはず
 #if 1
 				if( FAILED(hr = GraphBuilder()->Render(m_Reader->GetPin(0))) )
 					ThrowDShowException(L"Failed to call IGraphBuilder::Render.", hr);
@@ -179,7 +179,7 @@ void __stdcall tTVPDSLayerVideo::BuildGraph( HWND callbackwin, IStream *stream,
 					pinInfo.pFilter->Release();
 					if( FAILED(hr = ConnectFilters( pSpliter, pDDSRenderer ) ) )
 					{
-						if( FAILED(hr = GraphBuilder()->RemoveFilter( pDDSRenderer)) )	// 壒柍偟偲傒側偟偰丄僼傿儖僞傪嶍彍偡傞
+						if( FAILED(hr = GraphBuilder()->RemoveFilter( pDDSRenderer)) )	// 音無しとみなして、フィルタを削除する
 							ThrowDShowException(L"Failed to call GraphBuilder()->RemoveFilter( pDDSRenderer).", hr);
 					}
 				}
@@ -193,7 +193,7 @@ void __stdcall tTVPDSLayerVideo::BuildGraph( HWND callbackwin, IStream *stream,
 			}
 		}
 
-#if 0	// 媑棦媑棦偺Bitmap偼忋壓媡偺宍幃傜偟偄偺偱丄忋壓斀揮偺偨傔偺嵞愙懕偼昁梫側偄
+#if 0	// 吉里吉里のBitmapは上下逆の形式らしいので、上下反転のための再接続は必要ない
 		{	// Reconnect buffer render filter
 			// get decoder output pin
 			CComPtr<IPin>			pDecoderPinOut;
@@ -271,11 +271,11 @@ void __stdcall tTVPDSLayerVideo::BuildGraph( HWND callbackwin, IStream *stream,
 	}
 
 	MakeAPause(false);
-//	CoUninitialize();	// 偙偙偱偙傟傪屇傇偲傑偢偦偆側婥偑偡傞偗偳丄戝忎晇側偺偐側偀
+//	CoUninitialize();	// ここでこれを呼ぶとまずそうな気がするけど、大丈夫なのかなぁ
 }
 
 //----------------------------------------------------------------------------
-//! @brief	  	僀儞僞乕僼僃僀僗傪夝曻偡傞
+//! @brief	  	インターフェイスを解放する
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSLayerVideo::ReleaseAll()
 {
@@ -293,10 +293,10 @@ void __stdcall tTVPDSLayerVideo::ReleaseAll()
 	tTVPDSMovie::ReleaseAll();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	昤夋偡傞僶僢僼傽傪愝掕偡傞
-//! @param		buff1 : 僶僢僼傽1
-//! @param		buff2 : 僶僢僼傽2
-//! @param		size : 僶僢僼傽偺僒僀僘
+//! @brief	  	描画するバッファを設定する
+//! @param		buff1 : バッファ1
+//! @param		buff2 : バッファ2
+//! @param		size : バッファのサイズ
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSLayerVideo::SetVideoBuffer( BYTE *buff1, BYTE *buff2, long size )
 {
@@ -312,8 +312,8 @@ void __stdcall tTVPDSLayerVideo::SetVideoBuffer( BYTE *buff1, BYTE *buff2, long 
 		ThrowDShowException(L"Failed to call IBufferAccess::SetBackBuffer.", hr);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僼儘儞僩僶僢僼傽傪庢摼偡傞
-//! @param		buff : 僶僢僼傽
+//! @brief	  	フロントバッファを取得する
+//! @param		buff : バッファ
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSLayerVideo::GetFrontBuffer( BYTE **buff )
 {
@@ -323,9 +323,9 @@ void __stdcall tTVPDSLayerVideo::GetFrontBuffer( BYTE **buff )
 		ThrowDShowException(L"Failed to call IBufferAccess::GetFrontBuffer.", hr);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺夋憸僒僀僘傪庢摼偡傞
-//! @param		width : 暆
-//! @param		height : 崅偝
+//! @brief	  	ビデオの画像サイズを取得する
+//! @param		width : 幅
+//! @param		height : 高さ
 //----------------------------------------------------------------------------
 void __stdcall tTVPDSLayerVideo::GetVideoSize( long *width, long *height )
 {
@@ -336,9 +336,9 @@ void __stdcall tTVPDSLayerVideo::GetVideoSize( long *width, long *height )
 		BufferVideo()->get_VideoHeight( height );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	1僼儗乕儉偺暯嬒昞帵帪娫傪庢摼偟傑偡
-//! @param		pAvgTimePerFrame : 1僼儗乕儉偺暯嬒昞帵帪娫
-//! @return		僄儔乕僐乕僪
+//! @brief	  	1フレームの平均表示時間を取得します
+//! @param		pAvgTimePerFrame : 1フレームの平均表示時間
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT __stdcall tTVPDSLayerVideo::GetAvgTimePerFrame( REFTIME *pAvgTimePerFrame )
 {

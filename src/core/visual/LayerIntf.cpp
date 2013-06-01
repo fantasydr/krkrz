@@ -6908,7 +6908,7 @@ TJS_BEGIN_NATIVE_METHOD_DECL(/*func. name*/loadImages)
 	TJS_GET_NATIVE_INSTANCE(/*var. name*/_this, /*var. type*/tTJSNI_Layer);
 	if(numparams < 1) return TJS_E_BADPARAMCOUNT;
 	ttstr name(*param[0]);
-	tjs_uint32 key = clNone; // TODO Intf‚È‚Ì‚ÉŒÅ—L’l‚ª
+	tjs_uint32 key = clNone; // TODO Intf¤Ê¤Î¤Ë¹ÌÓÐ‚Ž¤¬
 	if(numparams >=2 && param[1]->Type() != tvtVoid)
 		key = (tjs_uint32)param[1]->AsInteger();
 	iTJSDispatch2 * metainfo = _this->LoadImages(name, key);

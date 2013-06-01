@@ -61,7 +61,7 @@ public:
 		HKL hKl = ::GetKeyboardLayout(0);
 		return 0!=::ImmIsIME(hKl);
 	}
-	// ImmSetStatusWindowPos 娭悢傪屇傃弌偡偲丄傾僾儕働乕僔儑儞偵 IMN_SETSTATUSWINDOWPOS 儊僢僙乕僕偑憲怣偝傟傑偡丅
+	// ImmSetStatusWindowPos 関数を呼び出すと、アプリケーションに IMN_SETSTATUSWINDOWPOS メッセージが送信されます。
 	void SetStatusPosition( int x, int y ) {
 		POINT pt = {x,y};
 		HIMC hImc = ::ImmGetContext(hWnd_);
@@ -84,7 +84,7 @@ public:
 		}
 	}
 	/**
-	 偙偺僗儗僢僪偺IME傪柍岠偵偡傞
+	 このスレッドのIMEを無効にする
 	 */
 	void Disable() {
 		if( hOldImc_ == INVALID_HANDLE_VALUE ) {
@@ -97,7 +97,7 @@ public:
 			hOldImc_ = INVALID_HANDLE_VALUE;
 		}
 	}
-	// 偙偺娭悢傪屇傃弌偡偲丄傾僾儕働乕僔儑儞偵 IMN_SETCOMPOSITIONFONT 儊僢僙乕僕偑憲怣偝傟傑偡丅
+	// この関数を呼び出すと、アプリケーションに IMN_SETCOMPOSITIONFONT メッセージが送信されます。
 	void SetCompositionFont( TFont* font ) {
 		LOGFONT logfont={0};
 		font->GetFont(&logfont);
@@ -124,56 +124,56 @@ public:
 		y = pos.ptCurrentPos.y;
 	}
 	/**
-	 * conversion : 擖椡儌乕僪偺抣傪巜掕偟傑偡丅
-	 * 		IME_CMODE_ALPHANUMERIC(0x0000) 	塸悢儌乕僪
-	 * 		IME_CMODE_NATIVE(0x0001) 	懳墳尵岅擖椡(ON)丒塸悢擖椡(OFF) 儌乕僪
+	 * conversion : 入力モードの値を指定します。
+	 * 		IME_CMODE_ALPHANUMERIC(0x0000) 	英数モード
+	 * 		IME_CMODE_NATIVE(0x0001) 	対応言語入力(ON)．英数入力(OFF) モード
 	 * 		IME_CMODE_CHINESE
 	 * 		IME_CMODE_HANGEUL
-	 * 		IME_CMODE_JAPANESE 偱傕掕媊偟偰偁傞
-	 * 		IME_CMODE_KATAKANA(0x0002) 	僇僞僇僫(ON)丒傂傜偑側(OFF) 儌乕僪
-	 * 		IME_CMODE_FULLSHAPE(0x0008) 	慡妏儌乕僪
-	 * 		IME_CMODE_ROMAN(0x0010) 	儘乕儅帤儌乕僪
-	 * 		IME_CMODE_CHARCODE(0x0020) 	僉儍儔僋僞擖椡儌乕僪
-	 * 		IME_CMODE_HANJACONVERT(0x0040) 	僴儞僌儖暥帤曄姺儌乕僪
-	 * 		IME_CMODE_SOFTKBD(0x0080) 	僜僼僩僉乕儃乕僪儌乕僪
-	 * 		IME_CMODE_NOCONVERSION(0x0100) 	柍曄姺儌乕僪
-	 * 		IME_CMODE_EUDC(0x0200) 	EUD曄姺儌乕僪
-	 * 		IME_CMODE_SYMBOL(0x0400) 	僔儞儃儖儌乕僪
-	 * sentence : 曄姺儌乕僪偺抣傪巜掕偟傑偡丅
-	 * 		IME_SMODE_NONE(0x0000) 	柍曄姺
-	 * 		IME_SMODE_PLURALCLAUSE(0x0001) 	暋崌岅桪愭
-	 * 		IME_SMODE_SINGLECONVERT(0x0002) 	扨曄姺
-	 * 		IME_SMODE_AUTOMATIC(0x0004) 	帺摦曄姺
-	 * 		IME_SMODE_PHRASEPREDICT(0x0008) 	楢暥愡曄姺
+	 * 		IME_CMODE_JAPANESE でも定義してある
+	 * 		IME_CMODE_KATAKANA(0x0002) 	カタカナ(ON)．ひらがな(OFF) モード
+	 * 		IME_CMODE_FULLSHAPE(0x0008) 	全角モード
+	 * 		IME_CMODE_ROMAN(0x0010) 	ローマ字モード
+	 * 		IME_CMODE_CHARCODE(0x0020) 	キャラクタ入力モード
+	 * 		IME_CMODE_HANJACONVERT(0x0040) 	ハングル文字変換モード
+	 * 		IME_CMODE_SOFTKBD(0x0080) 	ソフトキーボードモード
+	 * 		IME_CMODE_NOCONVERSION(0x0100) 	無変換モード
+	 * 		IME_CMODE_EUDC(0x0200) 	EUD変換モード
+	 * 		IME_CMODE_SYMBOL(0x0400) 	シンボルモード
+	 * sentence : 変換モードの値を指定します。
+	 * 		IME_SMODE_NONE(0x0000) 	無変換
+	 * 		IME_SMODE_PLURALCLAUSE(0x0001) 	複合語優先
+	 * 		IME_SMODE_SINGLECONVERT(0x0002) 	単変換
+	 * 		IME_SMODE_AUTOMATIC(0x0004) 	自動変換
+	 * 		IME_SMODE_PHRASEPREDICT(0x0008) 	連文節変換
 
-imDisable 傪巜掕偡傞偲丄IME偼柍岠偵側傝傑偡丅IME傪巊梡偟偨擖椡偼偱偒傑偣傫偟丄儐乕僓偺憖嶌偱傕IME傪桳岠偵偡傞偙偲偼偱偒傑偣傫丅
+imDisable を指定すると、IMEは無効になります。IMEを使用した入力はできませんし、ユーザの操作でもIMEを有効にすることはできません。
 	Disable
 	
-imClose 傪巜掕偡傞偲丄IME偼柍岠偵側傝傑偡丅imDisable偲堎側傝丄儐乕僓偺憖嶌偱IME傪桳岠偵偡傞偙偲偑偱偒傑偡丅
+imClose を指定すると、IMEは無効になります。imDisableと異なり、ユーザの操作でIMEを有効にすることができます。
 	Close
 	
-imOpen 傪巜掕偡傞偲丄IME偼桳岠偵側傝傑偡丅
+imOpen を指定すると、IMEは有効になります。
 	Open
 	
-imDontCare 傪巜掕偡傞偲丄IME偺桳岠/柍岠偺忬懺偼丄慜偺忬懺傪堷偒宲偓傑偡丅儐乕僓偺憖嶌偵傛偭偰IME傪桳岠偵偟偨傝柍岠偵偟偨傝偡傞偙偲偑偱偒傑偡丅擔杮岅擖椡偵偍偄偰偼丄敿妏/慡妏暥帤傪儐乕僓偵帺桼偵擖椡偝偣傞応崌偺堦斒揑側儌乕僪偱偡丅
+imDontCare を指定すると、IMEの有効/無効の状態は、前の状態を引き継ぎます。ユーザの操作によってIMEを有効にしたり無効にしたりすることができます。日本語入力においては、半角/全角文字をユーザに自由に入力させる場合の一般的なモードです。
 	
 	
-imSAlpha 傪巜掕偡傞偲丄IME偼桳岠偵側傝丄敿妏傾儖僼傽儀僢僩擖椡儌乕僪偵側傝傑偡丅
+imSAlpha を指定すると、IMEは有効になり、半角アルファベット入力モードになります。
 	IME_CMODE_ALPHANUMERIC
 	
-imAlpha 傪巜掕偡傞偲丄IME偼桳岠偵側傝丄慡妏傾儖僼傽儀僢僩擖椡儌乕僪偵側傝傑偡丅
+imAlpha を指定すると、IMEは有効になり、全角アルファベット入力モードになります。
 	IME_CMODE_FULLSHAPE
 	
-imHira 傪巜掕偡傞偲丄IME偼桳岠偵側傝丄傂傜偑側擖椡儌乕僪偵側傝傑偡丅
-imSKata 傪巜掕偡傞偲丄IME偼桳岠偵側傝丄敿妏僇僞僇僫擖椡儌乕僪偵側傝傑偡丅
+imHira を指定すると、IMEは有効になり、ひらがな入力モードになります。
+imSKata を指定すると、IMEは有効になり、半角カタカナ入力モードになります。
 	IME_CMODE_KATAKANA
-imKata 傪巜掕偡傞偲丄IME偼桳岠偵側傝丄慡妏僇僞僇僫擖椡儌乕僪偵側傝傑偡丅
+imKata を指定すると、IMEは有効になり、全角カタカナ入力モードになります。
 	IME_CMODE_KATAKANA IME_CMODE_NATIVE
-imChinese 傪巜掕偡傞偲丄IME偼桳岠偵側傝丄2僶僀僩拞崙岅擖椡傪庴偗晅偗傞儌乕僪偵側傝傑偡丅擔杮岅娐嫬偱偼巊梡偱偒傑偣傫丅
+imChinese を指定すると、IMEは有効になり、2バイト中国語入力を受け付けるモードになります。日本語環境では使用できません。
 	IME_CMODE_CHINESE
-imSHanguel 傪巜掕偡傞偲丄IME偼桳岠偵側傝丄1僶僀僩娯崙岅擖椡傪庴偗晅偗傞儌乕僪偵側傝傑偡丅擔杮岅娐嫬偱偼巊梡偱偒傑偣傫丅
+imSHanguel を指定すると、IMEは有効になり、1バイト韓国語入力を受け付けるモードになります。日本語環境では使用できません。
 	IME_CMODE_HANJACONVERT
-imHanguel 傪巜掕偡傞偲丄IME偼桳岠偵側傝丄2僶僀僩娯崙岅擖椡傪庴偗晅偗傞儌乕僪偵側傝傑偡丅擔杮岅娐嫬偱偼巊梡偱偒傑偣傫丅
+imHanguel を指定すると、IMEは有効になり、2バイト韓国語入力を受け付けるモードになります。日本語環境では使用できません。
 	IME_CMODE_HANGEUL
 	 */
 	/*

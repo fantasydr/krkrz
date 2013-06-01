@@ -40,7 +40,7 @@ private:
 	void Remove( WindowMenuItem* item, bool ignoreupdate = false );
 
 	/**
-	 * 慡偰偺崁栚傪嶍彍偟偰偐傜捛壛偟捈偡
+	 * 全ての項目を削除してから追加し直す
 	 */
 	void UpdateChildren();
 	void UpdateMenu();
@@ -50,11 +50,11 @@ private:
 	void UncheckRadioItem( int group );
 
 	/**
-	 * 巜掕僌儖乕僾偺撪偱check偑偮偄偰偄傞傾僀僥儉僀儞僨僢僋僗傪庢摼偡傞
+	 * 指定グループの内でcheckがついているアイテムインデックスを取得する
 	 */
 	int GetCheckRadioIndex( int group );
 	/**
-	 * 儔僕僆傾僀僥儉壔偡傞帪偵
+	 * ラジオアイテム化する時に
 	 */
 	void RadioItemSafeCheck();
 

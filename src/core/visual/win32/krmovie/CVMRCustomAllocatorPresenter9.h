@@ -1,6 +1,6 @@
 /****************************************************************************/
 /*! @file
-@brief VMR9偺儗儞僟乕儗僗儌乕僪梡傾儘働乕僞偲僾儗僛儞僞
+@brief VMR9のレンダーレスモード用アロケータとプレゼンタ
 
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto ( http://www.kaede-software.com/ )
@@ -25,7 +25,7 @@
 class tTVPDSMixerVideoOverlay;
 
 //----------------------------------------------------------------------------
-//! @brief VMR9偺儗儞僟乕儗僗儌乕僪梡傾儘働乕僞偲僾儗僛儞僞
+//! @brief VMR9のレンダーレスモード用アロケータとプレゼンタ
 //----------------------------------------------------------------------------
 class CVMRCustomAllocatorPresenter9 : public CUnknown, public IVMRSurfaceAllocator9, public IVMRImagePresenter9
 {
@@ -33,7 +33,7 @@ class CVMRCustomAllocatorPresenter9 : public CUnknown, public IVMRSurfaceAllocat
 	static ATOM		m_ChildAtom;
 
 	bool		m_Visible;
-	RECT		m_Rect;			//!< 巜掕偝傟偨儉乕價乕偺昞帵嬮宍椞堟傪曐帩
+	RECT		m_Rect;			//!< 指定されたムービーの表示矩形領域を保持
 
 	CComPtr<IDirect3D9>			m_D3D;
 	CComPtr<IDirect3DDevice9>	m_D3DDevice;
@@ -52,8 +52,8 @@ class CVMRCustomAllocatorPresenter9 : public CUnknown, public IVMRSurfaceAllocat
 	CComPtr<IDirect3DTexture9>	m_Texture;
     CComPtr<IDirect3DSurface9>	m_RenderTarget;
     CComPtr<IDirect3DVertexBuffer9> m_VertexBuffer;
-	RECT						m_SrcRect;		//!< 幚嵺偵昤夋偝傟傞椞堟偺戝偒偝傪曐帩丄m_ChildRect 偐傜妱傝弌偣傞偗偳乧
-	RECT						m_ChildRect;	//!< 幚嵺偵昤夋偝傟傞嬮宍椞堟傪曐帩
+	RECT						m_SrcRect;		//!< 実際に描画される領域の大きさを保持、m_ChildRect から割り出せるけど…
+	RECT						m_ChildRect;	//!< 実際に描画される矩形領域を保持
 
 	DWORD	m_ThreadID;
 

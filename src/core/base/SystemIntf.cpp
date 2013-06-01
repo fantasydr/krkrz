@@ -121,7 +121,7 @@ TJS_BEGIN_NATIVE_METHOD_DECL(/*func. name*/exit)
 	return TJS_S_OK;
 }
 TJS_END_NATIVE_STATIC_METHOD_DECL(/*func. name*/exit)
-#pragma message( __LOC__ "TODO inputString –³Œø‰»‚·‚é" )
+#pragma message( __LOC__ "TODO inputString Ÿo„¿»¯¤¹¤ë" )
 #if 0
 //----------------------------------------------------------------------
 TJS_BEGIN_NATIVE_METHOD_DECL(/*func. name*/inputString)

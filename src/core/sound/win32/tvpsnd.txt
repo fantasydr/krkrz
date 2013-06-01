@@ -1,399 +1,399 @@
-慡斒揑偵丅
+全般的に。
 
-暥帤楍傪僾儔僌僀儞偑傢偐傜杮懱揑偵曉偡偲偒偼丄杮懱懁偐傜搉偝傟偨暥帤楍僶僢
-僼傽偲丄偦偺僒僀僘 ( 僛儘廔寢暥帤傪娷傓 ) 偑搉偝傟傞偺偱 ( 偨偩偟椺奜偁傝)丄
-僾儔僌僀儞懁偼偦偺暥帤楍僶僢僼傽偵彂偒崬傒丄偦偺僒僀僘傪挻偊偰彂偒崬傫偱
-偼側傜側偄丅暥帤僐乕僪偼儚僀僪暥帤楍傪梡偄傞丅
+文字列をプラグインがわから本体的に返すときは、本体側から渡された文字列バッ
+ファと、そのサイズ ( ゼロ終結文字を含む ) が渡されるので ( ただし例外あり)、
+プラグイン側はその文字列バッファに書き込み、そのサイズを超えて書き込んで
+はならない。文字コードはワイド文字列を用いる。
 
-URL 偱丄僼傽僀儖偑儘乕僇儖偵偁傞応崌偼 file: 傪徣棯偱偒傞丅傑偨丄僷僗嬫
-愗傝偼 / 傪巊偆偙偲偲偡傞丅
-傕偪傠傫丄杮懱懁偼儘乕僇儖僼傽僀儖偺傒偺僒億乕僩偱傕傛偄丅
+URL で、ファイルがローカルにある場合は file: を省略できる。また、パス区
+切りは / を使うこととする。
+もちろん、本体側はローカルファイルのみのサポートでもよい。
 
-埲壓丄乽僒儞僾儖扨埵乿偲偼丄16bit pcm 偺応崌 2byte丄8bit pcm 偺応崌偼
-1byte 傪愯桳偡傞丄検巕壔僨乕僞偺扨埵偱偁傞丅傑偨丄乽儅儖僠僠儍僱儖僒儞僾儖
-扨埵乿偲偼丄儌僲儔儖偺応崌 1 僒儞僾儖扨埵丄僗僥儗僆偺応崌 2 僒儞僾儖扨埵
-傪愯桳偡傞丄偡傋偰偺僠儍僱儖傪崌傢偣偨検巕壔僨乕僞偺扨埵偱偁傞丅
+以下、「サンプル単位」とは、16bit pcm の場合 2byte、8bit pcm の場合は
+1byte を占有する、量子化データの単位である。また、「マルチチャネルサンプル
+単位」とは、モノラルの場合 1 サンプル単位、ステレオの場合 2 サンプル単位
+を占有する、すべてのチャネルを合わせた量子化データの単位である。
 
 
 ----------------------------------------------------------------------
-DLL 偐傜僄僋僗億乕僩偝傟傞傕偺
-偙傟傜偺娭悢偼儊僀儞僗儗僢僪偐傜偺傒屇傇丅
+DLL からエクスポートされるもの
+これらの関数はメインスレッドからのみ呼ぶ。
 
 HRESULT _stdcall GetModuleInstance(ITSSModule **out, ITSSStorageProvider *provider,
 	IStream * config, HWND mainwin);
-婡擻:
-	丂儌僕儏乕儖偺僀儞僗僞儞僗偺庢摼
-僾儔僌僀儞懁:
-	丂out 偵 ITSSModule 偺僀儞僗僞儞僗傪嶌惉偡傞側偳偟偰曉偡丅
-	丂provider 偵偼丄杮懱懁偺僼傽僀儖傪奐偔偨傔偺 ITSSStorageProvider 僀
-	儞僞僼僃乕僗偑搉偝傟傞偺偱丄僼傽僀儖傪奐偔昁梫偑偁傞偲偒偵棙梡偡傞丅
-	丂config 偵偼丄偙偺僾儔僌僀儞梡偺愝掕僨乕僞傪婰榐偟偰偁傞 IStream 僀
-	儞僞僼僃乕僗偑搉偝傟傞偑丄NULL 偑搉偝傟偨偲偒偼愝掕僨乕僞偼搉偝傟側偐
-	偭偨傕偺偲偟偰張棟偡傞丅
-	丂mainwin 偵偼傾僾儕働乕僔儑儞偺儊僀儞僂傿儞僪僂偺僴儞僪儖偑搉偝傟
-	偰偄傞偑丄NULL 偺応崌傕偁傞丅
-杮懱懁:
-	丂僾儔僌僀儞傪巊梡偡傞偲偒偵偙偺娭悢傪屇傇丅out 偵偼僾儔僌僀儞偐傜
-	ITSSModule 僀儞僞僼僃乕僗偑搉偝傟傞偺偱丄巊梡偟廔傢偭偨傜 Release
-	儊僜僢僪偱夝曻偡傞丅
-	丂config 偵偼丄偦偺僾儔僌僀儞梡偺愝掕僨乕僞僼傽僀儖側偳偺 IStream
-	僀儞僞僼僃乕僗傪搉偡 ( 僨乕僞偼撉傒崬傒儌乕僪偱奐偗偽偄偄 )丅柺搢側
-	偲偒傗丄愝掕僨乕僞偑柍偄応崌偼 NULL 傪搉偟偰傕傛偄丅
-	丂mainwin 偵偼傾僾儕働乕僔儑儞偺儊僀儞僂傿儞僪僂偺僴儞僪儖傪搉偡偑丄
-	NULL 偱傕傛偄丅
-栠傝抣:
-	S_OK : 惓忢
-	偦傟埲奜 : 堎忢
+機能:
+	　モジュールのインスタンスの取得
+プラグイン側:
+	　out に ITSSModule のインスタンスを作成するなどして返す。
+	　provider には、本体側のファイルを開くための ITSSStorageProvider イ
+	ンタフェースが渡されるので、ファイルを開く必要があるときに利用する。
+	　config には、このプラグイン用の設定データを記録してある IStream イ
+	ンタフェースが渡されるが、NULL が渡されたときは設定データは渡されなか
+	ったものとして処理する。
+	　mainwin にはアプリケーションのメインウィンドウのハンドルが渡され
+	ているが、NULL の場合もある。
+本体側:
+	　プラグインを使用するときにこの関数を呼ぶ。out にはプラグインから
+	ITSSModule インタフェースが渡されるので、使用し終わったら Release
+	メソッドで解放する。
+	　config には、そのプラグイン用の設定データファイルなどの IStream
+	インタフェースを渡す ( データは読み込みモードで開けばいい )。面倒な
+	ときや、設定データが無い場合は NULL を渡してもよい。
+	　mainwin にはアプリケーションのメインウィンドウのハンドルを渡すが、
+	NULL でもよい。
+戻り値:
+	S_OK : 正常
+	それ以外 : 異常
 
 
 ULONG _stdcall GetModuleThreadModel(void)
-婡擻:
-	丂儌僕儏乕儖偺僗儗僢僪儌僨儖傪摼傞
-僾儔僌僀儞懁:
-	丂*result 偵僗儗僢僪儌僨儖傪曉偡丅
-		0  僔儞僌儖僗儗僢僪儌僨儖 ( 儕僄儞僩儔儞僩偱側偄 )
-		1  傾僷乕僩儊儞僩僗儗僢僪儌僨儖 ( 儕僄儞僩儔儞僩偱偁傞 )
-	丂偙偺娭悢傪僄僋僗億乕僩偟偰偄側偄偲偒偼丄傾僷乕僩儊儞僩僗儗僢僪儌
-	僨儖偱偁傞偲尒側偝傟傞丅
-杮懱懁:
-	丂0 偑曉偝傟偨応崌偼丄僾儔僌僀儞偵懳偟偰暋悢偺僗儗僢僪偐傜摨帪偵傾
-	僋僙僗偱偒側偄 ( 暋悢僗儗僢僪偑摨帪偵偱偼側偗傟偽傾僋僙僗偡傞偙偲偼
-	偱偒傞 )丅
-	丂1 偑曉偝傟偨応崌偼丄僾儔僌僀儞偵懳偟偰暋悢偺僗儗僢僪偐傜摨帪偵傾
-	僋僙僗偼偱偒傞偑丄堦偮偺僆僽僕僃僋僩偵懳偟偰偼暋悢僗儗僢僪偐傜摨帪
-	偵傾僋僙僗偟偰偼側傜側偄丅
-	丂僾儔僌僀儞偑偙偺娭悢傪僄僋僗億乕僩偟偰偄側偄偲偒偼丄傾僷乕僩儊儞
-	僩僗儗僢僪儌僨儖偱偁傞偲尒側偡丅
-栠傝抣 :
-	0 : 僔儞僌儖僗儗僢僪儌僨儖 ( 儕僄儞僩儔儞僩偱側偄 )
-	1 : 傾僷乕僩儊儞僩僗儗僢僪儌僨儖 ( 儕僄儞僩儔儞僩偱偁傞 )
+機能:
+	　モジュールのスレッドモデルを得る
+プラグイン側:
+	　*result にスレッドモデルを返す。
+		0  シングルスレッドモデル ( リエントラントでない )
+		1  アパートメントスレッドモデル ( リエントラントである )
+	　この関数をエクスポートしていないときは、アパートメントスレッドモ
+	デルであると見なされる。
+本体側:
+	　0 が返された場合は、プラグインに対して複数のスレッドから同時にア
+	クセスできない ( 複数スレッドが同時にではなければアクセスすることは
+	できる )。
+	　1 が返された場合は、プラグインに対して複数のスレッドから同時にア
+	クセスはできるが、一つのオブジェクトに対しては複数スレッドから同時
+	にアクセスしてはならない。
+	　プラグインがこの関数をエクスポートしていないときは、アパートメン
+	トスレッドモデルであると見なす。
+戻り値 :
+	0 : シングルスレッドモデル ( リエントラントでない )
+	1 : アパートメントスレッドモデル ( リエントラントである )
 
 
 
 HRESULT _stdcall ShowConfigWindow([in] HWND parentwin, [in]  IStream * storage );
-婡擻:
-	丂愝掕僟僀傾儘僌偺昞帵
-僾儔僌僀儞懁:
-	丂愝掕僟僀傾儘僌傪昞帵偡傞丅parentwin 偵偼恊僂傿儞僪僂偲側傞傋偒僂
-	傿儞僪僂偺僴儞僪儖偑搉偝傟傞偺偱丄妶梡偡傞丅愝掕偑廔傢偭偨傜丄storage
-	偵愝掕僨乕僞傪奿擺偡傞丅奿擺宍幃偼僾儔僌僀儞偑寛傔傞丅
-	丂愝掕僟僀傾儘僌傪昞帵偟側偄応崌偼丄偙偺娭悢傪僄僋僗億乕僩偟側偔偰傛偄丅
-杮懱懁:
-	丂愝掕僟僀傾儘僌傪昞帵偟偨偄偲偒偵屇傃弌偡丅parentwin 偵偼恊僂傿儞
-	僪僂偲側傞傋偒僂傿儞僪僂偺僴儞僪儖傪搉偡丅
-	丂storage 偵偼愝掕僨乕僞傪搉偡偨傔偺 IStream 僀儞僞僼僃乕僗傪搉偡
-	( 僗僩儕乕儉偵彂偒崬傔傞昁梫偑偁傞 )丅
-	丂偙偺娭悢偑僄僋僗億乕僩偝傟偰偄側偄偲偒偼丄愝掕僟僀傾儘僌傪昞帵偝
-	偣傞偙偲偼偱偒側偄丅
-栠傝抣:
-	S_OK : 惓忢
-	E_NOTIMPL : 幚憰偟偰偄側偄
-	偦傟埲奜 : 堎忢
+機能:
+	　設定ダイアログの表示
+プラグイン側:
+	　設定ダイアログを表示する。parentwin には親ウィンドウとなるべきウ
+	ィンドウのハンドルが渡されるので、活用する。設定が終わったら、storage
+	に設定データを格納する。格納形式はプラグインが決める。
+	　設定ダイアログを表示しない場合は、この関数をエクスポートしなくてよい。
+本体側:
+	　設定ダイアログを表示したいときに呼び出す。parentwin には親ウィン
+	ドウとなるべきウィンドウのハンドルを渡す。
+	　storage には設定データを渡すための IStream インタフェースを渡す
+	( ストリームに書き込める必要がある )。
+	　この関数がエクスポートされていないときは、設定ダイアログを表示さ
+	せることはできない。
+戻り値:
+	S_OK : 正常
+	E_NOTIMPL : 実装していない
+	それ以外 : 異常
 
 
 
 ULONG _stdcall CanUnloadNow(void);
-婡擻:
-	丂僾儔僌僀儞傪夝曻偱偒傞偐偳偆偐傪曉偡
-僾儔僌僀儞懁:
-	丂偙偺 DLL 傪偡偖偵夝曻偟偰傕傛偄偐傪曉偡丅堦斒揑偵偼丄撪晹偵嶲徠僇
-	僂儞僞傪偍偒丄ITSSModule 側偳偺僀儞僞僼僃乕僗偑嶌惉偝傟偨傜偦偺嶲徠
-	僇僂儞僞傪僀儞僋儕儊儞僩丄嶍彍偝傟傟偽僨僋儕儊儞僩偟偰丄偦偺嶲徠僇
-	僂儞僞傪曉偣偽傛偄丅
-杮懱懁:
-	丂僾儔僌僀儞傪夝曻偡傞傑偊偵偙偺娭悢偱僠僃僢僋偡傋偒丅
-	丂偙偺娭悢偑僄僋僗億乕僩偝傟偰偄側偄偲偒偼丄偡偖偵夝曻偟偰偐傑傢側偄丅
-栠傝抣:
-	0 : 夝曻壜擻
-	偦傟埲奜 : 夝曻晄壜
+機能:
+	　プラグインを解放できるかどうかを返す
+プラグイン側:
+	　この DLL をすぐに解放してもよいかを返す。一般的には、内部に参照カ
+	ウンタをおき、ITSSModule などのインタフェースが作成されたらその参照
+	カウンタをインクリメント、削除されればデクリメントして、その参照カ
+	ウンタを返せばよい。
+本体側:
+	　プラグインを解放するまえにこの関数でチェックすべき。
+	　この関数がエクスポートされていないときは、すぐに解放してかまわない。
+戻り値:
+	0 : 解放可能
+	それ以外 : 解放不可
 
 
 ----------------------------------------------------------------------
 ITSSModule
-僾儔僌僀儞偵偮偒侾屄丄昁梫偵側傞僆僽僕僃僋僩丅GetModuleInstance 偱偙偺
-僀儞僞僼僃乕僗傪曉偡丅
+プラグインにつき１個、必要になるオブジェクト。GetModuleInstance でこの
+インタフェースを返す。
 
 HRESULT _stdcall GetModuleCopyright([in] LPWSTR buffer, [in] unsigned long buflen );
-婡擻:
-	丂儌僕儏乕儖偺挊嶌尃忣曬偺庢摼
-僾儔僌僀儞懁:
-	丂僾儔僌僀儞偺挊嶌尃忣曬傪 buffer 偵彂偒崬傓丅buffer 偺挿偝偼 buflen
-	( 僛儘廔寢暥帤傪娷傓 ) 偱梌偊傜傟偰偄傞偺偱丄偙傟傪墇偊偰彂偒崬傫偱
-	偼側傜側偄丅
-杮懱懁:
-	丂僾儔僌僀儞偺挊嶌尃忣曬偑昁梫偵側傟偽屇傃弌偡丅buffer 偵偼暥帤楍僶
-	僢僼傽丄buflen 偵偼偦偺僒僀僘 ( 僛儘廔寢暥帤傪娷傓 ) 傪梌偊傞丅
-栠傝抣:
-	S_OK : 惓忢
-	E_NOTIMPL : 幚憰偟偰偄側偄
-	偦傟埲奜 : 堎忢
+機能:
+	　モジュールの著作権情報の取得
+プラグイン側:
+	　プラグインの著作権情報を buffer に書き込む。buffer の長さは buflen
+	( ゼロ終結文字を含む ) で与えられているので、これを越えて書き込んで
+	はならない。
+本体側:
+	　プラグインの著作権情報が必要になれば呼び出す。buffer には文字列バ
+	ッファ、buflen にはそのサイズ ( ゼロ終結文字を含む ) を与える。
+戻り値:
+	S_OK : 正常
+	E_NOTIMPL : 実装していない
+	それ以外 : 異常
 
 
 HRESULT _stdcall GetModuleDescription([in] LPWSTR buffer, [in] unsigned long buflen );
-婡擻:
-	丂儌僕儏乕儖偺捛壛忣曬偺庢摼
-僾儔僌僀儞懁:
-	丂GetModuleCopyright 偲摨偠丅
-杮懱懁:
-	丂僾儔僌僀儞偺捛壛忣曬偑昁梫偵側傟偽屇傃弌偡丅偦偺傎偐偼
-	GetModuleCopyright 偲摨偠丅
-栠傝抣:
-	S_OK : 惓忢
-	E_NOTIMPL : 幚憰偟偰偄側偄
-	偦傟埲奜 : 堎忢
+機能:
+	　モジュールの追加情報の取得
+プラグイン側:
+	　GetModuleCopyright と同じ。
+本体側:
+	　プラグインの追加情報が必要になれば呼び出す。そのほかは
+	GetModuleCopyright と同じ。
+戻り値:
+	S_OK : 正常
+	E_NOTIMPL : 実装していない
+	それ以外 : 異常
 
 
 HRESULT _stdcall GetSupportExts([in] unsigned long index, [in] LPWSTR mediashortname, [in] LPWSTR buf, [in] unsigned long buflen );
-婡擻:
-	丂懳墳僼傽僀儖奼挘巕偺庢摼
-僾儔僌僀儞懁:
-	丂index 偵偼丄杮懱懁偐傜 0 偐傜弴偵悢抣偑搉偝傟傞偺偱丄偦偺悢抣偵懳
-	墳偟偨僼傽僀儖奼挘巕傪曉偡丅懳墳偟偰偄傞奼挘巕僀儞僨僢僋僗傪墇偊偰
-	屇偽傟傟偽丄S_FALSE 傪曉偡丅
-	丂mediashortname 偵偼丄偦偺奼挘巕偵懳墳偡傞儊僨傿傾柤傪彂偒崬傓偨傔
-	偺僶僢僼傽傊偺億僀儞僞偑搉偝傟傞丅杮懱懁偱偼 char[33] 偱妋曐偝傟偰
-	偄傞僶僢僼傽側偺偱丄僛儘廔寢暥帤傪娷傫偱 32 暥帤傑偱彂偒崬傓偙偲偑
-	偱偒傞丅
-	丂buf 偵偼丄僼傽僀儖奼挘巕傪彂偒崬傓丅buflen 偼僶僢僼傽挿丅僼傽僀儖
-	奼挘巕偼 . (僪僢僩) 傪傆偔傓丅傕偟丄僼傽僀儖宍幃偑奼挘巕偵傛傜側偄
-	応崌偼丄僪僢僩傕側偟偵嬻暥帤傪曉偡 ( buf[0]='\0' )丅
-杮懱懁:
-	丂mediashortname 偵偼 char[33] 偱妋曐偟偨僶僢僼傽傊偺億僀儞僞傪搉偡丅
-	丂buf, buflen 偵偼丄僼傽僀儖奼挘巕偑曉偝傟傞偺偱丄MAX_PATH +1 偺僶
-	僢僼傽挿傪妋曐偡傞丅
-	丂index 偼 0 偐傜偼偠傔丄僾儔僌僀儞偑 S_FALSE 傪曉偡傑偱 1 傪壛偊偮
-	偮孞傝曉偟屇傃弌偡丅偨偩偟丄僾儔僌僀儞懁偑 S_FALSE 傪曉偟偨偲偒偵偼
-	婛偵僀儞僨僢僋僗傪墇偊偰偄傞偺偱丄mediashortname , buf 偵偼忣曬偼奿
-	擺偝傟偰偄側偄丅
-	丂buf 偵嬻暥帤楍偑愝掕偝傟偨応崌偼丄偦偺僾儔僌僀儞傪廟偭偰傕傛偄偟丄
-	GetMediaSupport 傪屇傃弌偟偰僾儔僌僀儞偵偦偺搒搙懳墳傪妋擣偝偣傞偙
-	偲傕偱偒傞丅
-栠傝抣:
-	S_OK : 惓忢 ( 忣曬偼奿擺偝傟偨 )
-	S_FALSE : 僀儞僨僢僋僗傪墇偊偰偄傞 ( 忣曬偼奿擺偝傟偰偄側偄 )
-	偦偺傎偐 : 堎忢
+機能:
+	　対応ファイル拡張子の取得
+プラグイン側:
+	　index には、本体側から 0 から順に数値が渡されるので、その数値に対
+	応したファイル拡張子を返す。対応している拡張子インデックスを越えて
+	呼ばれれば、S_FALSE を返す。
+	　mediashortname には、その拡張子に対応するメディア名を書き込むため
+	のバッファへのポインタが渡される。本体側では char[33] で確保されて
+	いるバッファなので、ゼロ終結文字を含んで 32 文字まで書き込むことが
+	できる。
+	　buf には、ファイル拡張子を書き込む。buflen はバッファ長。ファイル
+	拡張子は . (ドット) をふくむ。もし、ファイル形式が拡張子によらない
+	場合は、ドットもなしに空文字を返す ( buf[0]='\0' )。
+本体側:
+	　mediashortname には char[33] で確保したバッファへのポインタを渡す。
+	　buf, buflen には、ファイル拡張子が返されるので、MAX_PATH +1 のバ
+	ッファ長を確保する。
+	　index は 0 からはじめ、プラグインが S_FALSE を返すまで 1 を加えつ
+	つ繰り返し呼び出す。ただし、プラグイン側が S_FALSE を返したときには
+	既にインデックスを越えているので、mediashortname , buf には情報は格
+	納されていない。
+	　buf に空文字列が設定された場合は、そのプラグインを蹴ってもよいし、
+	GetMediaSupport を呼び出してプラグインにその都度対応を確認させるこ
+	ともできる。
+戻り値:
+	S_OK : 正常 ( 情報は格納された )
+	S_FALSE : インデックスを越えている ( 情報は格納されていない )
+	そのほか : 異常
 
 
 HRESULT _stdcall GetMediaInfo([in] LPWSTR url, [out, retval] ITSSMediaBaseInfo ** info );
-婡擻:
-	丂巜掕儊僨傿傾偺忣曬傪庢摼
-僾儔僌僀儞懁:
-	丂url 偵偼儊僨傿傾偺懚嵼偡傞応強 ( Uniform Resource Locator 偱 ) 偑
-	搉偝傟傞丅昁梫偱偁傟偽丄GetModuleInstance 偱搉偝傟偨 provider 傪梡
-	偄偰僼傽僀儖傪奐偒丄儊僨傿傾偺撪梕傪摼傞丅
-	丂info 偵偼丄嶌惉偟偨 ITSSMediaBaseInfo 僀儞僞僼僃乕僗丄傑偨偼偦偺
-	攈惗僀儞僞僼僃乕僗傪曉偡丅
-杮懱懁:
-	丂url 偵偼儊僨傿傾偺懚嵼偡傞応強傪搉偡丅
-	丂info 偵偼 ITSSMediaBaseInfo 僀儞僞僼僃乕僗偑搉偝傟傞偺偱丄偙傟偱
-	儊僨傿傾偺忣曬傪摼傞丅巊梡偟廔傢偭偨傜 Release 儊僜僢僪偱夝曻偡傞偙
-	偲丅
-栠傝抣:
-	S_OK : 惓忢
-	E_NOTIMPL : 幚憰偟偰偄側偄 ( 忣曬偼摼傜傟側偄 )
-	偦傟埲奜 : 堎忢
+機能:
+	　指定メディアの情報を取得
+プラグイン側:
+	　url にはメディアの存在する場所 ( Uniform Resource Locator で ) が
+	渡される。必要であれば、GetModuleInstance で渡された provider を用
+	いてファイルを開き、メディアの内容を得る。
+	　info には、作成した ITSSMediaBaseInfo インタフェース、またはその
+	派生インタフェースを返す。
+本体側:
+	　url にはメディアの存在する場所を渡す。
+	　info には ITSSMediaBaseInfo インタフェースが渡されるので、これで
+	メディアの情報を得る。使用し終わったら Release メソッドで解放するこ
+	と。
+戻り値:
+	S_OK : 正常
+	E_NOTIMPL : 実装していない ( 情報は得られない )
+	それ以外 : 異常
 
 
 HRESULT _stdcall GetMediaSupport([in] LPWSTR url );
-婡擻:
-	丂巜掕儊僨傿傾傪偙偺僾儔僌僀儞偱埖偊傞偐専嵏
-僾儔僌僀儞懁:
-	丂搉偝傟偨 url 傪棅傝偵丄偙偺儊僨傿傾偑埖偊傞宍幃偱偁傞偐偳偆偐傪
-	曉偡丅
-杮懱懁:
-	丂儊僨傿傾偑僾儔僌僀儞偱埖偊傞偐偳偆偐傪専嵏偟偨偄偲偒偵丄偙偺儊僜
-	僢僪傪屇傃弌偡丅
-栠傝抣:
-	S_OK : 惓忢
-	E_NOTIMPL : 幚憰偟偰偄側偄 ( GetSupportExts 偱巜掕偟偨奼挘巕傪帩偮
-		僼傽僀儖偼椺奜側偔撉傔傞傫偠傖儃働 )
-	偦傟埲奜 : 堎忢
+機能:
+	　指定メディアをこのプラグインで扱えるか検査
+プラグイン側:
+	　渡された url を頼りに、このメディアが扱える形式であるかどうかを
+	返す。
+本体側:
+	　メディアがプラグインで扱えるかどうかを検査したいときに、このメソ
+	ッドを呼び出す。
+戻り値:
+	S_OK : 正常
+	E_NOTIMPL : 実装していない ( GetSupportExts で指定した拡張子を持つ
+		ファイルは例外なく読めるんじゃボケ )
+	それ以外 : 異常
 
 
 HRESULT _stdcall GetMediaInstance([in] LPWSTR url, [out, retval]  IUnknown ** instance );
-婡擻:
-	丂儊僨傿傾嵞惗梡僆僽僕僃僋僩偺庢摼
-僾儔僌僀儞懁:
-	丂搉偝傟偨 url 傪嵞惗偡傞偙偲偺偱偒傞嵞惗梡僆僽僕僃僋僩傪曉偟丄
-	instance 偵曉偡丅
-杮懱懁:
-	丂url 偵偮偄偰偼 GetMediaInfo 傪嶲徠丅
-	丂僾儔僌僀儞偐傜婣偭偰偔傞 instance 偼 IUnknown * 宆 側偺偱丄杮懱懁
-	偱 instance->QueryInterface 儊僜僢僪傪屇傃弌偟丄偳偺傛偆側庬椶偺儊
-	僨傿傾嵞惗梡僆僽僕僃僋僩側偺偐傪摿掕偡傞丅尰嵼 ITSSWaveDecoder 偑婯
-	掕偝傟偰偄傞丅
-	丂instance 偱曉偝傟偨僆僽僕僃僋僩傪巊梡偟廔傢偭偨傜丄Release 儊僜僢
-	僪傪屇傃弌偟偰夝曻偡傞丅
-栠傝抣:
-	S_OK : 惓忢
-	偦傟埲奜 : 堎忢
+機能:
+	　メディア再生用オブジェクトの取得
+プラグイン側:
+	　渡された url を再生することのできる再生用オブジェクトを返し、
+	instance に返す。
+本体側:
+	　url については GetMediaInfo を参照。
+	　プラグインから帰ってくる instance は IUnknown * 型 なので、本体側
+	で instance->QueryInterface メソッドを呼び出し、どのような種類のメ
+	ディア再生用オブジェクトなのかを特定する。現在 ITSSWaveDecoder が規
+	定されている。
+	　instance で返されたオブジェクトを使用し終わったら、Release メソッ
+	ドを呼び出して解放する。
+戻り値:
+	S_OK : 正常
+	それ以外 : 異常
 
 
 ----------------------------------------------------------------------
 ITSSMediaBaseInfo
-巜掕偝傟偨嬋偵娭偡傞忣曬傪摼傞偨傔偺僀儞僞僼僃乕僗丅
-傛傝崅搙側忣曬傕偙偺僀儞僞僼僃乕僗偐傜攈惗偟偨僋儔僗偵傛偭偰摼傜傟傞丅
+指定された曲に関する情報を得るためのインタフェース。
+より高度な情報もこのインタフェースから派生したクラスによって得られる。
 
 HRESULT _stdcall GetMediaType([in] LPWSTR shortname, [in] LPWSTR descbuf, [in] unsigned long descbuflen );
-婡擻:
-	丂儊僨傿傾偺庬椶暥帤楍偺庢摼
-僾儔僌僀儞懁:
-	丂偙偺儊僨傿傾偺庬椶傪 shortname, descbuf 偵曉偡丅
-	丂shortname 偵偮偄偰偼丄ITSSModule::GetSupportExts 偺 mediashortname
-	傪嶲徠丅
-杮懱懁:
-	丂儊僨傿傾偺庬椶偵娭偡傞忣曬傪摼偨偄偲偒偵偙偺儊僜僢僪傪屇傇丅
-	丂shortname 偵偮偄偰偼丄ITSSModule::GetSupportExts 偺 mediashortname
-	傪嶲徠丅
-栠傝抣:
-	S_OK : 惓忢
-	E_NOTIMPL : 幚憰偟偰偄側偄
-	偦傟埲奜 : 堎忢
+機能:
+	　メディアの種類文字列の取得
+プラグイン側:
+	　このメディアの種類を shortname, descbuf に返す。
+	　shortname については、ITSSModule::GetSupportExts の mediashortname
+	を参照。
+本体側:
+	　メディアの種類に関する情報を得たいときにこのメソッドを呼ぶ。
+	　shortname については、ITSSModule::GetSupportExts の mediashortname
+	を参照。
+戻り値:
+	S_OK : 正常
+	E_NOTIMPL : 実装していない
+	それ以外 : 異常
 
 
 HRESULT _stdcall GetLength([out, retval] unsigned long * length );
-婡擻:
-	丂嬋挿偝偺庢摼
-僾儔僌僀儞懁:
-	丂偙偺儊僨傿傾偺嬋挿傪 *length 偵 ms 扨埵偱曉偡丅
-	丂嬋挿偑傢偐傜側偄応崌偼丄儊僜僢僪偺栠傝抣偲偟偰 E_NOTIMPL 傪曉偡偙
-	偲丅
-杮懱懁:
-	丂儊僨傿傾偺嬋挿傪摼偨偄偲偒偵偙偺儊僜僢僪傪屇傇丅
-栠傝抣:
-	S_OK : 惓忢
-	E_NOTIMPL : 嬋挿偼傢偐傜側偄
-	偦傟埲奜 : 堎忢
+機能:
+	　曲長さの取得
+プラグイン側:
+	　このメディアの曲長を *length に ms 単位で返す。
+	　曲長がわからない場合は、メソッドの戻り値として E_NOTIMPL を返すこ
+	と。
+本体側:
+	　メディアの曲長を得たいときにこのメソッドを呼ぶ。
+戻り値:
+	S_OK : 正常
+	E_NOTIMPL : 曲長はわからない
+	それ以外 : 異常
 
 HRESULT _stdcall GetTitle([in] LPWSTR buf, [in] unsigned long buflen );
-婡擻:
-	丂儊僨傿傾僞僀僩儖偺庢摼
+機能:
+	　メディアタイトルの取得
 
 
 HRESULT _stdcall GetCopyright([in] LPWSTR buf, [in] unsigned long buflen );
-婡擻:
-	丂儊僨傿傾挊嶌尃忣曬偺庢摼
+機能:
+	　メディア著作権情報の取得
 
 
 HRESULT _stdcall GetComment([in] LPWSTR buf, [in] unsigned long buflen );
-婡擻:
-	丂儊僨傿傾僐儊儞僩偺庢摼
+機能:
+	　メディアコメントの取得
 
 
 HRESULT _stdcall GetArtist([in] LPWSTR buf, [in] unsigned long buflen );
-婡擻:
-	丂儊僨傿傾傾乕僥傿僗僩偺庢摼
+機能:
+	　メディアアーティストの取得
 
 
 ----------------------------------------------------------------------
 ITSSWaveDecoder
-Wave 宍幃偺僼傽僀儖傪僨僐乕僪偡傞偨傔偺僀儞僞僼僃乕僗丅
+Wave 形式のファイルをデコードするためのインタフェース。
 
 
 HRESULT _stdcall GetFormat([in] TSSWaveFormat * format );
-婡擻:
-	丂嵞惗僼僅乕儅僢僩偺庢摼
-僾儔僌僀儞懁:
-	丂format 偵丄偙偺儊僨傿傾偺嵞惗僼僅乕儅僢僩傪愝掕偡傞丅
+機能:
+	　再生フォーマットの取得
+プラグイン側:
+	　format に、このメディアの再生フォーマットを設定する。
 		typedef struct tagTSSWaveFormat
 		{
 			unsigned long dwSamplesPerSec;
 			unsigned long dwChannels;
 			unsigned long dwBitsPerSample;
 			unsigned long dwSeekable;
-			unsigned __int64 ui64TotalSamples; // 儅儖僠僠儍僱儖僒儞僾儖扨埵
+			unsigned __int64 ui64TotalSamples; // マルチチャネルサンプル単位
 			unsigned long dwTotalTime;
 			unsigned long dwReserved0;
 			unsigned long dwReserved1;
 		} TSSWaveFormat;
-	丂TSSWaveFormat 偺 dwSeekable 僼傿乕儖僪偼丄僒儞僾儖悢扨埵惛搙偱僔
-	乕僋壜擻側応崌偼 2丄ms 扨埵惛搙偱僔乕僋壜擻側応崌偼 1丄僔乕僋偑偱
-	偒側偄丄偁傞偄偼僔乕僋偱偒偰傕惛搙偑埆偄偲偄偆応崌偼 0 傪擖傟傞丅
-杮懱懁:
-	丂format 偵偼 TSSWaveFormat 傊偺億僀儞僞傪搉偡丅
-	丂僾儔僌僀儞懁偐傜僼僅乕儅僢僩偑曉偝傟傞偺偱丄嵞惗偺弨旛傪偡傞丅
-栠傝抣:
-	S_OK : 惓忢
-	偦傟埲奜 : 堎忢
+	　TSSWaveFormat の dwSeekable フィールドは、サンプル数単位精度でシ
+	ーク可能な場合は 2、ms 単位精度でシーク可能な場合は 1、シークがで
+	きない、あるいはシークできても精度が悪いという場合は 0 を入れる。
+本体側:
+	　format には TSSWaveFormat へのポインタを渡す。
+	　プラグイン側からフォーマットが返されるので、再生の準備をする。
+戻り値:
+	S_OK : 正常
+	それ以外 : 異常
 
 
 HRESULT _stdcall Render([in] void * buf, [in] unsigned long bufsamplelen, [out] unsigned long * rendered, [out, retval] unsigned long * continue );
-婡擻:
-	丂尰嵼埵抲偐傜僨僐乕僪
-僾儔僌僀儞懁:
-	丂尰嵼偺僨僐乕僪埵抲偐傜僨僐乕僪傪偡傞丅
-	丂僨僐乕僪偺奿擺愭偼 buf 丄奿擺偡傋偒僒儞僾儖悢偼 bufsamplelen 偱儅
-	儖僠僠儍僱儖僒儞僾儖扨埵偱帵偝傟偰偄傞丅bufsamplelen 偼僶僢僼傽偺僶
-	僀僩悢偱偼側偔丄儅儖僠僠儍僱儖僒儞僾儖悢偱偁傞丅*rendered 偵偼幚嵺偵
-	僨僐乕僪偟偨僒儞僾儖悢傪儅儖僠僠儍僱儖僒儞僾儖扨埵偱曉偡丅
-	丂buf 偑 NULL 偺応崌偼弌椡 PCM 傪奿擺偡傞昁梫偼側偄 ( 僗僉僢僾摦嶌 )丅
-	丂continue 偵偼丄僨僐乕僪偑廔傢偭偨偐偳偆偐偺僨僐乕僟偺僗僥乕僞僗傪
-	曉偡丅傑偩僨僐乕僪傪懕偗傜傟傞応崌偼 1 傪曉偟丄僨僐乕僪偑廔椆偟偨応
-	崌偼 0 傪曉偡丅
-	丂rendered 傗 continue 偵 NULL 偑搉偝傟偨応崌偼偙傟傜偵偼忣曬傪奿擺
-	偟側偄丅
-杮懱懁:
-	丂buf 偵偼 PCM 偺僒儞僾儖傪奿擺偡傞偨傔偺僶僢僼傽丄bufsamplelen 偵
-	偼丄偦偺僶僢僼傽偵奿擺偱偒傞嵟戝僒儞僾儖悢傪搉偡丅
-	丂僾儔僌僀儞偵僗僉僢僾偺摦嶌傪峴傢偣偨偄応崌偼 buf 偵 NULL丄bufsamplelen
-	偵僗僉僢僾偟偨偄僒儞僾儖悢傪巜掕偡傞偑丄rendered 偵偼幚嵺偵僗僉僢僾
-	偝傟偨僒儞僾儖悢偑奿擺偝傟丄偦傟偼 bufsamplelen 傛傝傕彮側偄応崌偑
-	偁傞丅
-	丂rendered 偵偼幚嵺偵奿擺偝傟偨僒儞僾儖悢偑搉偝傟傞偑丄bufsamplelen
-	傛傝傕彫偝偄応崌偑偁傞丅傑偨丄彫偝偄偐傜偲尵偭偰僨僐乕僪偑廔傢偭偨
-	傢偗偱偼側偄丅rendered 偵 0 偑曉偝傟偰傕丄continue 偑 1 側傜偽師偺
-	僒儞僾儖傪僨僐乕僪偱偒傞丅
-	丂continue 偑 1 偱曉偭偰偒偨偲偒偼丄懕偗偰師偺僨僐乕僪傪偡傞偙偲偑
-	偱偒傞丅0 偱曉偭偰偒偨偲偒偼師偺僨僐乕僪偼偱偒側偄丅
-栠傝抣:
-	S_OK : 惓忢
-	偦傟埲奜 : 堎忢
+機能:
+	　現在位置からデコード
+プラグイン側:
+	　現在のデコード位置からデコードをする。
+	　デコードの格納先は buf 、格納すべきサンプル数は bufsamplelen でマ
+	ルチチャネルサンプル単位で示されている。bufsamplelen はバッファのバ
+	イト数ではなく、マルチチャネルサンプル数である。*rendered には実際に
+	デコードしたサンプル数をマルチチャネルサンプル単位で返す。
+	　buf が NULL の場合は出力 PCM を格納する必要はない ( スキップ動作 )。
+	　continue には、デコードが終わったかどうかのデコーダのステータスを
+	返す。まだデコードを続けられる場合は 1 を返し、デコードが終了した場
+	合は 0 を返す。
+	　rendered や continue に NULL が渡された場合はこれらには情報を格納
+	しない。
+本体側:
+	　buf には PCM のサンプルを格納するためのバッファ、bufsamplelen に
+	は、そのバッファに格納できる最大サンプル数を渡す。
+	　プラグインにスキップの動作を行わせたい場合は buf に NULL、bufsamplelen
+	にスキップしたいサンプル数を指定するが、rendered には実際にスキップ
+	されたサンプル数が格納され、それは bufsamplelen よりも少ない場合が
+	ある。
+	　rendered には実際に格納されたサンプル数が渡されるが、bufsamplelen
+	よりも小さい場合がある。また、小さいからと言ってデコードが終わった
+	わけではない。rendered に 0 が返されても、continue が 1 ならば次の
+	サンプルをデコードできる。
+	　continue が 1 で返ってきたときは、続けて次のデコードをすることが
+	できる。0 で返ってきたときは次のデコードはできない。
+戻り値:
+	S_OK : 正常
+	それ以外 : 異常
 
-僪埵
+ド位
 HRESULT _stdcall SetPosition([in] unsigned __int64 samplepos );
-婡擻:
-	丂巜掕埵抲傊偺僨僐乕僪埵抲偺堏摦
-僾儔僌僀儞懁:
-	丂samplepos 偵偼丄堏摦愭偺埵抲偑儅儖僠僠儍僱儖僒儞僾儖扨埵偱搉偝傟
-	傞 ( ms 扨埵偱偼側偄 ) 偺偱丄偦偺埵抲偵僨僐乕僪埵抲傪堏摦偡傞丅
-	丂僾儔僌僀儞偵傛偭偰偼丄ms 扨埵偵惛搙傪娵傔偰堏摦偟偰傕傛偄偑丄悇
-	彠偟側偄丅
-杮懱懁:
-	丂僔乕僋傪峴偆偲偒偵屇傃弌偡丅
-栠傝抣:
-	S_OK : 惓忢
-	E_NOTIMPL : 幚憰偟偰偄側偄
-	偦傟埲奜 : 堎忢
+機能:
+	　指定位置へのデコード位置の移動
+プラグイン側:
+	　samplepos には、移動先の位置がマルチチャネルサンプル単位で渡され
+	る ( ms 単位ではない ) ので、その位置にデコード位置を移動する。
+	　プラグインによっては、ms 単位に精度を丸めて移動してもよいが、推
+	奨しない。
+本体側:
+	　シークを行うときに呼び出す。
+戻り値:
+	S_OK : 正常
+	E_NOTIMPL : 実装していない
+	それ以外 : 異常
 
 
 ----------------------------------------------------------------------
 ITSSStorageProvider
-杮懱懁偱幚憰偟丄GetModuleInstance 傪屇傇偲偒偵偙偺僀儞僞僼僃乕僗傪搉偡丅
-杮懱懁偼傾僷乕僩儊儞僩僗儗僢僪儌僨儖偱偙傟傪幚憰偡傞昁梫偑偁傞丅
+本体側で実装し、GetModuleInstance を呼ぶときにこのインタフェースを渡す。
+本体側はアパートメントスレッドモデルでこれを実装する必要がある。
 
 HRESULT _stdcall GetStreamForRead([in] LPWSTR url, [out, retval]  IUnknown ** stream );
-婡擻:
-	丂僗僩儗乕僕偺撉傒崬傒梡IStream偺庢摼
-僾儔僌僀儞懁:
-	丂偙偺儊僜僢僪傪梡偄偰丄巜掕 URL 偺僼傽僀儖傪撉傒崬傒儌乕僪偱奐偔偙
-	偲偑偱偒傞丅
-	丂*stream 偵偼嶌惉偝傟偨 IStream 僀儞僞僼僃乕僗偑曉偭偰偔傞偺偱丄巊
-	偄廔傢偭偨傜 Release 偡傞帠丅
-杮懱懁:
-	丂僾儔僌僀儞懁偑梫媮偟偰偒偨僼傽僀儖傪撉傒崬傒儌乕僪偱奐偒丄偦偺
-	IStream 僀儞僞僼僃乕僗傪曉偡丅
-栠傝抣:
-	S_OK : 惓忢
-	偦傟埲奜 : 堎忢
+機能:
+	　ストレージの読み込み用IStreamの取得
+プラグイン側:
+	　このメソッドを用いて、指定 URL のファイルを読み込みモードで開くこ
+	とができる。
+	　*stream には作成された IStream インタフェースが返ってくるので、使
+	い終わったら Release する事。
+本体側:
+	　プラグイン側が要求してきたファイルを読み込みモードで開き、その
+	IStream インタフェースを返す。
+戻り値:
+	S_OK : 正常
+	それ以外 : 異常
 
 
 HRESULT _stdcall GetStreamForWrite([in] LPWSTR url, [out, retval]  IUnknown ** stream );
-婡擻:
-	丂僗僩儗乕僕偺彂偒崬傒梡IStream偺庢摼
+機能:
+	　ストレージの書き込み用IStreamの取得
 
 HRESULT _stdcall GetStreamForUpdate([in] LPWSTR url, [out, retval]  IUnknown ** stream );
-婡擻:
-	丂僗僩儗乕僕偺峏怴梡IStream偺庢摼
+機能:
+	　ストレージの更新用IStreamの取得
 
-丂忋婰擇偮偼幚憰偡傞昁梫側偟
+　上記二つは実装する必要なし
 

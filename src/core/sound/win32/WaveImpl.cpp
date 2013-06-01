@@ -792,7 +792,7 @@ static void TVPInitDirectSound()
 				TVPPrimaryDelayedStopperTimer = new TTimer(Application);
 				TVPPrimaryDelayedStopperTimer->SetInterval( 4000 );
 				TVPPrimaryDelayedStopperTimer->SetEnabled( false );
-#pragma message( __LOC__ "TODO ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰‚ğ‚È‚ñ‚Æ‚©‚·‚é" )
+#pragma message( __LOC__ "TODO ¥¤¥Ù¥ó¥È¥Ï¥ó¥É¥é¤ò¤Ê¤ó¤È¤«¤¹¤ë" )
 //				TVPPrimaryDelayedStopperTimer->SetOnTimer( TVPPrimaryDelayedStopper.OnTimer );
 			}
 		}
@@ -1481,7 +1481,7 @@ public:
 tTVPWaveSoundBufferThread::tTVPWaveSoundBufferThread()
 	: tTVPThread(true)
 {
-#pragma message( __LOC__ "TODO ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰‚ğ‚È‚ñ‚Æ‚©‚·‚é" )
+#pragma message( __LOC__ "TODO ¥á¥Ã¥»©`¥¸¥Ï¥ó¥É¥é¤ò¤Ê¤ó¤È¤«¤¹¤ë" )
 //	UtilWindow = AllocateHWnd(UtilWndProc);
 	PendingLabelEventExists = false;
 	NextLabelEventTick = 0;
@@ -1498,7 +1498,7 @@ tTVPWaveSoundBufferThread::~tTVPWaveSoundBufferThread()
 	Resume();
 	Event.Set();
 	WaitFor();
-#pragma message( __LOC__ "TODO ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰‚ğ‚È‚ñ‚Æ‚©‚·‚é" )
+#pragma message( __LOC__ "TODO ¥á¥Ã¥»©`¥¸¥Ï¥ó¥É¥é¤ò¤Ê¤ó¤È¤«¤¹¤ë" )
 	//DeallocateHWnd(UtilWindow);
 }
 //---------------------------------------------------------------------------

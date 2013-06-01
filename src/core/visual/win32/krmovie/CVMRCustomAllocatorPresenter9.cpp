@@ -1,6 +1,6 @@
 /****************************************************************************/
 /*! @file
-@brief VMR9偺儗儞僟乕儗僗儌乕僪梡傾儘働乕僞偲僾儗僛儞僞
+@brief VMR9のレンダーレスモード用アロケータとプレゼンタ
 
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto ( http://www.kaede-software.com/ )
@@ -28,8 +28,8 @@ static const GUID IID_IDirect3DTexture9 =
 
 //----------------------------------------------------------------------------
 //! @brief	  	CVMRCustomAllocatorPresenter9 constructor
-//! @param		owner : 偙偺僋儔僗傪曐帩偟偰偄傞僋儔僗
-//! @param		lock : 儘僢僋僆僽僕僃僋僩
+//! @param		owner : このクラスを保持しているクラス
+//! @param		lock : ロックオブジェクト
 //----------------------------------------------------------------------------
 CVMRCustomAllocatorPresenter9::CVMRCustomAllocatorPresenter9( tTVPDSMixerVideoOverlay* owner, CCritSec &lock )
  : CUnknown(NAME("VMR Custom Allocator Presenter"),NULL), m_ChildWnd(NULL), m_Visible(false)
@@ -55,7 +55,7 @@ CVMRCustomAllocatorPresenter9::~CVMRCustomAllocatorPresenter9()
 	ReleaseAll();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	弶婜壔張棟
+//! @brief	  	初期化処理
 //----------------------------------------------------------------------------
 void CVMRCustomAllocatorPresenter9::Initialize()
 {
@@ -68,10 +68,10 @@ void CVMRCustomAllocatorPresenter9::Initialize()
 		ThrowDShowException(L"Failed to create device.", hr );
 }
 //----------------------------------------------------------------------------
-//! @brief	  	梫媮偝傟偨僀儞僞乕僼僃僀僗傪曉偡
-//! @param		riid : 僀儞僞乕僼僃僀僗偺IID
-//! @param		ppv : 僀儞僞乕僼僃僀僗傪曉偡億僀儞僞乕傊偺億僀儞僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	要求されたインターフェイスを返す
+//! @param		riid : インターフェイスのIID
+//! @param		ppv : インターフェイスを返すポインターへのポインタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 STDMETHODIMP CVMRCustomAllocatorPresenter9::NonDelegatingQueryInterface( REFIID riid, void ** ppv )
 {
@@ -84,7 +84,7 @@ STDMETHODIMP CVMRCustomAllocatorPresenter9::NonDelegatingQueryInterface( REFIID 
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僀儞僞乕僼僃僀僗傪夝曻偡傞
+//! @brief	  	インターフェイスを解放する
 //----------------------------------------------------------------------------
 void CVMRCustomAllocatorPresenter9::ReleaseAll()
 {
@@ -97,11 +97,11 @@ void CVMRCustomAllocatorPresenter9::ReleaseAll()
 	DestroyChildWindow();
 }
 //----------------------------------------------------------------------------
-//! @brief	  	Direct3D 僨僶僀僗傪弶婜壔偡傞 ( 幚嵺偼僒乕僼僃僀僗傪妋曐偡傞)
-//! @param		dwUserID : VMR 偺偙偺僀儞僗僞儞僗傪巜掕偡傞
-//! @param		lpAllocInfo : 弶婜壔堷悢
-//! @param		lpNumBuffers : 擖椡偱偼丄嶌惉偡傞僶僢僼傽偺悢傪巜掕偡傞丅儊僜僢僪偑曉傞偲丄偙偺堷悢偵偼幚嵺偵妱傝摉偰傜傟偨僶僢僼傽偺悢偑奿擺偝傟偰偄傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	Direct3D デバイスを初期化する ( 実際はサーフェイスを確保する)
+//! @param		dwUserID : VMR のこのインスタンスを指定する
+//! @param		lpAllocInfo : 初期化引数
+//! @param		lpNumBuffers : 入力では、作成するバッファの数を指定する。メソッドが返ると、この引数には実際に割り当てられたバッファの数が格納されている
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::InitializeDevice( DWORD_PTR dwUserID, VMR9AllocationInfo *lpAllocInfo, DWORD *lpNumBuffers )
 {
@@ -118,8 +118,8 @@ HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::InitializeDevice( DWORD
 	D3DCAPS9	d3dcaps;
 	D3DDevice()->GetDeviceCaps( &d3dcaps );
 	if( d3dcaps.TextureCaps & D3DPTEXTURECAPS_POW2 )
-	{	// 2偺椵忔偺傒嫋壜偡傞偐偳偆偐敾掕
-		// 儉乕價乕側偺偱丄嵟掅抣偼64偵偟偰偍偔
+	{	// 2の累乗のみ許可するかどうか判定
+		// ムービーなので、最低値は64にしておく
 		DWORD		dwWidth = 64;
 		DWORD		dwHeight = 64;
 
@@ -136,7 +136,7 @@ HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::InitializeDevice( DWORD
 		TVPAddLog( ttstr("krmovie : Use power of two surface.") );
 	}
 
-	// 僥僋僗僠儍偲偟偰巊偊傞傛偆偵偡傞
+	// テクスチャとして使えるようにする
 	lpAllocInfo->dwFlags |= VMR9AllocFlag_TextureSurface;
 	ReleaseSurfaces();
 	m_Surfaces.resize(*lpNumBuffers);
@@ -144,10 +144,10 @@ HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::InitializeDevice( DWORD
 
 	if( FAILED(hr) && !(lpAllocInfo->dwFlags & VMR9AllocFlag_3DRenderTarget) )
 	{
-		// 僥僋僗僠儍惗惉幐攕
+		// テクスチャ生成失敗
 		ReleaseSurfaces();
 
-		// YUV 僒乕僼僃僀僗偐偳偆偐
+		// YUV サーフェイスかどうか
 		if( lpAllocInfo->Format > '0000' )
 		{
 			D3DDISPLAYMODE dm; 
@@ -161,7 +161,7 @@ HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::InitializeDevice( DWORD
 		} else {
 			TVPAddLog( ttstr("krmovie : Use offscreen surface.") );
 		}
-		// 僥僋僗僠儍偼巭傔偰僆僼僗僋儕乕儞偵
+		// テクスチャは止めてオフスクリーンに
 		lpAllocInfo->dwFlags &= ~VMR9AllocFlag_TextureSurface;
 		lpAllocInfo->dwFlags |= VMR9AllocFlag_OffscreenSurface;
 		m_Surfaces.resize(*lpNumBuffers);
@@ -179,14 +179,14 @@ HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::InitializeDevice( DWORD
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	捀揰僶僢僼傽傪惗惉偟丄弶婜抣傪擖傟傞
-//! @param		texWidth : 僥僋僗僠儍偺暆
-//! @param		texHeight : 僥僋僗僠儍偺崅偝
-//! @return		僄儔乕僐乕僪
+//! @brief	  	頂点バッファを生成し、初期値を入れる
+//! @param		texWidth : テクスチャの幅
+//! @param		texHeight : テクスチャの高さ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::CreateVertexBuffer( int texWidth, int texHeight )
 {
-	// 捀揰忣曬傪寁嶼偟偰偍偔
+	// 頂点情報を計算しておく
 	HRESULT		hr;
 
 	CAutoLock Lock(m_Lock);
@@ -250,15 +250,15 @@ HRESULT CVMRCustomAllocatorPresenter9::CreateVertexBuffer( int texWidth, int tex
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	捀揰僶僢僼傽偺捀揰忣曬傪峏怴偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	頂点バッファの頂点情報を更新する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::UpdateVertex()
 {
 	HRESULT	hr;
 	CAutoLock Lock(m_Lock);
 
-	// 捀揰僶僢僼傽偑傑偩妋曐偝傟偰偄側偄帪偼僗儖乕
+	// 頂点バッファがまだ確保されていない時はスルー
 	if( m_VertexBuffer == NULL )
 		return S_OK;
 
@@ -294,9 +294,9 @@ HRESULT CVMRCustomAllocatorPresenter9::UpdateVertex()
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	Direct3D 僨僶僀僗傪夝曻偡傞 ( 幚嵺偼僒乕僼僃僀僗傪夝曻偡傞)
-//! @param		dwID : VMR 偺偙偺僀儞僗僞儞僗傪帵偡 ID 傪巜掕偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	Direct3D デバイスを解放する ( 実際はサーフェイスを解放する)
+//! @param		dwID : VMR のこのインスタンスを示す ID を指定する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::TerminateDevice( DWORD_PTR dwID )
 {
@@ -311,12 +311,12 @@ HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::TerminateDevice( DWORD_
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	Direct3D 僒乕僼僃僀僗傪庢摼偡傞
-//! @param		dwUserID : VMR 偺偙偺僀儞僗僞儞僗傪帵偡 ID 傪巜掕偡傞
-//! @param		SurfaceIndex : 庢摼偡傞僒乕僼僃僀僗偺僀儞僨僢僋僗傪巜掕偡傞
-//! @param		SurfaceFlags : 僒乕僼僃僀僗 僼儔僌傪巜掕偡傞 ( 壗偵巊偆偺丠 )
-//! @param		lplpSurface : IDirect3DSurface9 僀儞僞乕僼僃僀僗 億僀儞僞傪庴偗庢傞曄悢偺傾僪儗僗丅屇傃弌偟尦偼僀儞僞乕僼僃僀僗傪昁偢夝曻偡傞偙偲
-//! @return		僄儔乕僐乕僪
+//! @brief	  	Direct3D サーフェイスを取得する
+//! @param		dwUserID : VMR のこのインスタンスを示す ID を指定する
+//! @param		SurfaceIndex : 取得するサーフェイスのインデックスを指定する
+//! @param		SurfaceFlags : サーフェイス フラグを指定する ( 何に使うの？ )
+//! @param		lplpSurface : IDirect3DSurface9 インターフェイス ポインタを受け取る変数のアドレス。呼び出し元はインターフェイスを必ず解放すること
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::GetSurface( DWORD_PTR dwUserID, DWORD SurfaceIndex, DWORD SurfaceFlags, IDirect3DSurface9 **lplpSurface )
 {
@@ -343,9 +343,9 @@ HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::GetSurface( DWORD_PTR d
 	return E_INVALIDARG;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	VMR 偐傜屇傃弌偝傟丄傾儘働乕僞僾儗僛儞僞偵捠抦僐乕儖僶僢僋偺僀儞僞乕僼僃僀僗 億僀儞僞傪採嫙偡傞
-//! @param		lpIVMRSurfAllocNotify : 傾儘働乕僞僾儗僛儞僞偑捠抦僐乕儖僶僢僋傪 VMR 偵搉偡偨傔偵巊偆丄IVMRSurfaceAllocatorNotify9 僀儞僞乕僼僃僀僗傪巜掕偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	VMR から呼び出され、アロケータプレゼンタに通知コールバックのインターフェイス ポインタを提供する
+//! @param		lpIVMRSurfAllocNotify : アロケータプレゼンタが通知コールバックを VMR に渡すために使う、IVMRSurfaceAllocatorNotify9 インターフェイスを指定する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::AdviseNotify( IVMRSurfaceAllocatorNotify9 *lpIVMRSurfAllocNotify )
 {
@@ -359,8 +359,8 @@ HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::AdviseNotify( IVMRSurfa
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	Direct3D娭楢偺傕偺傪奐曻偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	Direct3D関連のものを開放する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::ReleaseD3D()
 {
@@ -376,8 +376,8 @@ HRESULT CVMRCustomAllocatorPresenter9::ReleaseD3D()
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僒乕僼僃僀僗傪奐曻偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	サーフェイスを開放する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::ReleaseSurfaces()
 {
@@ -394,9 +394,9 @@ HRESULT CVMRCustomAllocatorPresenter9::ReleaseSurfaces()
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偑嵞惗傪奐巒偡傞捈慜偵屇傃弌偡丅傾儘働乕僞僾儗僛儞僞偼丄偙偺儊僜僢僪偺昁梫側峔惉傪幚峴偡傞昁梫偑偁傞
-//! @param		dwUserID : 傾儘働乕僞僾儗僛儞僞偺 1 偮偺僀儞僗僞儞僗偑暋悢偺 VMR 僀儞僗僞儞僗偱巊傢傟傞応崌偵巊偆丄VMR 偺偙偺僀儞僗僞儞僗傪堦堄偵幆暿偡傞傾僾儕働乕僔儑儞偑掕媊偟偨 DWORD_PTR 僋僢僉乕
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ビデオが再生を開始する直前に呼び出す。アロケータプレゼンタは、このメソッドの必要な構成を実行する必要がある
+//! @param		dwUserID : アロケータプレゼンタの 1 つのインスタンスが複数の VMR インスタンスで使われる場合に使う、VMR のこのインスタンスを一意に識別するアプリケーションが定義した DWORD_PTR クッキー
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::StartPresenting( DWORD_PTR dwUserID )
 {
@@ -407,10 +407,10 @@ HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::StartPresenting( DWORD_
 }
 
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆僥僋僗僠儍傪億儕僑儞偵揬傝晅偗偰昤夋偡傞
+//! @brief	  	ビデオテクスチャをポリゴンに貼り付けて描画する
 //! @param		device : Direct3D Device
-//! @param		tex : 僥僋僗僠儍
-//! @return		僄儔乕僐乕僪
+//! @param		tex : テクスチャ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::DrawVideoPlane( IDirect3DDevice9* device, IDirect3DTexture9* tex )
 {
@@ -443,10 +443,10 @@ HRESULT CVMRCustomAllocatorPresenter9::DrawVideoPlane( IDirect3DDevice9* device,
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	偙偺價僨僆 僼儗乕儉傪昞帵偟側偗傟偽側傜側偄偲偒偵屇傃弌偝傟傞
-//! @param		dwUserID : 傾儘働乕僞僾儗僛儞僞偺 1 偮偺僀儞僗僞儞僗偑暋悢偺 VMR 僀儞僗僞儞僗偱巊傢傟傞応崌偵巊偆丄VMR 偺偙偺僀儞僗僞儞僗傪堦堄偵幆暿偡傞傾僾儕働乕僔儑儞偑掕媊偟偨 DWORD_PTR 僋僢僉乕
-//! @param		lpPresInfo : 價僨僆 僼儗乕儉偵娭偡傞忣曬傪奿擺偡傞 VMR9PresentationInfo 峔憿懱傪巜掕偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	このビデオ フレームを表示しなければならないときに呼び出される
+//! @param		dwUserID : アロケータプレゼンタの 1 つのインスタンスが複数の VMR インスタンスで使われる場合に使う、VMR のこのインスタンスを一意に識別するアプリケーションが定義した DWORD_PTR クッキー
+//! @param		lpPresInfo : ビデオ フレームに関する情報を格納する VMR9PresentationInfo 構造体を指定する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::PresentImage( DWORD_PTR dwUserID, VMR9PresentationInfo *lpPresInfo )
 {
@@ -457,29 +457,29 @@ HRESULT STDMETHODCALLTYPE CVMRCustomAllocatorPresenter9::PresentImage( DWORD_PTR
 	if( m_dwUserID == dwUserID ) {
 		CAutoLock Lock(m_Lock);
 //		AllocatorNotify()->NotifyEvent(EC_UPDATE,0,0);
-		if( m_RebuildingWindow ) return S_OK;	// 僼儖僗僋儕乕儞愗傝懼偊拞偼昤夋偟側偄
+		if( m_RebuildingWindow ) return S_OK;	// フルスクリーン切り替え中は描画しない
 		hr = PresentHelper( lpPresInfo );
 		if( hr == D3DERR_DEVICELOST)
 		{
 			TVPAddLog( ttstr("krmovie warning : Device lost.") );
 			hr = D3DDevice()->TestCooperativeLevel();
 			if( hr == D3DERR_DEVICENOTRESET )
-			{	// 儕僙僢僩壜擻
+			{	// リセット可能
 				ReleaseSurfaces();
 				RebuildD3DDevice();
 //				if( FAILED(hr = RebuildD3DDevice()) )
 //					AllocatorNotify()->NotifyEvent(EC_ERRORABORT,hr,0);
-				// 幐攕偟偰傕捠抦偟側偄丅
-				// 偳偆傗傜僼儖僗僋儕乕儞愗傝懼偊帪側偳偵壗搙偐幐攕偡傞偙偲偑偁傞傛偆偩
+				// 失敗しても通知しない。
+				// どうやらフルスクリーン切り替え時などに何度か失敗することがあるようだ
 			}
 		}
 	}
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆 僼儗乕儉傪昤夋偡傞
-//! @param		lpPresInfo : 價僨僆 僼儗乕儉偵娭偡傞忣曬傪奿擺偡傞 VMR9PresentationInfo 峔憿懱傪巜掕偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ビデオ フレームを描画する
+//! @param		lpPresInfo : ビデオ フレームに関する情報を格納する VMR9PresentationInfo 構造体を指定する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::PresentHelper( VMR9PresentationInfo *lpPresInfo )
 {
@@ -514,7 +514,7 @@ HRESULT CVMRCustomAllocatorPresenter9::PresentHelper( VMR9PresentationInfo *lpPr
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆 僼儗乕儉傪夋柺偵斀塮偡傞
+//! @brief	  	ビデオ フレームを画面に反映する
 //----------------------------------------------------------------------------
 void CVMRCustomAllocatorPresenter9::PresentVideoImage()
 {
@@ -527,7 +527,7 @@ void CVMRCustomAllocatorPresenter9::PresentVideoImage()
 		{
 			hr = D3DDevice()->TestCooperativeLevel();
 			if( hr == D3DERR_DEVICENOTRESET )
-			{	// 儕僙僢僩壜擻
+			{	// リセット可能
 				ReleaseSurfaces();
 				RebuildD3DDevice();
 			}
@@ -535,8 +535,8 @@ void CVMRCustomAllocatorPresenter9::PresentVideoImage()
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僂傿儞僪僂偺偁傞儌僯僞偺彉悢傪庢摼偡傞
-//! @return		僂傿儞僪僂偺偁傞儌僯僞偺彉悢
+//! @brief	  	ウィンドウのあるモニタの序数を取得する
+//! @return		ウィンドウのあるモニタの序数
 //----------------------------------------------------------------------------
 UINT CVMRCustomAllocatorPresenter9::GetMonitorNumber()
 {
@@ -556,9 +556,9 @@ UINT CVMRCustomAllocatorPresenter9::GetMonitorNumber()
 }
 
 //----------------------------------------------------------------------------
-//! @brief	  	僾儗僛儞僩 僷儔儊乕僞傪寛掕偡傞
+//! @brief	  	プレゼント パラメータを決定する
 //! @param		d3dpp : D3DPRESENT_PARAMETERS
-//! @return		僄儔乕僐乕僪
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::DecideD3DPresentParameters( D3DPRESENT_PARAMETERS& d3dpp )
 {
@@ -572,18 +572,18 @@ HRESULT CVMRCustomAllocatorPresenter9::DecideD3DPresentParameters( D3DPRESENT_PA
 	UINT	height = 0;
 	LONG	ownerStyle = ::GetWindowLong( Owner()->OwnerWindow, GWL_STYLE );
 	if( !(ownerStyle&WS_THICKFRAME) ) {
-		// 僆乕僫乕偼僒僀僘曄峏晄壜
+		// オーナーはサイズ変更不可
 		RECT	clientRect;
 		if( ::GetClientRect( Owner()->OwnerWindow, &clientRect ) ) {
 			width = clientRect.right - clientRect.left;
 			height = clientRect.bottom - clientRect.top;
-			// 弶夞偼丄僒僀僘0偺僂傿儞僪僂僴儞僪儖偑搉偝傟傞偺偱丄偙偙偼0偵側傞丅
-			// 偦偺帪偼丄僂傿儞僪僂偺僋儔僀傾儞僩椞堟偲摨偠僒僀僘偺僶僢僋僶僢僼傽偑嶌傜傟傞偙偲偵側傞丅
-			// 偨偩偟丄捈屻偵惓偟偄僂傿儞僪僂僴儞僪儖偑搉偝傟偰丄婜懸偟偨戝偒偝偺僶僢僋僶僢僼傽偵側傞偼偢丅
+			// 初回は、サイズ0のウィンドウハンドルが渡されるので、ここは0になる。
+			// その時は、ウィンドウのクライアント領域と同じサイズのバックバッファが作られることになる。
+			// ただし、直後に正しいウィンドウハンドルが渡されて、期待した大きさのバックバッファになるはず。
 		}
 	} else {
 //	if( width == 0 || height == 0 ) {
-		// 僒僀僘曄峏壜偺帪偼丄夋柺僒僀僘偲摨偠戝偒偝偺僶僢僋僶僢僼傽僒僀僘偵偟偰偟傑偆
+		// サイズ変更可の時は、画面サイズと同じ大きさのバックバッファサイズにしてしまう
 		width = dm.Width;
 		height = dm.Height;
 	}
@@ -602,8 +602,8 @@ HRESULT CVMRCustomAllocatorPresenter9::DecideD3DPresentParameters( D3DPRESENT_PA
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	Direct3D傪弶婜壔偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	Direct3Dを初期化する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::CreateD3D()
 {
@@ -651,8 +651,8 @@ HRESULT CVMRCustomAllocatorPresenter9::CreateD3D()
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	Direct3D偺僗僥乕僩傪弶婜壔偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	Direct3Dのステートを初期化する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::InitializeDirect3DState()
 {
@@ -699,8 +699,8 @@ HRESULT CVMRCustomAllocatorPresenter9::InitializeDirect3DState()
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	Direct3D僨僶僀僗偺曄峏傪捠抦偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	Direct3Dデバイスの変更を通知する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::ChangeD3DDevice()
 {
@@ -720,8 +720,8 @@ HRESULT CVMRCustomAllocatorPresenter9::ChangeD3DDevice()
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	Direct3D僨僶僀僗傪嵞峔抸偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	Direct3Dデバイスを再構築する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::RebuildD3DDevice()
 {
@@ -734,8 +734,8 @@ HRESULT CVMRCustomAllocatorPresenter9::RebuildD3DDevice()
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僶僢僋僶僢僼傽偺僒僀僘傪曄峏偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	バックバッファのサイズを変更する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::ResizeBackbuffer()
 {
@@ -774,8 +774,8 @@ HRESULT CVMRCustomAllocatorPresenter9::ResizeBackbuffer()
 	return hr;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巕僂傿儞僪僂傪惗惉偡傞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	子ウィンドウを生成する
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 HRESULT CVMRCustomAllocatorPresenter9::CreateChildWindow()
 {
@@ -808,10 +808,10 @@ HRESULT CVMRCustomAllocatorPresenter9::CreateChildWindow()
 	return S_OK;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巕僂傿儞僪僂偺埵抲傪寁嶼偡傞
+//! @brief	  	子ウィンドウの位置を計算する
 //!
-//! 恊僂傿儞僪僂偺僒僀僘傪挻偊側偄傛偆側巕僂傿儞僪僂偺埵抲偲戝偒偝傪媮傔傞
-//! @param		childRect : 巕僂傿儞僪僂偺椞堟
+//! 親ウィンドウのサイズを超えないような子ウィンドウの位置と大きさを求める
+//! @param		childRect : 子ウィンドウの領域
 //----------------------------------------------------------------------------
 void CVMRCustomAllocatorPresenter9::CalcChildWindowSize( RECT& childRect )
 {
@@ -841,7 +841,7 @@ void CVMRCustomAllocatorPresenter9::CalcChildWindowSize( RECT& childRect )
 	m_ChildRect = childRect;
 }
 //----------------------------------------------------------------------------
-//! @brief	  	巕僂傿儞僪僂傪攋婞偡傞
+//! @brief	  	子ウィンドウを破棄する
 //----------------------------------------------------------------------------
 void CVMRCustomAllocatorPresenter9::DestroyChildWindow()
 {
@@ -855,12 +855,12 @@ void CVMRCustomAllocatorPresenter9::DestroyChildWindow()
 
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僂傿儞僪僂僾儘僔乕僕儍
-//! @param		hWnd : 僂傿儞僪僂僴儞僪儖
-//! @param		msg : 儊僢僙乕僕ID
-//! @param		wParam : 僷儔儊僞
-//! @param		lParam : 僷儔儊僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ウィンドウプロシージャ
+//! @param		hWnd : ウィンドウハンドル
+//! @param		msg : メッセージID
+//! @param		wParam : パラメタ
+//! @param		lParam : パラメタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 LRESULT WINAPI CVMRCustomAllocatorPresenter9::WndProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
@@ -872,12 +872,12 @@ LRESULT WINAPI CVMRCustomAllocatorPresenter9::WndProc( HWND hWnd, UINT msg, WPAR
 	return DefWindowProc(hWnd,msg,wParam,lParam);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	僂傿儞僪僂僾儘僔乕僕儍
-//! @param		hWnd : 僂傿儞僪僂僴儞僪儖
-//! @param		msg : 儊僢僙乕僕ID
-//! @param		wParam : 僷儔儊僞
-//! @param		lParam : 僷儔儊僞
-//! @return		僄儔乕僐乕僪
+//! @brief	  	ウィンドウプロシージャ
+//! @param		hWnd : ウィンドウハンドル
+//! @param		msg : メッセージID
+//! @param		wParam : パラメタ
+//! @param		lParam : パラメタ
+//! @return		エラーコード
 //----------------------------------------------------------------------------
 LRESULT WINAPI CVMRCustomAllocatorPresenter9::Proc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 {
@@ -900,8 +900,8 @@ LRESULT WINAPI CVMRCustomAllocatorPresenter9::Proc( HWND hWnd, UINT msg, WPARAM 
 	return DefWindowProc(hWnd,msg,wParam,lParam);
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺僒僀僘傪愝掕偡傞
-//! @param		rect : 梫媮偡傞僒僀僘
+//! @brief	  	ビデオのサイズを設定する
+//! @param		rect : 要求するサイズ
 //----------------------------------------------------------------------------
 void CVMRCustomAllocatorPresenter9::SetRect( RECT *rect )
 {
@@ -931,8 +931,8 @@ void CVMRCustomAllocatorPresenter9::SetRect( RECT *rect )
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	價僨僆偺昞帵/旕昞帵傪愝掕偡傞
-//! @param		b : 昞帵/旕昞帵
+//! @brief	  	ビデオの表示/非表示を設定する
+//! @param		b : 表示/非表示
 //----------------------------------------------------------------------------
 void CVMRCustomAllocatorPresenter9::SetVisible( bool b )
 {
@@ -955,7 +955,7 @@ void CVMRCustomAllocatorPresenter9::SetVisible( bool b )
 	}
 }
 //----------------------------------------------------------------------------
-//! @brief	  	Direct3D Device傪儕僙僢僩偡傞
+//! @brief	  	Direct3D Deviceをリセットする
 //----------------------------------------------------------------------------
 void CVMRCustomAllocatorPresenter9::Reset()
 {

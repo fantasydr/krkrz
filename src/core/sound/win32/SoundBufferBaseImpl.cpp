@@ -45,7 +45,7 @@ void TVPAddSoundBuffer(tTJSNI_SoundBuffer * buf)
 		// first buffer
 		TVPSoundBufferTimer = new TTimer(Application); // Create VCL TTimer Object
 		TVPSoundBufferTimer->SetInterval( TVP_SB_BEAT_INTERVAL );
-#pragma message( __LOC__ "TODO ƒCƒxƒ“ƒgƒnƒ“ƒhƒ‰‚ð‚È‚ñ‚Æ‚©‚·‚é" )
+#pragma message( __LOC__ "TODO ¥¤¥Ù¥ó¥È¥Ï¥ó¥É¥é¤ò¤Ê¤ó¤È¤«¤¹¤ë" )
 //		TVPSoundBufferTimer->SetOnTimerHandler( TVPSoundBufferTimerDispatcher.Handler );
 	}
 

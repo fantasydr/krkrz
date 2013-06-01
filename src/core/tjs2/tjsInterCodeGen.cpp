@@ -299,7 +299,7 @@ tTJSInterCodeContext::tTJSInterCodeContext(tTJSInterCodeContext *parent,
 		throw;
 	}
 #ifdef ENABLE_DEBUGGER
-	// 屆偄儘乕僇儖曄悢偼嶍彍偟偰偟傑偆
+	// 古いローカル変数は削除してしまう
 	TJSDebuggerClearLocalVariable( GetClassName().c_str(), GetName(), Block->GetName(), FunctionRegisterCodePoint );
 #endif	// ENABLE_DEBUGGER
 }
@@ -3865,7 +3865,7 @@ tTJSExprNode * tTJSInterCodeContext::MakeNP3(tjs_int opecode, tTJSExprNode * nod
 //---------------------------------------------------------------------------
 
 /**
- * 僶僀僩僐乕僪傪弌椡偡傞
+ * バイトコードを出力する
  * @return
  */
 std::vector<tjs_uint8>* tTJSInterCodeContext::ExportByteCode( bool outputdebug, tTJSScriptBlock *block, tjsConstArrayData& constarray )
@@ -3890,7 +3890,7 @@ std::vector<tjs_uint8>* tTJSInterCodeContext::ExportByteCode( bool outputdebug, 
 	if( Name != NULL ) {
 		name = constarray.PutString(Name);
 	}
-	// 13 * 4 僨乕僞晹暘偺僒僀僘
+	// 13 * 4 データ部分のサイズ
 	int srcpossize = 0;
 	if( outputdebug ) {
 		srcpossize = SourcePosArraySize * 8;

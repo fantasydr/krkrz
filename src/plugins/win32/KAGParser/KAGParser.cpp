@@ -27,18 +27,18 @@
 #define TJS_strcmp			wcscmp
 #define TJS_strncpy			wcsncpy_s
 
-const tjs_char* TVPKAGNoLine = TJS_W("撉傒崬傕偆偲偟偨僔僫儕僆僼傽僀儖 %1 偼嬻偱偡");
-const tjs_char* TVPKAGCannotOmmitFirstLabelName = TJS_W("僔僫儕僆僼傽僀儖偺嵟弶偺儔儀儖柤偼徣棯偱偒傑偣傫");
-const tjs_char* TVPInternalError = TJS_W("撪晹僄儔乕偑敪惗偟傑偟偨: at %1 line %2");
-const tjs_char* TVPKAGMalformedSaveData = TJS_W("瀤僨乕僞偑堎忢偱偡丅僨乕僞偑攋懝偟偰偄傞壜擻惈偑偁傝傑偡");
-const tjs_char* TVPKAGLabelNotFound = TJS_W("僔僫儕僆僼傽僀儖 %1 撪偵儔儀儖 %2 偑尒偮偐傝傑偣傫");
-const tjs_char* TVPLabelOrScriptInMacro = TJS_W("儔儀儖傗 iscript 偼儅僋儘拞偵婰弎偱偒傑偣傫");
-const tjs_char* TVPKAGInlineScriptNotEnd = TJS_W("[endscript] 傑偨偼 @endscript 偑尒偮偐傝傑偣傫");
-const tjs_char* TVPKAGSyntaxError = TJS_W("僞僌偺暥朄僄儔乕偱偡丅'[' 傗 ']' 偺懳墳丄\" 偲 \" 偺懳墳丄僗儁乕僗偺擖傟朰傟丄梋暘側夵峴丄macro 乣 endmacro 偺懳墳丄昁梫側懏惈偺晄懌側偳傪妋擣偟偰偔偩偝偄");
-const tjs_char* TVPKAGCallStackUnderflow = TJS_W("return 僞僌偑 call 僞僌偲懳墳偟偰偄傑偣傫 ( return 僞僌偑懡偄 )");
-const tjs_char* TVPKAGReturnLostSync = TJS_W("僔僫儕僆僼傽僀儖偵曄峏偑偁偭偨偨傔 return 偺栠傝愭埵抲傪摿掕偱偒傑偣傫");
-const tjs_char* TVPKAGSpecifyKAGParser = TJS_W("KAGParser 僋儔僗偺僆僽僕僃僋僩傪巜掕偟偰偔偩偝偄");
-const tjs_char* TVPUnknownMacroName = TJS_W("儅僋儘 \"%1\" 偼搊榐偝傟偰偄傑偣傫");
+const tjs_char* TVPKAGNoLine = TJS_W("読み込もうとしたシナリオファイル %1 は空です");
+const tjs_char* TVPKAGCannotOmmitFirstLabelName = TJS_W("シナリオファイルの最初のラベル名は省略できません");
+const tjs_char* TVPInternalError = TJS_W("内部エラーが発生しました: at %1 line %2");
+const tjs_char* TVPKAGMalformedSaveData = TJS_W("栞データが異常です。データが破損している可能性があります");
+const tjs_char* TVPKAGLabelNotFound = TJS_W("シナリオファイル %1 内にラベル %2 が見つかりません");
+const tjs_char* TVPLabelOrScriptInMacro = TJS_W("ラベルや iscript はマクロ中に記述できません");
+const tjs_char* TVPKAGInlineScriptNotEnd = TJS_W("[endscript] または @endscript が見つかりません");
+const tjs_char* TVPKAGSyntaxError = TJS_W("タグの文法エラーです。'[' や ']' の対応、\" と \" の対応、スペースの入れ忘れ、余分な改行、macro ～ endmacro の対応、必要な属性の不足などを確認してください");
+const tjs_char* TVPKAGCallStackUnderflow = TJS_W("return タグが call タグと対応していません ( return タグが多い )");
+const tjs_char* TVPKAGReturnLostSync = TJS_W("シナリオファイルに変更があったため return の戻り先位置を特定できません");
+const tjs_char* TVPKAGSpecifyKAGParser = TJS_W("KAGParser クラスのオブジェクトを指定してください");
+const tjs_char* TVPUnknownMacroName = TJS_W("マクロ \"%1\" は登録されていません");
 
 #define TVPThrowInternalError \
 	TVPThrowExceptionMessage(TVPInternalError, __FILE__,  __LINE__)

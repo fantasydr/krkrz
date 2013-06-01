@@ -1,21 +1,21 @@
-// stdafx.h : 昗弨偺僔僗僥儉 僀儞僋儖乕僪 僼傽僀儖偺僀儞僋儖乕僪 僼傽僀儖丄傑偨偼
-// 嶲徠夞悢偑懡偔丄偐偮偁傑傝曄峏偝傟側偄丄僾儘僕僃僋僩愱梡偺僀儞僋儖乕僪 僼傽僀儖
-// 傪婰弎偟傑偡丅
+// stdafx.h : 標準のシステム インクルード ファイルのインクルード ファイル、または
+// 参照回数が多く、かつあまり変更されない、プロジェクト専用のインクルード ファイル
+// を記述します。
 //
 
 #pragma once
 
 #include "targetver.h"
 
-#define WIN32_LEAN_AND_MEAN             // Windows 僿僢僟乕偐傜巊梡偝傟偰偄側偄晹暘傪彍奜偟傑偡丅
-// Windows 僿僢僟乕 僼傽僀儖:
+#define WIN32_LEAN_AND_MEAN             // Windows ヘッダーから使用されていない部分を除外します。
+// Windows ヘッダー ファイル:
 #include <windows.h>
 
-// C 儔儞僞僀儉 僿僢僟乕 僼傽僀儖
+// C ランタイム ヘッダー ファイル
 #include <stdlib.h>
 #include <malloc.h>
 #include <memory.h>
 #include <tchar.h>
 
 
-// TODO: 僾儘僌儔儉偵昁梫側捛壛僿僢僟乕傪偙偙偱嶲徠偟偰偔偩偝偄丅
+// TODO: プログラムに必要な追加ヘッダーをここで参照してください。

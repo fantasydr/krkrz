@@ -1,8 +1,8 @@
 #pragma once
 
-// SDKDDKVer.h 傪僀儞僋儖乕僪偡傞偲丄棙梡偱偒傞嵟傕忋埵偺 Windows 僾儔僢僩僼僅乕儉偑掕媊偝傟傑偡丅
+// SDKDDKVer.h をインクルードすると、利用できる最も上位の Windows プラットフォームが定義されます。
 
-// 埲慜偺 Windows 僾儔僢僩僼僅乕儉梡偵傾僾儕働乕僔儑儞傪價儖僪偡傞応崌偼丄WinSDKVer.h 傪僀儞僋儖乕僪偟丄
-// SDKDDKVer.h 傪僀儞僋儖乕僪偡傞慜偵丄僒億乕僩懳徾偲偡傞僾儔僢僩僼僅乕儉傪帵偡傛偆偵 _WIN32_WINNT 儅僋儘傪愝掕偟傑偡丅
+// 以前の Windows プラットフォーム用にアプリケーションをビルドする場合は、WinSDKVer.h をインクルードし、
+// SDKDDKVer.h をインクルードする前に、サポート対象とするプラットフォームを示すように _WIN32_WINNT マクロを設定します。
 
 #include <SDKDDKVer.h>

@@ -287,7 +287,7 @@ void TVPShowScriptException(eTJSScriptError &e)
 	{
 
 		if(TVPMainForm) TVPMainForm->SetVisible( true );
-#pragma message( __LOC__ "TODO PadƒNƒ‰ƒX–³Œø‰»" )
+#pragma message( __LOC__ "TODO Pad¥¯¥é¥¹Ÿo„¿»¯" )
 #if 0 // Not use pad class
 		TTVPPadForm *pad = new TTVPPadForm(Application);
 		pad->FreeOnTerminate = true;

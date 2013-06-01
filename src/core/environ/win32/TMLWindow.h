@@ -238,7 +238,7 @@ public:
 
 	void GetClientRect( struct tTVPRect& rt );
 
-	// ƒƒbƒZ[ƒWƒnƒ“ƒhƒ‰
+	// ¥á¥Ã¥»©`¥¸¥Ï¥ó¥É¥é
 	virtual void OnActive( HWND preactive ) {}
 	virtual void OnDeactive( HWND postactive ) {}
 	virtual void OnClose( CloseAction& action ){}

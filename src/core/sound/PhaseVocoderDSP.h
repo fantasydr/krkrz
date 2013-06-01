@@ -1,6 +1,6 @@
 //---------------------------------------------------------------------------
 /*
-	Risa [傝偝]      alias 媑棦媑棦3 [kirikiri-3]
+	Risa [りさ]      alias 吉里吉里3 [kirikiri-3]
 	 stands for "Risa Is a Stagecraft Architecture"
 	Copyright (C) 2000 W.Dee <dee@kikyou.info> and contributors
 
@@ -8,7 +8,7 @@
 */
 //---------------------------------------------------------------------------
 //! @file
-//! @brief Phase Vocoder 偺幚憰
+//! @brief Phase Vocoder の実装
 //---------------------------------------------------------------------------
 #ifndef RisaPhaseVocoderH
 #define RisaPhaseVocoderH
@@ -16,147 +16,147 @@
 #include "RingBuffer.h"
 
 //---------------------------------------------------------------------------
-//! @brief Phase Vocoder DSP 僋儔僗
+//! @brief Phase Vocoder DSP クラス
 //---------------------------------------------------------------------------
 class tRisaPhaseVocoderDSP
 {
 protected:
-	float ** AnalWork; //!< 夝愅(Analyze)梡僶僢僼傽(FrameSize屄) 柤慜偱徫傢側偄傛偆偵
-	float ** SynthWork; //!< 崌惉梡嶌嬈僶僢僼傽(FrameSize)
-	float ** LastAnalPhase; //!< 慜夞夝愅帪偺奺僼傿儖僞僶儞僪偺埵憡 (奺僠儍儞僱儖偛偲偵FrameSize/2屄)
-	float ** LastSynthPhase; //!< 慜夞崌惉帪偺奺僼傿儖僞僶儞僪偺埵憡 (奺僠儍儞僱儖偛偲偵FrameSize/2屄)
+	float ** AnalWork; //!< 解析(Analyze)用バッファ(FrameSize個) 名前で笑わないように
+	float ** SynthWork; //!< 合成用作業バッファ(FrameSize)
+	float ** LastAnalPhase; //!< 前回解析時の各フィルタバンドの位相 (各チャンネルごとにFrameSize/2個)
+	float ** LastSynthPhase; //!< 前回合成時の各フィルタバンドの位相 (各チャンネルごとにFrameSize/2個)
 
-	int * FFTWorkIp; //!< rdft 偵搉偡 ip 僷儔儊乕僞
-	float * FFTWorkW; //!< rdft 偵搉偡 w 僷儔儊乕僞
-	float * InputWindow; //!< 擖椡梡憢娭悢
-	float * OutputWindow; //!< 弌椡梡憢娭悢
+	int * FFTWorkIp; //!< rdft に渡す ip パラメータ
+	float * FFTWorkW; //!< rdft に渡す w パラメータ
+	float * InputWindow; //!< 入力用窓関数
+	float * OutputWindow; //!< 出力用窓関数
 
-	unsigned int FrameSize; //!< FFT僒僀僘
-	unsigned int OverSampling; //!< 僆乕僶乕丒僒儞僾儕儞僌學悢
-	unsigned int Frequency; //!< PCM 僒儞僾儕儞僌廃攇悢
-	unsigned int Channels; //!< PCM 僠儍儞僱儖悢
+	unsigned int FrameSize; //!< FFTサイズ
+	unsigned int OverSampling; //!< オーバー．サンプリング係数
+	unsigned int Frequency; //!< PCM サンプリング周波数
+	unsigned int Channels; //!< PCM チャンネル数
 	unsigned int InputHopSize; //!< FrameSize/OverSampling
-	unsigned int OutputHopSize; //!< InputHopSize * TimeScale (SetTimeScale帪偵嵞寁嶼偝傟傞)
+	unsigned int OutputHopSize; //!< InputHopSize * TimeScale (SetTimeScale時に再計算される)
 
-	float	TimeScale; //!< 帪娫幉曽岦偺僗働乕儖(弌椡/擖椡)
-	float	FrequencyScale; //!< 廃攇悢曽岦偺僗働乕儖(弌椡/擖椡)
+	float	TimeScale; //!< 時間軸方向のスケール(出力/入力)
+	float	FrequencyScale; //!< 周波数方向のスケール(出力/入力)
 
-	// 埲壓丄RebuildParams 偑恀偺帪偵嵞峔抸偝傟傞僷儔儊乕僞
-	// 偙偙偵偁傞儊儞僶埲奜偱偼丄InputWindow 偲 OutputWindow 傕嵞峔抸偝傟傞
+	// 以下、RebuildParams が真の時に再構築されるパラメータ
+	// ここにあるメンバ以外では、InputWindow と OutputWindow も再構築される
 	float OverSamplingRadian; //!< (2.0*M_PI)/OverSampling
-	float OverSamplingRadianRecp; //!< OverSamplingRadian 偺媡悢
+	float OverSamplingRadianRecp; //!< OverSamplingRadian の逆数
 	float FrequencyPerFilterBand; //!< Frequency/FrameSize
-	float FrequencyPerFilterBandRecp; //!< FrequencyPerFilterBand 偺媡悢
-	float ExactTimeScale; //!< 尩枾側TimeScale = OutputHopSize / InputHopSize
-	// 嵞峔抸偝傟傞僷儔儊乕僞丄偙偙傑偱
+	float FrequencyPerFilterBandRecp; //!< FrequencyPerFilterBand の逆数
+	float ExactTimeScale; //!< 厳密なTimeScale = OutputHopSize / InputHopSize
+	// 再構築されるパラメータ、ここまで
 
-	tRisaRingBuffer<float> InputBuffer; //!< 擖椡梡儕儞僌僶僢僼傽
-	tRisaRingBuffer<float> OutputBuffer; //!< 弌椡梡儕儞僌僶僢僼傽
+	tRisaRingBuffer<float> InputBuffer; //!< 入力用リングバッファ
+	tRisaRingBuffer<float> OutputBuffer; //!< 出力用リングバッファ
 
-	bool	RebuildParams; //!< 撪晹揑側僷儔儊乕僞側偳傪嵞峔抸偟側偗傟偽側傜側偄偲偒偵恀
+	bool	RebuildParams; //!< 内部的なパラメータなどを再構築しなければならないときに真
 
-	unsigned long LastSynthPhaseAdjustCounter; //!< LastSynthPhase 傪曗惓偡傞廃婜傪偼偐傞偨傔偺僇僂儞僞
-	const static unsigned long LastSynthPhaseAdjustIncrement = 0x03e8a444; //!< LastSynthPhaseAdjustCounter偵壛嶼偡傞抣
-	const static unsigned long LastSynthPhaseAdjustInterval  = 0xfa2911fe; //!< LastSynthPhase 傪曗惓偡傞廃婜
+	unsigned long LastSynthPhaseAdjustCounter; //!< LastSynthPhase を補正する周期をはかるためのカウンタ
+	const static unsigned long LastSynthPhaseAdjustIncrement = 0x03e8a444; //!< LastSynthPhaseAdjustCounterに加算する値
+	const static unsigned long LastSynthPhaseAdjustInterval  = 0xfa2911fe; //!< LastSynthPhase を補正する周期
 
 
 public:
-	//! @brief Process 偑曉偡僗僥乕僞僗
+	//! @brief Process が返すステータス
 	enum tStatus
 	{
-		psNoError, //!< 栤戣側偟
-		psInputNotEnough, //!< 擖椡偑傕偆側偄 (GetInputBuffer偱摼偨億僀儞僞偵彂偄偰偐傜嵞帋峴偣傛)
-		psOutputFull //!< 弌椡僶僢僼傽偑偄偭傁偄 (GetOutputBuffer偱摼偨億僀儞僞偐傜撉傒弌偟偰偐傜嵞帋峴偣傛)
+		psNoError, //!< 問題なし
+		psInputNotEnough, //!< 入力がもうない (GetInputBufferで得たポインタに書いてから再試行せよ)
+		psOutputFull //!< 出力バッファがいっぱい (GetOutputBufferで得たポインタから読み出してから再試行せよ)
 	};
 
 public:
-	//! @brief		僐儞僗僩儔僋僞
-	//! @param		framesize		僼儗乕儉僒僀僘(2偺椵忔, 16乣)
-	//! @param		frequency		擖椡PCM偺僒儞僾儕儞僌儗乕僩
-	//! @param		channels		擖椡PCM偺僠儍儞僱儖悢
-	//! @note		壒妝梡偱偼framesize=4096,oversamp=16偖傜偄偑傛偔丄
-	//! @note		儃僀僗梡偱偼framesize=256,oversamp=8偖傜偄偑傛偄丅
+	//! @brief		コンストラクタ
+	//! @param		framesize		フレームサイズ(2の累乗, 16～)
+	//! @param		frequency		入力PCMのサンプリングレート
+	//! @param		channels		入力PCMのチャンネル数
+	//! @note		音楽用ではframesize=4096,oversamp=16ぐらいがよく、
+	//! @note		ボイス用ではframesize=256,oversamp=8ぐらいがよい。
 	tRisaPhaseVocoderDSP(unsigned int framesize,
 					unsigned int frequency, unsigned int channels);
 
-	//! @brief		僨僗僩儔僋僞
+	//! @brief		デストラクタ
 	~tRisaPhaseVocoderDSP();
 
-	float GetTimeScale() const { return TimeScale; } //!< 帪娫幉曽岦偺僗働乕儖傪摼傞
+	float GetTimeScale() const { return TimeScale; } //!< 時間軸方向のスケールを得る
 
-	//! @brief		帪娫幉曽岦偺僗働乕儖傪愝掕偡傞
-	//! @param		v     僗働乕儖
+	//! @brief		時間軸方向のスケールを設定する
+	//! @param		v     スケール
 	void SetTimeScale(float v);
 
-	float GetFrequencyScale() const { return FrequencyScale; } //!< 廃攇悢幉曽岦偺僗働乕儖傪摼傞
+	float GetFrequencyScale() const { return FrequencyScale; } //!< 周波数軸方向のスケールを得る
 
-	//! @brief		廃攇悢幉曽岦偺僗働乕儖傪愝掕偡傞
-	//! @param		v     僗働乕儖
+	//! @brief		周波数軸方向のスケールを設定する
+	//! @param		v     スケール
 	void SetFrequencyScale(float v);
 
-	//! @brief		僆乕僶乕僒儞僾儕儞僌學悢傪庢摼偡傞
-	//! @return		僆乕僶乕僒儞僾儕儞僌學悢
+	//! @brief		オーバーサンプリング係数を取得する
+	//! @return		オーバーサンプリング係数
 	unsigned int GetOverSampling() const { return OverSampling; }
 
-	//! @brief		僆乕僶乕僒儞僾儕儞僌學悢傪愝掕偡傞
-	//! @param		v		學悢 ( 0 = 帪娫幉曽岦偺僗働乕儖偵廬偭偰帺摦揑偵愝掕 )
+	//! @brief		オーバーサンプリング係数を設定する
+	//! @param		v		係数 ( 0 = 時間軸方向のスケールに従って自動的に設定 )
 	void SetOverSampling(unsigned int v);
 
-	unsigned int GetInputHopSize() const { return InputHopSize; } //!< InputHopSize傪摼傞
-	unsigned int GetOutputHopSize() const { return OutputHopSize; } //!< OutputHopSize 傪摼傞
+	unsigned int GetInputHopSize() const { return InputHopSize; } //!< InputHopSizeを得る
+	unsigned int GetOutputHopSize() const { return OutputHopSize; } //!< OutputHopSize を得る
 
 private:
-	//! @brief		僋儕傾
+	//! @brief		クリア
 	void Clear();
 
 public:
-	//! @brief		擖椡僶僢僼傽偺嬻偒僒儞僾儖僌儔僯儏乕儖悢傪摼傞
-	//! @return		擖椡僶僢僼傽偺嬻偒僒儞僾儖僌儔僯儏乕儖悢
+	//! @brief		入力バッファの空きサンプルグラニュール数を得る
+	//! @return		入力バッファの空きサンプルグラニュール数
 	size_t GetInputFreeSize();
 
-	//! @brief		擖椡僶僢僼傽偺彂偒崬傒億僀儞僞傪摼傞
-	//! @param		numsamplegranules 彂偒崬傒偨偄僒儞僾儖僌儔僯儏乕儖悢
-	//! @param		p1		僽儘僢僋1偺愭摢傊偺億僀儞僞傪奿擺偡傞偨傔偺曄悢
-	//! @param		p1size	p1偺昞偡僽儘僢僋偺僒儞僾儖僌儔僯儏乕儖悢
-	//! @param		p2		僽儘僢僋2偺愭摢傊偺億僀儞僞傪奿擺偡傞偨傔偺曄悢(NULL偑偁傝摼傞)
-	//! @param		p2size	p2偺昞偡僽儘僢僋偺僒儞僾儖僌儔僯儏乕儖悢(0偑偁傝摼傞)
-	//! @return		嬻偒梕検偑懌傝側偗傟偽婾丄嬻偒梕検偑懌傝丄億僀儞僞偑曉偝傟傟偽恀
-	//! @note		p1 偲 p2 偺傛偆偵俀偮偺億僀儞僞偲偦偺僒僀僘偑曉偝傟傞偺偼丄
-	//!				偙偺僶僢僼傽偑幚嵺偼儕儞僌僶僢僼傽偱丄儕儞僌僶僢僼傽撪晹偺儕僯傾側僶僢僼傽
-	//!				偺廔抂傪傑偨偖壜擻惈偑偁傞偨傔丅傑偨偑側偄応崌偼p2偼NULL偵側傞偑丄傑偨偖
-	//!				応崌偼 p1 偺偁偲偵 p2 偵懕偗偰彂偒崬傑側偗傟偽側傜側偄丅
+	//! @brief		入力バッファの書き込みポインタを得る
+	//! @param		numsamplegranules 書き込みたいサンプルグラニュール数
+	//! @param		p1		ブロック1の先頭へのポインタを格納するための変数
+	//! @param		p1size	p1の表すブロックのサンプルグラニュール数
+	//! @param		p2		ブロック2の先頭へのポインタを格納するための変数(NULLがあり得る)
+	//! @param		p2size	p2の表すブロックのサンプルグラニュール数(0があり得る)
+	//! @return		空き容量が足りなければ偽、空き容量が足り、ポインタが返されれば真
+	//! @note		p1 と p2 のように２つのポインタとそのサイズが返されるのは、
+	//!				このバッファが実際はリングバッファで、リングバッファ内部のリニアなバッファ
+	//!				の終端をまたぐ可能性があるため。またがない場合はp2はNULLになるが、またぐ
+	//!				場合は p1 のあとに p2 に続けて書き込まなければならない。
 	bool GetInputBuffer(size_t numsamplegranules,
 		float * & p1, size_t & p1size,
 		float * & p2, size_t & p2size);
 
-	//! @brief		弌椡僶僢僼傽偺弨旛嵪傒僒儞僾儖僌儔僯儏乕儖悢傪摼傞
-	//! @return		弌椡僶僢僼傽偺弨旛嵪傒僒儞僾儖僌儔僯儏乕儖悢
+	//! @brief		出力バッファの準備済みサンプルグラニュール数を得る
+	//! @return		出力バッファの準備済みサンプルグラニュール数
 	size_t GetOutputReadySize();
 
-	//! @brief		弌椡僶僢僼傽偺撉傒崬傒億僀儞僞傪摼傞
-	//! @param		numsamplegranules 撉傒崬傒偨偄僒儞僾儖僌儔僯儏乕儖悢
-	//! @param		p1		僽儘僢僋1偺愭摢傊偺億僀儞僞傪奿擺偡傞偨傔偺曄悢
-	//! @param		p1size	p1偺昞偡僽儘僢僋偺僒儞僾儖僌儔僯儏乕儖悢
-	//! @param		p2		僽儘僢僋2偺愭摢傊偺億僀儞僞傪奿擺偡傞偨傔偺曄悢(NULL偑偁傝摼傞)
-	//! @param		p2size	p2偺昞偡僽儘僢僋偺僒儞僾儖僌儔僯儏乕儖悢(0偑偁傝摼傞)
-	//! @return		弨旛偝傟偨僒儞僾儖偑懌傝側偗傟偽婾丄僒儞僾儖偑懌傝丄億僀儞僞偑曉偝傟傟偽恀
-	//! @note		p1 偲 p2 偺傛偆偵俀偮偺億僀儞僞偲偦偺僒僀僘偑曉偝傟傞偺偼丄
-	//!				偙偺僶僢僼傽偑幚嵺偼儕儞僌僶僢僼傽偱丄儕儞僌僶僢僼傽撪晹偺儕僯傾側僶僢僼傽
-	//!				偺廔抂傪傑偨偖壜擻惈偑偁傞偨傔丅傑偨偑側偄応崌偼p2偼NULL偵側傞偑丄傑偨偖
-	//!				応崌偼 p1 偺偁偲偵 p2 傪懕偗偰撉傒弌偝側偗傟偽側傜側偄丅
+	//! @brief		出力バッファの読み込みポインタを得る
+	//! @param		numsamplegranules 読み込みたいサンプルグラニュール数
+	//! @param		p1		ブロック1の先頭へのポインタを格納するための変数
+	//! @param		p1size	p1の表すブロックのサンプルグラニュール数
+	//! @param		p2		ブロック2の先頭へのポインタを格納するための変数(NULLがあり得る)
+	//! @param		p2size	p2の表すブロックのサンプルグラニュール数(0があり得る)
+	//! @return		準備されたサンプルが足りなければ偽、サンプルが足り、ポインタが返されれば真
+	//! @note		p1 と p2 のように２つのポインタとそのサイズが返されるのは、
+	//!				このバッファが実際はリングバッファで、リングバッファ内部のリニアなバッファ
+	//!				の終端をまたぐ可能性があるため。またがない場合はp2はNULLになるが、またぐ
+	//!				場合は p1 のあとに p2 を続けて読み出さなければならない。
 	bool GetOutputBuffer(size_t numsamplegranules,
 		const float * & p1, size_t & p1size,
 		const float * & p2, size_t & p2size);
 
-	//! @brief		張棟傪1僗僥僢僾峴偆
-	//! @return		張棟寢壥傪昞偡enum
+	//! @brief		処理を1ステップ行う
+	//! @return		処理結果を表すenum
 	tStatus Process();
 
-	//! @brief		墘嶼偺崻姴晹暘傪張棟偡傞
-	//! @param		ch			張棟傪峴偆僠儍儞僱儖
-	//! @note		偙偙偺晹暘偼奺CPU偛偲偵嵟揔壔偝傟傞偨傔丄
-	//!				幚憰偼 opt_default 僨傿儗僋僩儕壓側偳偵抲偐傟傞丅
-	//!				(PhaseVocoderDSP.cpp撪偵偼偙傟偺幚憰偼側偄)
+	//! @brief		演算の根幹部分を処理する
+	//! @param		ch			処理を行うチャンネル
+	//! @note		ここの部分は各CPUごとに最適化されるため、
+	//!				実装は opt_default ディレクトリ下などに置かれる。
+	//!				(PhaseVocoderDSP.cpp内にはこれの実装はない)
 	void ProcessCore(int ch);
 };
 //---------------------------------------------------------------------------

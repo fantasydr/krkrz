@@ -7,20 +7,20 @@
 
 class MouseCursor {
 	enum {
-		CURSOR_APPSTARTING,	// 昗弨栴報僇乕僜儖偍傛傃彫宆嵒帪寁僇乕僜儖
-		CURSOR_ARROW,		// 昗弨栴報僇乕僜儖
-		CURSOR_CROSS,		// 廫帤僇乕僜儖
-		CURSOR_HAND,		// 僴儞僪僇乕僜儖
-		CURSOR_IBEAM,		// 傾僀價乕儉 (廲慄) 僇乕僜儖
-		CURSOR_HELP,		// 栴報偲媈栤晞
-		CURSOR_NO,			// 嬛巭僇乕僜儖
-		CURSOR_SIZEALL,		// 4 曽岦栴報僇乕僜儖
-		CURSOR_SIZENESW,	// 幬傔嵍壓偑傝偺椉曽岦栴報僇乕僜儖
-		CURSOR_SIZENS,		// 忋壓椉曽岦栴報僇乕僜儖
-		CURSOR_SIZENWSE,	// 幬傔塃壓偑傝偺椉曽岦栴報僇乕僜儖
-		CURSOR_SIZEWE,		// 嵍塃椉曽岦栴報僇乕僜儖
-		CURSOR_UPARROW,		// 悅捈偺栴報僇乕僜儖
-		CURSOR_WAIT,		// 嵒帪寁僇乕僜儖 
+		CURSOR_APPSTARTING,	// 標準矢印カーソルおよび小型砂時計カーソル
+		CURSOR_ARROW,		// 標準矢印カーソル
+		CURSOR_CROSS,		// 十字カーソル
+		CURSOR_HAND,		// ハンドカーソル
+		CURSOR_IBEAM,		// アイビーム (縦線) カーソル
+		CURSOR_HELP,		// 矢印と疑問符
+		CURSOR_NO,			// 禁止カーソル
+		CURSOR_SIZEALL,		// 4 方向矢印カーソル
+		CURSOR_SIZENESW,	// 斜め左下がりの両方向矢印カーソル
+		CURSOR_SIZENS,		// 上下両方向矢印カーソル
+		CURSOR_SIZENWSE,	// 斜め右下がりの両方向矢印カーソル
+		CURSOR_SIZEWE,		// 左右両方向矢印カーソル
+		CURSOR_UPARROW,		// 垂直の矢印カーソル
+		CURSOR_WAIT,		// 砂時計カーソル 
 		CURSOR_EOT,
 	};
 	static const LPTSTR CURSORS[CURSOR_EOT];

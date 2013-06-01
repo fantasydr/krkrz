@@ -17,7 +17,7 @@
 //---------------------------------------------------------------------------
 class TTVPMainForm
 {
-private:	// 儐乕僓乕愰尵
+private:	// ユーザー宣言
 	bool ContinuousEventCalling;
 	bool AutoShowConsoleOnError;
 	bool ApplicationStayOnTop;
@@ -77,14 +77,14 @@ enum {
   mtCustom = 0
 };
 /*
-MB_ABORTRETRYIGNORE	儊僢僙乕僕儃僢僋僗偵乵拞巭乶丄乵嵞帋峴乶丄乵柍帇乶偺奺僾僢僔儏儃僞儞傪昞帵偟傑偡丅
-MB_CANCELTRYCONTINUE	Windows 2000丗儊僢僙乕僕儃僢僋僗偵乵僉儍儞僙儖乶丄乵嵞幚峴乶丄乵懕峴乶偺奺僾僢僔儏儃僞儞傪昞帵偟傑偡丅MB_ABORTRETRYIGNORE 偺戙傢傝偵丄偙偺儊僢僙乕僕儃僢僋僗僞僀僾傪巊偭偰偔偩偝偄丅
-MB_HELP	Windows 95/98丄Windows NT 4.0 埲崀丗儊僢僙乕僕儃僢僋僗偵乵僿儖僾乶儃僞儞傪捛壛偟傑偡丅儐乕僓乕偑乵僿儖僾乶儃僞儞傪僋儕僢僋偡傞偐 F1 僉乕傪墴偡偲丄僔僗僥儉偼僆乕僫乕傊 儊僢僙乕僕傪憲怣偟傑偡丅
-MB_OK	儊僢僙乕僕儃僢僋僗偵乵OK乶僾僢僔儏儃僞儞偩偗傪昞帵偟傑偡丅偙傟偼婛掕偺儊僢僙乕僕儃僢僋僗僞僀僾偱偡丅
-MB_OKCANCEL	儊僢僙乕僕儃僢僋僗偵乵OK乶丄乵僉儍儞僙儖乶偺奺僾僢僔儏儃僞儞傪昞帵偟傑偡丅
-MB_RETRYCANCEL	儊僢僙乕僕儃僢僋僗偵乵嵞帋峴乶丄乵僉儍儞僙儖乶偺奺僾僢僔儏儃僞儞傪昞帵偟傑偡丅
-MB_YESNO	儊僢僙乕僕儃僢僋僗偵乵偼偄乶丄乵偄偄偊乶偺奺僾僢僔儏儃僞儞傪昞帵偟傑偡丅
-MB_YESNOCANCEL	儊僢僙乕僕儃僢僋僗偵乵偼偄乶丄乵偄偄偊乶丄乵僉儍儞僙儖乶偺奺僾僢僔儏儃僞儞傪昞帵偟傑偡丅
+MB_ABORTRETRYIGNORE	メッセージボックスに［中止］、［再試行］、［無視］の各プッシュボタンを表示します。
+MB_CANCELTRYCONTINUE	Windows 2000：メッセージボックスに［キャンセル］、［再実行］、［続行］の各プッシュボタンを表示します。MB_ABORTRETRYIGNORE の代わりに、このメッセージボックスタイプを使ってください。
+MB_HELP	Windows 95/98、Windows NT 4.0 以降：メッセージボックスに［ヘルプ］ボタンを追加します。ユーザーが［ヘルプ］ボタンをクリックするか F1 キーを押すと、システムはオーナーへ メッセージを送信します。
+MB_OK	メッセージボックスに［OK］プッシュボタンだけを表示します。これは既定のメッセージボックスタイプです。
+MB_OKCANCEL	メッセージボックスに［OK］、［キャンセル］の各プッシュボタンを表示します。
+MB_RETRYCANCEL	メッセージボックスに［再試行］、［キャンセル］の各プッシュボタンを表示します。
+MB_YESNO	メッセージボックスに［はい］、［いいえ］の各プッシュボタンを表示します。
+MB_YESNOCANCEL	メッセージボックスに［はい］、［いいえ］、［キャンセル］の各プッシュボタンを表示します。
 */
 inline int MessageDlg( const tstring& string, int type, int buttons, void* helpCtx ) {
 	return ::MessageBox( NULL, string.c_str(), _T(""), type | buttons );

@@ -49,15 +49,15 @@ LRESULT WINAPI Window::Proc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 		return 0;
 	}
 
-// Mouse 僴儞僪儔
+// Mouse ハンドラ
 		/* wParam
-		0x0001 (MK_LBUTTON) 	儅僂僗偺嵍儃僞儞偑墴偝傟偰偄傑偡丅
-		0x0002 (MK_RBUTTON) 	儅僂僗偺塃儃僞儞偑墴偝傟偰偄傑偡丅
-		0x0004 (MK_SHIFT) 		[Shift] 僉乕偑墴偝傟偰偄傑偡丅
-		0x0008 (MK_CONTROL) 	[Ctrl] 僉乕偑墴偝傟偰偄傑偡丅
-		0x0010 (MK_MBUTTON) 	儅僂僗偺拞墰儃僞儞偑墴偝傟偰偄傑偡丅
-		0x0020 (MK_XBUTTON1) 	Windows 2000/XP丗 1斣栚偺 X 儃僞儞偑墴偝傟偰偄傑偡丅
-		0x0040 (MK_XBUTTON2)	Windows 2000/XP丗 2斣栚偺 X 儃僞儞偑墴偝傟偰偄傑偡丅
+		0x0001 (MK_LBUTTON) 	マウスの左ボタンが押されています。
+		0x0002 (MK_RBUTTON) 	マウスの右ボタンが押されています。
+		0x0004 (MK_SHIFT) 		[Shift] キーが押されています。
+		0x0008 (MK_CONTROL) 	[Ctrl] キーが押されています。
+		0x0010 (MK_MBUTTON) 	マウスの中央ボタンが押されています。
+		0x0020 (MK_XBUTTON1) 	Windows 2000/XP： 1番目の X ボタンが押されています。
+		0x0040 (MK_XBUTTON2)	Windows 2000/XP： 2番目の X ボタンが押されています。
 		*/
 	case WM_MOUSELEAVE:
 		OnMouseLeave();
@@ -76,7 +76,7 @@ LRESULT WINAPI Window::Proc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
             tme.cbSize = sizeof(TRACKMOUSEEVENT);
             tme.dwFlags = TME_LEAVE;
             tme.hwndTrack = hWnd;
-            ::TrackMouseEvent( &tme ); // 僄儔乕偼僴儞僪儕儞僌偟偰傕偁傑傝堄枴柍偄偺偱柍帇
+            ::TrackMouseEvent( &tme ); // エラーはハンドリングしてもあまり意味無いので無視
 		}
 		OnMouseMove( GetShiftState(wParam), GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) );
 		return 0;
@@ -105,7 +105,7 @@ LRESULT WINAPI Window::Proc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 	case WM_RBUTTONUP:
 		OnMouseUp( mbRight, GetShiftState(wParam), GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) );
 		return 0;
-	case WM_RBUTTONDBLCLK: // 塃僟僽儖僋儕僢僋偼柍帇
+	case WM_RBUTTONDBLCLK: // 右ダブルクリックは無視
 		return ::DefWindowProc(hWnd,msg,wParam,lParam);
 
 	case WM_MBUTTONDOWN:
@@ -114,34 +114,34 @@ LRESULT WINAPI Window::Proc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 	case WM_MBUTTONUP:
 		OnMouseUp( mbMiddle, GetShiftState(wParam), GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) );
 		return 0;
-	case WM_MBUTTONDBLCLK: // 拞僟僽儖僋儕僢僋偼柍帇
+	case WM_MBUTTONDBLCLK: // 中ダブルクリックは無視
 		return ::DefWindowProc(hWnd,msg,wParam,lParam);
 
-	case WM_XBUTTONDBLCLK: // X僟僽儖僋儕僢僋偼柍帇
+	case WM_XBUTTONDBLCLK: // Xダブルクリックは無視
 		return ::DefWindowProc(hWnd,msg,wParam,lParam);
 	case WM_XBUTTONUP:
 	    switch(GET_XBUTTON_WPARAM(wParam)){
-        case XBUTTON1: // 僒僀僪僉乕偑戞1X儃僞儞
+        case XBUTTON1: // サイドキーが第1Xボタン
             OnMouseUp( mbX1, GetShiftState(wParam), GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) );
 			return 0;
-        case XBUTTON2: // 僒僀僪僉乕偑戞2X儃僞儞
+        case XBUTTON2: // サイドキーが第2Xボタン
             OnMouseUp( mbX2, GetShiftState(wParam), GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) );
 			return 0;
 		}
 		return ::DefWindowProc(hWnd,msg,wParam,lParam);
-	case WM_XBUTTONDOWN: // 栠傞傗恑傓偑妱傝摉偰傜傟傞
+	case WM_XBUTTONDOWN: // 戻るや進むが割り当てられる
 	    switch(GET_XBUTTON_WPARAM(wParam)){
-        case XBUTTON1: // 僒僀僪僉乕偑戞1X儃僞儞
+        case XBUTTON1: // サイドキーが第1Xボタン
             OnMouseDown( mbX1, GetShiftState(wParam), GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) );
 			return 0;
-        case XBUTTON2: // 僒僀僪僉乕偑戞2X儃僞儞
+        case XBUTTON2: // サイドキーが第2Xボタン
             OnMouseDown( mbX2, GetShiftState(wParam), GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) );
 			return 0;
 		}
 		return ::DefWindowProc(hWnd,msg,wParam,lParam);
 #if 0
 	case WM_TOUCH: {
-		// user32.dll 偐傜 GetTouchInputInfo 側偳撉傒崬傓
+		// user32.dll から GetTouchInputInfo など読み込む
 		UINT cInputs = LOWORD(wParam);
 		PTOUCHINPUT pInputs = new TOUCHINPUT[cInputs];
 		if( NULL != pInputs ) {
@@ -217,8 +217,8 @@ LRESULT WINAPI Window::Proc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 	case WM_GETMINMAXINFO:
 		if( min_size_.cx != 0 ||  min_size_.cy != 0 || max_size_.cx != 0 || max_size_.cy != 0 ) {
 			MINMAXINFO* lpmmi = (LPMINMAXINFO)lParam;
-			// lpmmi->ptMaxPosition 嵟戝壔帪偺埵抲
-			// 嵟彫僒僀僘
+			// lpmmi->ptMaxPosition 最大化時の位置
+			// 最小サイズ
 			if( min_size_.cx > 0 ) {
 				lpmmi->ptMinTrackSize.x = min_size_.cx;
 			}
@@ -226,12 +226,12 @@ LRESULT WINAPI Window::Proc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 				lpmmi->ptMinTrackSize.y = min_size_.cy;
 			}
 			if( max_size_.cx > 0 ) {
-				lpmmi->ptMaxTrackSize.x = max_size_.cx; // 僒僀僘曄峏帪偺嵟戝僒僀僘
-				lpmmi->ptMaxSize.x = max_size_.cx; // 嵟戝壔帪偺僒僀僘
+				lpmmi->ptMaxTrackSize.x = max_size_.cx; // サイズ変更時の最大サイズ
+				lpmmi->ptMaxSize.x = max_size_.cx; // 最大化時のサイズ
 			}
 			if( max_size_.cy > 0 ) {
-				lpmmi->ptMaxTrackSize.y = max_size_.cy; // 僒僀僘曄峏帪偺嵟戝僒僀僘
-				lpmmi->ptMaxSize.y = max_size_.cy; // 嵟戝壔帪偺僒僀僘
+				lpmmi->ptMaxTrackSize.y = max_size_.cy; // サイズ変更時の最大サイズ
+				lpmmi->ptMaxSize.y = max_size_.cy; // 最大化時のサイズ
 			}
 			return 0;
 		} else {
@@ -364,16 +364,16 @@ void Window::SetScreenSize( int width, int height ) {
 int Window::MainLoop() {
 	MSG msg;
 	ZeroMemory( &msg, sizeof(msg) );
-	// 嵟弶偵惗惉娭學偺偨傑偭偰偄傞儊僢僙乕僕傪張棟偡傞
+	// 最初に生成関係のたまっているメッセージを処理する
 	while( msg.message != WM_QUIT && PeekMessage( &msg, NULL, 0U, 0U, PM_REMOVE ) ) {
 		TranslateMessage( &msg );
 		DispatchMessage( &msg );
 	}
 
-	// 傾僾儕僗儗僢僪傪巒摦偡傞
+	// アプリスレッドを始動する
 	GetApplication()->Wakeup();
 
-	// 儊僀儞張棟
+	// メイン処理
 	while( msg.message != WM_QUIT ) {
 		if( GetMessage( &msg, NULL, 0, 0 ) ) {
 			TranslateMessage( &msg );
@@ -412,17 +412,17 @@ void Window::SetClientSize( HWND hWnd, SIZE& size ) {
 }
 
 
-// 昞帵忬懺
+// 表示状態
 bool Window::GetVisible() const {
 /*
 	WINDOWPLACEMENT wndpl;
 //	::ZeroMemory( &wndpl, sizeof(wndpl) );
 	wndpl.length = sizeof(WINDOWPLACEMENT);
 	if( GetWindowPlacement( GetHandle(), &wndpl ) ) {
-		// 旕昞帵埲奜偺帪偼丄昞帵忬懺
+		// 非表示以外の時は、表示状態
 		return wndpl.showCmd != SW_HIDE;
 	} else {
-		// error, 偲傝偁偊偢 false 傪曉偟偰偍偔
+		// error, とりあえず false を返しておく
 		return false;
 	}
 */
@@ -450,7 +450,7 @@ void Window::GetCaption( tstring& v ) const {
 		}
 	}
 
-// 撪晹偱帩偭偰偄傞偺傛傝傕丄偪傖傫偲枅夞庢摼偟偨曽偑偄偄偐
+// 内部で持っているのよりも、ちゃんと毎回取得した方がいいか
 //	v = window_title_;
 }
 void Window::SetCaption( const tstring& v ) {
@@ -460,30 +460,30 @@ void Window::SetCaption( const tstring& v ) {
 	}
 }
 /*
-bsDialog : 僒僀僘曄峏晄壜偺丄僟僀傾儘僌儃僢僋僗偲摨條偺奜尒傪帩偪傑偡丅
+bsDialog : サイズ変更不可の、ダイアログボックスと同様の外見を持ちます。
 WS_DLGFRAME | WS_POPUP | WS_CAPTION
 WS_EX_DLGMODALFRAME | WS_EX_WINDOWEDGE;
 //WS_DLGFRAME 
 //-WS_THICKFRAME 
 
-bsSingle : 僒僀僘曄峏晄壜偺僂傿儞僪僂偱偡丅
+bsSingle : サイズ変更不可のウィンドウです。
 WS_CAPTION | WS_BORDER
 //WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_BORDER
 
-bsNone : 儃乕僟乕偺側偄僂傿儞僪僂偱偡丅
+bsNone : ボーダーのないウィンドウです。
 WS_POPUP
 // WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX
 
-bsSizeable : 僒僀僘曄峏壜偺堦斒揑側僂傿儞僪僂偱偡丅僨僼僅儖僩偱偡丅
+bsSizeable : サイズ変更可の一般的なウィンドウです。デフォルトです。
 WS_CAPTION | WS_THICKFRAME
 //WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_BORDER
 
 
-bsToolWindow : 僒僀僘曄峏晄壜偺僣乕儖僂傿儞僪僂(僉儍僾僔儑儞偺彫偝偄僂傿儞僪僂) 偱偡丅
+bsToolWindow : サイズ変更不可のツールウィンドウ(キャプションの小さいウィンドウ) です。
 WS_CAPTION | WS_BORDER
 WS_EX_TOOLWINDOW
 
-bsSizeToolWin : bsToolWindow 偲帡偰偄傑偡偑丄僒僀僘曄峏偑壜擻偱偡丅
+bsSizeToolWin : bsToolWindow と似ていますが、サイズ変更が可能です。
 WS_CAPTION | WS_THICKFRAME
 WS_EX_TOOLWINDOW
 */
@@ -738,7 +738,7 @@ int Window::ShowModal() {
 	}
 	::ReleaseCapture();
 	Application->ModalStarted();
-	std::vector<class TTVPWindowForm*> disablewins; // TODO 傾僋僥傿僽僂傿儞僪僂傪摼偰張棟偡傞曽偑僗儅乕僩偐丠
+	std::vector<class TTVPWindowForm*> disablewins; // TODO アクティブウィンドウを得て処理する方がスマートか？
 	try {
 		//HWND hActiveWnd = ::GetActiveWindow();
 		Application->GetDisableWindowList( disablewins );

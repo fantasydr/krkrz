@@ -2,7 +2,7 @@
 /*! @file
 @brief DirectShow
 
-僶僢僼傽僿儗儞僟儕儞僌偡傞
+バッファヘレンダリングする
 -----------------------------------------------------------------------------
 	Copyright (C) 2004 T.Imoto
 -----------------------------------------------------------------------------
@@ -26,13 +26,13 @@ class TBufferRendererInputPin;
 class TBufferRenderer;
 
 //----------------------------------------------------------------------------
-//! @brief Buffer Renderer偺傾儘働乕僞乕
+//! @brief Buffer Rendererのアロケーター
 //----------------------------------------------------------------------------
 class TBufferRendererAllocator : public CBaseAllocator
 {
 private:
-	CMediaSample	*m_pMediaSample;	//!< 尰嵼偺儊僨傿傾僒儞僾儖傊偺億僀儞僞
-	TBufferRenderer	*m_pRenderer;		//!< 偙偺傾儘働乕僞乕傪帩偮儗儞僟乕傊偺億僀儞僞
+	CMediaSample	*m_pMediaSample;	//!< 現在のメディアサンプルへのポインタ
+	TBufferRenderer	*m_pRenderer;		//!< このアロケーターを持つレンダーへのポインタ
 
 protected:
 	void Free(void);
@@ -43,40 +43,40 @@ public:
 	TBufferRendererAllocator( TCHAR *, LPUNKNOWN, HRESULT * );
 	virtual ~TBufferRendererAllocator();
 
-	// 僆乕僶乕儔僀僪
+	// オーバーライド
 	STDMETHODIMP SetProperties( ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_PROPERTIES* pActual );
 
-	// 僟僽儖僶僢僼傽儕儞僌梡億僀儞僞嵎偟懼偊儊僜僢僪
+	// ダブルバッファリング用ポインタ差し替えメソッド
 	void SetPointer( IMediaSample *media, BYTE *ptr );
 	void SetPointer( BYTE *ptr ) { SetPointer(m_pMediaSample,ptr); };
 };
 
 //----------------------------------------------------------------------------
-//! @brief Buffer Renderer偺僀儞僾僢僩僺儞
+//! @brief Buffer Rendererのインプットピン
 //----------------------------------------------------------------------------
 class TBufferRendererInputPin : public CRendererInputPin
 {
 private:
-	TBufferRenderer	*m_pRenderer;		//!< 偙偺僺儞傪帩偮儗儞僟乕傊偺億僀儞僞
-	CCritSec		*m_pInterfaceLock;	//!< 儘僢僋梡儕僜乕僗
-	bool			m_ActiveAllocator;	//!< 偙偺僺儞傪帩偮儗儞僟乕偺傾儘働乕僞乕偑巊傢傟偰偄傞偐偳偆偐
+	TBufferRenderer	*m_pRenderer;		//!< このピンを持つレンダーへのポインタ
+	CCritSec		*m_pInterfaceLock;	//!< ロック用リソース
+	bool			m_ActiveAllocator;	//!< このピンを持つレンダーのアロケーターが使われているかどうか
 
 public:
 	TBufferRendererInputPin( TBufferRenderer *pRenderer, CCritSec *pInterfaceLock, HRESULT *phr, LPCWSTR name );
 	virtual ~TBufferRendererInputPin();
 	bool ActiveAllocator( void ) const;
 
-	//僆乕僶乕儔僀僪
+	//オーバーライド
 	STDMETHODIMP GetAllocator( IMemAllocator **ppAllocator );
 	STDMETHODIMP NotifyAllocator( IMemAllocator * pAllocator, BOOL bReadOnly );
 
-	// 僟僽儖僶僢僼傽儕儞僌梡億僀儞僞嵎偟懼偊儊僜僢僪
+	// ダブルバッファリング用ポインタ差し替えメソッド
 	void SetPointer( IMediaSample *media, BYTE *ptr );
 	void SetPointer( BYTE *ptr );
 };
 
 //----------------------------------------------------------------------------
-//! @brief 僶僢僼傽僿儗儞僟儕儞僌偡傞
+//! @brief バッファヘレンダリングする
 //----------------------------------------------------------------------------
 class TBufferRenderer : public CBaseVideoRenderer, public IRendererBufferAccess, public IRendererBufferVideo
 {
@@ -84,19 +84,19 @@ class TBufferRenderer : public CBaseVideoRenderer, public IRendererBufferAccess,
 	friend class TBufferRendererAllocator;
 
 private:
-	long	m_VideoWidth;		//!< 價僨僆偺暆
-	long	m_VideoHeight;		//!< 價僨僆偺崅偝
-	long	m_VideoPitch;		//!< 價僨僆偺僺僢僠(1峴偺僶僀僩悢)
-	BYTE	*m_Buffer[2];		//!< 儗儞僟儕儞僌偡傞僶僢僼傽傊偺億僀儞僞
-	bool	m_IsBufferOwner[2];	//!< 僶僢僼傽偑偙偺僋儔僗偵妱傝摉偰傜傟偨傕偺偐偳偆偐傪曐帩
-	int		m_FrontBuffer;		//!< 尰嵼偺僼儘儞僩僶僢僼傽偑偳偪傜偐傪曐帩
+	long	m_VideoWidth;		//!< ビデオの幅
+	long	m_VideoHeight;		//!< ビデオの高さ
+	long	m_VideoPitch;		//!< ビデオのピッチ(1行のバイト数)
+	BYTE	*m_Buffer[2];		//!< レンダリングするバッファへのポインタ
+	bool	m_IsBufferOwner[2];	//!< バッファがこのクラスに割り当てられたものかどうかを保持
+	int		m_FrontBuffer;		//!< 現在のフロントバッファがどちらかを保持
 	LONG	m_StartFrame;
 	LONG	m_StopFrame;
 
-	TBufferRendererInputPin		m_InputPin;		//!< 擖椡僺儞
-	TBufferRendererAllocator	m_Allocator;	//!< 儊儌儕偺妱傝摉偰
+	TBufferRendererInputPin		m_InputPin;		//!< 入力ピン
+	TBufferRendererAllocator	m_Allocator;	//!< メモリの割り当て
 
-	CCritSec		m_BufferLock;	//!< 僶僢僼傽傊傾僋僙僗偡傞帪偵儘僢僋偡傞
+	CCritSec		m_BufferLock;	//!< バッファへアクセスする時にロックする
 	CMediaType		m_MtIn;			//!< Source connection media type
 
 public:
@@ -125,8 +125,8 @@ public:
 			/* [retval][out] */ long *pVideoHeight);
 
 protected:
-	// 僆乕僶乕儔僀僪
-	// DShow偑彑庤偵僐乕儖偡傞
+	// オーバーライド
+	// DShowが勝手にコールする
 	HRESULT CheckMediaType( const CMediaType *pmt );		// Format acceptable?
 	HRESULT DoRenderSample( IMediaSample *pMediaSample );	// New video sample
 	HRESULT SetMediaType( const CMediaType *pmt );			// Video format notification
@@ -149,7 +149,7 @@ protected:
 	BYTE *GetFrontBuffer();
 	BYTE *GetBackBuffer();
 
-	//! 僟僽儖僶僢僼傽儕儞僌梡億僀儞僞嵎偟懼偊儊僜僢僪
+	//! ダブルバッファリング用ポインタ差し替えメソッド
 	void SetPointer( IMediaSample *media, BYTE *ptr )
 	{
 		m_InputPin.SetPointer( media, ptr );

@@ -2,7 +2,7 @@
 /*! @file
 @brief DirectShow allocator wrapper for Windows media format
 
-DirectShow‚ÌƒAƒƒP[ƒ^[‚ğƒ‰ƒbƒv‚µ‚½Windows Media Format SDK—p‚ÌƒAƒƒP[ƒ^[
+DirectShow¤Î¥¢¥í¥±©`¥¿©`¤ò¥é¥Ã¥×¤·¤¿Windows Media Format SDKÓÃ¤Î¥¢¥í¥±©`¥¿©`
 -----------------------------------------------------------------------------
 	Copyright (C) 2005 T.Imoto <http://www.kaede-software.com>
 -----------------------------------------------------------------------------
@@ -24,7 +24,7 @@ DirectShow‚ÌƒAƒƒP[ƒ^[‚ğƒ‰ƒbƒv‚µ‚½Windows Media Format SDK—p‚ÌƒAƒƒP[ƒ^[
 #include <dshow.h>
 
 //----------------------------------------------------------------------------
-//! @brief WMV—pƒAƒƒP[ƒ^[
+//! @brief WMVÓÃ¥¢¥í¥±©`¥¿©`
 //----------------------------------------------------------------------------
 class CWMAllocator : public IWMReaderAllocatorEx, public CUnknown
 {

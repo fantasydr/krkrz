@@ -24,137 +24,137 @@ class iTVPLayerManager
 {
 public:
 //-- object lifetime management
-	//! @brief	嶲徠僇僂儞僞傪僀儞僋儕儊儞僩偡傞
+	//! @brief	参照カウンタをインクリメントする
 	virtual void TJS_INTF_METHOD AddRef() = 0;
 
-	//! @brief	嶲徠僇僂儞僞傪僨僋儕儊儞僩偡傞
+	//! @brief	参照カウンタをデクリメントする
 	virtual void TJS_INTF_METHOD Release() = 0;
 
 //-- draw device specific information
-	//! @brief	昤夋僨僶僀僗屌桳偺忣曬傪愝掕偡傞
-	//! @param	data	昤夋僨僶僀僗屌桳偺忣曬
-	//! @note	昤夋僨僶僀僗屌桳偺忣曬傪儗僀儎儅僱乕僕儍偵愝掕偡傞丅
-	//!			儗僀儎儅僱乕僕儍偱偼偙偺忣曬偺拞恎偵偮偄偰偼娭抦偟側偄丅
-	//!			昤夋僨僶僀僗懁偱栚報偵巊偭偨傝丄摿掕偺忣曬偲寢傃偮偗偰娗棟偡傞丅
+	//! @brief	描画デバイス固有の情報を設定する
+	//! @param	data	描画デバイス固有の情報
+	//! @note	描画デバイス固有の情報をレイヤマネージャに設定する。
+	//!			レイヤマネージャではこの情報の中身については関知しない。
+	//!			描画デバイス側で目印に使ったり、特定の情報と結びつけて管理する。
 	virtual void TJS_INTF_METHOD SetDrawDeviceData(void * data) = 0;
 
-	//! @brief	昤夋僨僶僀僗屌桳偺忣曬傪庢摼偡傞
-	//! @return	昤夋僨僶僀僗屌桳偺忣曬
+	//! @brief	描画デバイス固有の情報を取得する
+	//! @return	描画デバイス固有の情報
 	virtual void * TJS_INTF_METHOD GetDrawDeviceData() const = 0;
 
 //-- layer metrics
-	//! @brief	僾儔僀儅儕儗僀儎偺僒僀僘傪庢摼偡傞
-	//! @param	w	儗僀儎偺墶暆(僺僋僙儖扨埵)
-	//! @param	h	儗僀儎偺廲暆(僺僋僙儖扨埵)
-	//! @return	庢摼偵惉岟偡傟偽恀丄幐攕偡傟偽婾
+	//! @brief	プライマリレイヤのサイズを取得する
+	//! @param	w	レイヤの横幅(ピクセル単位)
+	//! @param	h	レイヤの縦幅(ピクセル単位)
+	//! @return	取得に成功すれば真、失敗すれば偽
 	virtual bool TJS_INTF_METHOD GetPrimaryLayerSize(tjs_int &w, tjs_int &h) const = 0;
 
 //-- layer structure information
-	//! @brief	僾儔僀儅儕儗僀儎偺庢摼
-	//! @return	僾儔僀儅儕儗僀儎
+	//! @brief	プライマリレイヤの取得
+	//! @return	プライマリレイヤ
 	virtual tTJSNI_BaseLayer * TJS_INTF_METHOD GetPrimaryLayer() const = 0;
 
-	//! @brief	僼僅乕僇僗偺偁傞儗僀儎偺庢摼
-	//! @return	僼僅乕僇僗偺偁傞儗僀儎
+	//! @brief	フォーカスのあるレイヤの取得
+	//! @return	フォーカスのあるレイヤ
 	virtual tTJSNI_BaseLayer * TJS_INTF_METHOD GetFocusedLayer() const = 0;
 
-	//! @brief	僼僅乕僇僗偺偁傞儗僀儎偺愝掕
-	//! @param	layer	僼僅乕僇僗偺偁傞儗僀儎
+	//! @brief	フォーカスのあるレイヤの設定
+	//! @param	layer	フォーカスのあるレイヤ
 	virtual void TJS_INTF_METHOD SetFocusedLayer(tTJSNI_BaseLayer * layer) = 0;
 
 //-- HID releted
-	//! @brief		僋儕僢僋偝傟偨
-	//! @param		x		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 x 埵抲
-	//! @param		y		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 y 埵抲
+	//! @brief		クリックされた
+	//! @param		x		プライマリレイヤ座標上における x 位置
+	//! @param		y		プライマリレイヤ座標上における y 位置
 	virtual void TJS_INTF_METHOD NotifyClick(tjs_int x, tjs_int y) = 0;
 
-	//! @brief		僟僽儖僋儕僢僋偝傟偨
-	//! @param		x		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 x 埵抲
-	//! @param		y		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 y 埵抲
+	//! @brief		ダブルクリックされた
+	//! @param		x		プライマリレイヤ座標上における x 位置
+	//! @param		y		プライマリレイヤ座標上における y 位置
 	virtual void TJS_INTF_METHOD NotifyDoubleClick(tjs_int x, tjs_int y) = 0;
 
-	//! @brief		儅僂僗儃僞儞偑墴壓偝傟偨
-	//! @param		x		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 x 埵抲
-	//! @param		y		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 y 埵抲
-	//! @param		mb		偳偺儅僂僗儃僞儞偐
-	//! @param		flags	僼儔僌(TVP_SS_*掕悢偺慻傒崌傢偣)
+	//! @brief		マウスボタンが押下された
+	//! @param		x		プライマリレイヤ座標上における x 位置
+	//! @param		y		プライマリレイヤ座標上における y 位置
+	//! @param		mb		どのマウスボタンか
+	//! @param		flags	フラグ(TVP_SS_*定数の組み合わせ)
 	virtual void TJS_INTF_METHOD NotifyMouseDown(tjs_int x, tjs_int y, tTVPMouseButton mb, tjs_uint32 flags) = 0;
 
-	//! @brief		儅僂僗儃僞儞偑棧偝傟偨
-	//! @param		x		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 x 埵抲
-	//! @param		y		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 y 埵抲
-	//! @param		mb		偳偺儅僂僗儃僞儞偐
-	//! @param		flags	僼儔僌(TVP_SS_*掕悢偺慻傒崌傢偣)
+	//! @brief		マウスボタンが離された
+	//! @param		x		プライマリレイヤ座標上における x 位置
+	//! @param		y		プライマリレイヤ座標上における y 位置
+	//! @param		mb		どのマウスボタンか
+	//! @param		flags	フラグ(TVP_SS_*定数の組み合わせ)
 	virtual void TJS_INTF_METHOD NotifyMouseUp(tjs_int x, tjs_int y, tTVPMouseButton mb, tjs_uint32 flags) = 0;
 
-	//! @brief		儅僂僗偑堏摦偟偨
-	//! @param		x		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 x 埵抲
-	//! @param		y		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 y 埵抲
-	//! @param		flags	僼儔僌(TVP_SS_*掕悢偺慻傒崌傢偣)
+	//! @brief		マウスが移動した
+	//! @param		x		プライマリレイヤ座標上における x 位置
+	//! @param		y		プライマリレイヤ座標上における y 位置
+	//! @param		flags	フラグ(TVP_SS_*定数の組み合わせ)
 	virtual void TJS_INTF_METHOD NotifyMouseMove(tjs_int x, tjs_int y, tjs_uint32 flags) = 0;
 
-	//! @brief		儅僂僗僉儍僾僠儍傪夝曻偡傞
-	//! @note		儅僂僗僉儍僾僠儍傪夝曻偡傋偒応崌偵僂傿儞僪僂偐傜屇偽傟傞丅
+	//! @brief		マウスキャプチャを解放する
+	//! @note		マウスキャプチャを解放すべき場合にウィンドウから呼ばれる。
 	virtual void TJS_INTF_METHOD ReleaseCapture() = 0;
 
-	//! @brief		儅僂僗偑僾儔僀儅儕儗僀儎奜偵堏摦偟偨
+	//! @brief		マウスがプライマリレイヤ外に移動した
 	virtual void TJS_INTF_METHOD NotifyMouseOutOfWindow() = 0;
 
-	//! @brief		僉乕偑墴偝傟偨
-	//! @param		key		壖憐僉乕僐乕僪
-	//! @param		shift	僔僼僩僉乕偺忬懺
+	//! @brief		キーが押された
+	//! @param		key		仮想キーコード
+	//! @param		shift	シフトキーの状態
 	virtual void TJS_INTF_METHOD NotifyKeyDown(tjs_uint key, tjs_uint32 shift) = 0;
 
-	//! @brief		僉乕偑棧偝傟偨
-	//! @param		key		壖憐僉乕僐乕僪
-	//! @param		shift	僔僼僩僉乕偺忬懺
+	//! @brief		キーが離された
+	//! @param		key		仮想キーコード
+	//! @param		shift	シフトキーの状態
 	virtual void TJS_INTF_METHOD NotifyKeyUp(tjs_uint key, tjs_uint32 shift) = 0;
 
-	//! @brief		僉乕偵傛傞擖椡
-	//! @param		key		暥帤僐乕僪
+	//! @brief		キーによる入力
+	//! @param		key		文字コード
 	virtual void TJS_INTF_METHOD NotifyKeyPress(tjs_char key) = 0;
 
-	//! @brief		儅僂僗儂僀乕儖偑夞揮偟偨
-	//! @param		shift	僔僼僩僉乕偺忬懺
-	//! @param		delta	夞揮妏
-	//! @param		x		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 x 埵抲
-	//! @param		y		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞 y 埵抲
+	//! @brief		マウスホイールが回転した
+	//! @param		shift	シフトキーの状態
+	//! @param		delta	回転角
+	//! @param		x		プライマリレイヤ座標上における x 位置
+	//! @param		y		プライマリレイヤ座標上における y 位置
 	virtual void TJS_INTF_METHOD NotifyMouseWheel(tjs_uint32 shift, tjs_int delta, tjs_int x, tjs_int y) = 0;
 
-	//! @brief		擖椡忬懺偺僠僃僢僋
-	//! @note		僂傿儞僪僂偐傜栺1昩偍偒偵丄儗僀儎儅僱乕僕儍偑儐乕僓偐傜偺擖椡偺忬懺傪
-	//!				嵞僠僃僢僋偡傞偨傔偵屇偽傟傞丅儗僀儎忬懺偺曄壔偑儐乕僓偺擖椡偲偼
-	//!				旕摨婜偵峴傢傟偨応崌丄偨偲偊偽儅僂僗僇乕僜儖偺壓偵儗僀儎偑弌尰偟偨
-	//!				偺偵傕偐偐傢傜偢丄儅僂僗僇乕僜儖偑偦偺儗僀儎偺巜掕偡傞宍忬偵曄峏偝傟側偄
-	//!				偲偄偭偨忬嫷偑敪惗偟偆傞丅偙偺傛偆側忬嫷偵懳張偡傞偨傔丄僂傿儞僪僂偐傜
-	//!				偙偺儊僜僢僪偑栺1昩偍偒偵屇偽傟傞丅
+	//! @brief		入力状態のチェック
+	//! @note		ウィンドウから約1秒おきに、レイヤマネージャがユーザからの入力の状態を
+	//!				再チェックするために呼ばれる。レイヤ状態の変化がユーザの入力とは
+	//!				非同期に行われた場合、たとえばマウスカーソルの下にレイヤが出現した
+	//!				のにもかかわらず、マウスカーソルがそのレイヤの指定する形状に変更されない
+	//!				といった状況が発生しうる。このような状況に対処するため、ウィンドウから
+	//!				このメソッドが約1秒おきに呼ばれる。
 	virtual void TJS_INTF_METHOD RecheckInputState() = 0;
 
 //-- invalidation/update
-	//! @brief		昤夋僨僶僀僗偑朷傓儗僀儎偺弌椡宍幃傪愝掕偡傞
-	//! @param		type	儗僀儎宍幃
-	//! @note		僨僼僅儖僩偼 ltOpaque 丅昤夋僨僶僀僗偑懠偺宍幃偺夋憸傪弌椡偲偟偰
-	//!				朷傓側傜偽偦偺宍幃傪巜掕偡傞丅偨偩偟丄僾儔僀儅儕儗僀儎偺 type
-	//!				僾儘僷僥傿傕摨條偵曄峏偡傞偙偲丅
+	//! @brief		描画デバイスが望むレイヤの出力形式を設定する
+	//! @param		type	レイヤ形式
+	//! @note		デフォルトは ltOpaque 。描画デバイスが他の形式の画像を出力として
+	//!				望むならばその形式を指定する。ただし、プライマリレイヤの type
+	//!				プロパティも同様に変更すること。
 	virtual void TJS_INTF_METHOD SetDesiredLayerType(tTVPLayerType type) = 0;
 
-	//! @brief		摿掕偺嬮宍偺嵞昤夋傪梫媮偡傞
-	//! @param		r		僾儔僀儅儕儗僀儎嵗昗忋偵偍偗傞嬮宍
-	//! @note		摿掕偺嬮宍偺嵞昤夋傪儗僀儎儅僱乕僕儍偵懳偟偰梫媮偡傞丅
-	//!				梫媮偼婰榐偝傟傞偩偗偱偙偺儊僜僢僪偼偡偖偵栠傞丅幚嵺偵偦傟偑
-	//!				墘嶼偝傟傞偺偼 UpdateToDrawDevice() 傪屇傫偩偲偒偱偁傞丅
+	//! @brief		特定の矩形の再描画を要求する
+	//! @param		r		プライマリレイヤ座標上における矩形
+	//! @note		特定の矩形の再描画をレイヤマネージャに対して要求する。
+	//!				要求は記録されるだけでこのメソッドはすぐに戻る。実際にそれが
+	//!				演算されるのは UpdateToDrawDevice() を呼んだときである。
 	virtual void TJS_INTF_METHOD RequestInvalidation(const tTVPRect &r) = 0; // draw device -> layer
 
-	//! @brief		撪梕偺嵞昤夋傪峴偆
-	//! @note		撪梕偺嵞昤夋傪峴偆嵺偵屇傇丅偙偺儊僜僢僪撪偱偼丄儗僀儎儅僱乕僕儍偼
+	//! @brief		内容の再描画を行う
+	//! @note		内容の再描画を行う際に呼ぶ。このメソッド内では、レイヤマネージャは
 	//!				iTVPDrawDevice::StartBitmapCompletion()
 	//!				iTVPDrawDevice::NotifyBitmapCompleted()
-	//!				iTVPDrawDevice::EndBitmapCompletion() 偺奺儊僜僢僪傪梡偄丄
-	//!				偄傑傑偱偵曄峏偑峴傢傟偨椞堟側偳傪弴師昤夋僨僶僀僗偵憲傞丅
+	//!				iTVPDrawDevice::EndBitmapCompletion() の各メソッドを用い、
+	//!				いままでに変更が行われた領域などを順次描画デバイスに送る。
 	virtual void TJS_INTF_METHOD UpdateToDrawDevice() = 0;
 
 //-- debug assist
-	//! @brief		(Window->DrawDevice) 儗僀儎峔憿傪僐儞僜乕儖偵僟儞僾偡傞
+	//! @brief		(Window->DrawDevice) レイヤ構造をコンソールにダンプする
 	virtual void TJS_INTF_METHOD DumpLayerStructure() = 0;
 };
 //---------------------------------------------------------------------------
