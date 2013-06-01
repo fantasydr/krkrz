@@ -290,6 +290,8 @@ void TApplication::CloseConsole() {
 HWND TApplication::GetHandle() {
 	if( windows_list_.size() > 0 ) {
 		return windows_list_[0]->GetHandle();
+	} else if (TVPMainForm) {
+		return TVPMainForm->GetHandle();
 	} else {
 		return INVALID_HANDLE_VALUE;
 	}
