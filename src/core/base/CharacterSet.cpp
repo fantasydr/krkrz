@@ -46,7 +46,8 @@ static tjs_int inline TVPWideCharToUtf8(tjs_char in, char * out)
 #if 1
 	else
 	{
-		TVPThrowExceptionMessage(TJS_W("UTF-16では発生し得ないUTF-8への変換"));
+		//TVPThrowExceptionMessage(TJS_W("UTF-16では発生し得ないUTF-8への変換"));
+        TVPThrowExceptionMessage(TJS_W("Can't Convert UTF-16 to UTF-8"));
 	}
 #else
 	// 以下オリジナルのコードだけど、通らないはず。

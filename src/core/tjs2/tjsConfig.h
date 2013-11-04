@@ -78,14 +78,24 @@ TJS_EXP_FUNC_DEF(size_t, TJS_strlen, (const tjs_char *d));
 	#define TJS_cdecl
 	#define TJS_vsnprintf		vswprintf
 	extern tjs_int TJS_sprintf(tjs_char *s, const tjs_char *format, ...);
-	#define TJS_timezone timezone
 	#define TJS_rand rand
 	#define TJS_RAND_MAX RAND_MAX
 	#define TJS_mbstowcs mbstowcs
 	#define TJS_wcstombs wcstombs
 	#define TJS_mbtowc   mbtowc
 	#define TJS_wctomb   wctomb
+
+#if defined(__ANDROID__)
+    #define TJS_timezone 0
+    #define TJS_snprintf(s, size, format, ...) TJS_sprintf(s, format, __VA_ARGS__)
+    tjs_int isdigit(tjs_char ch) { return 0; }
+    tjs_int isspace(tjs_char ch) { return 0; }
+    tjs_int isalpha(tjs_char ch) { return 0; }
+#else
+    #define TJS_timezone timezone
 	#define TJS_snprintf wsnprintf
+#endif // __ANDROID__
+
 #elif __WIN32__
 	#define TJS_cdecl __cdecl
 #ifdef _MSC_VER
